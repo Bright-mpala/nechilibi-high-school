@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
 
-python manage.py migrate --noinput
-python manage.py collectstatic --noinput
-python seed.py
+python manage.py migrate --noinput --settings=config.settings.production
+python manage.py collectstatic --noinput --settings=config.settings.production
