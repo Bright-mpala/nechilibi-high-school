@@ -1,0 +1,53 @@
+{% extends 'public/base.html' %}
+{% block title %}News - Nechilibi High School{% endblock %}
+{% block content %}
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">News &amp; Updates</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item active text-white">News</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    {% if articles %}
+    <div class="row">
+      {% for article in articles %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm card-hover">
+          {% if article.featured_image %}
+            <img src="{{ article.featured_image.url }}" class="card-img-top" style="height:200px;object-fit:cover" alt="{{ article.title }}">
+          {% else %}
+            <div style="height:200px;background:linear-gradient(135deg,#6B0000,#4a0000)" class="d-flex align-items-center justify-content-center">
+              <i class="fas fa-newspaper fa-3x text-white" style="opacity:0.5;"></i>
+            </div>
+          {% endif %}
+          <div class="card-body">
+            <p class="text-muted small mb-2"><i class="far fa-calendar-alt mr-1"></i>{{ article.created|date:"d M Y" }}</p>
+            <h6 class="font-weight-bold">{{ article.title }}</h6>
+            <p class="text-muted small">{{ article.content|striptags|truncatechars:120 }}</p>
+          </div>
+          <div class="card-footer bg-white border-0 pt-0">
+            <a href="{{ article.get_absolute_url }}" class="text-primary-custom font-weight-bold small">
+              Read More <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-newspaper fa-4x mb-4 d-block" style="opacity:0.25;color:#6B0000;"></i>
+      <h4>No news articles yet</h4>
+      <p>Check back soon for updates from Nechilibi High School.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

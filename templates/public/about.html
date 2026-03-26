@@ -1,0 +1,102 @@
+{% extends 'public/base.html' %}
+{% block title %}About Us - Nechilibi High School{% endblock %}
+{% block content %}
+<!-- PAGE HEADER -->
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">About Nechilibi High School</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item active text-white">About</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2 class="section-title">Our Story</h2>
+        <p>Nechilibi High School is a secondary school located in Matabeleland South, Zimbabwe. The school provides quality education to students from Form 1 through Form 6, preparing them for ZIMSEC O-Level and A-Level examinations.</p>
+        <p>Our institution is built on a foundation of academic excellence, strong moral values, and holistic development. We believe every student has the potential to succeed and our dedicated staff work tirelessly to bring out the best in each learner.</p>
+        <p>Situated in the heart of Matabeleland South, we serve students from the surrounding communities, offering both boarding and day school options to ensure access to quality education for all.</p>
+
+        <div class="row mt-5">
+          <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 p-4">
+              <div class="text-primary-custom mb-3"><i class="fas fa-eye fa-2x"></i></div>
+              <h5 class="font-weight-bold">Our Vision</h5>
+              <p class="text-muted">To be a centre of educational excellence that produces well-rounded, innovative, and morally upright citizens who contribute positively to Zimbabwe and the world.</p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 p-4">
+              <div class="text-primary-custom mb-3"><i class="fas fa-bullseye fa-2x"></i></div>
+              <h5 class="font-weight-bold">Our Mission</h5>
+              <p class="text-muted">To provide quality, accessible secondary education that empowers students academically, socially, and spiritually, building a strong foundation for lifelong success.</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="section-title mt-4">Our Core Values</h4>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Excellence</strong> — We strive for the highest academic and personal standards in everything we do.</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Integrity</strong> — Honesty and accountability are at the heart of our school culture.</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Respect</strong> — We uphold the dignity of every person in our community.</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Teamwork</strong> — We believe in collaboration among students, teachers, and parents.</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Innovation</strong> — We embrace new approaches to learning and teaching.</li>
+          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Service</strong> — We instill a spirit of community service and civic responsibility.</li>
+        </ul>
+
+        <h4 class="section-title mt-4">Our Programmes</h4>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="card border-left border-primary h-100 p-3" style="border-left: 4px solid #6B0000 !important;">
+              <h6 class="font-weight-bold text-primary-custom"><i class="fas fa-book mr-2"></i>O-Level (Forms 1–4)</h6>
+              <p class="text-muted small mb-0">A broad curriculum leading to ZIMSEC O-Level examinations with 17+ subjects offered.</p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card border-left border-primary h-100 p-3" style="border-left: 4px solid #FFD700 !important;">
+              <h6 class="font-weight-bold text-primary-custom"><i class="fas fa-graduation-cap mr-2"></i>A-Level (Forms 5–6)</h6>
+              <p class="text-muted small mb-0">Advanced level studies preparing students for university and professional careers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm p-4 mb-4 bg-light">
+          <h5 class="text-primary-custom font-weight-bold mb-3">Quick Facts</h5>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><i class="fas fa-map-marker-alt text-primary-custom mr-2"></i>Matabeleland South, Zimbabwe</li>
+            <li class="mb-2"><i class="fas fa-graduation-cap text-primary-custom mr-2"></i>Form 1 – Form 6</li>
+            <li class="mb-2"><i class="fas fa-certificate text-primary-custom mr-2"></i>ZIMSEC Accredited</li>
+            <li class="mb-2"><i class="fas fa-users text-primary-custom mr-2"></i>Boarding &amp; Day School</li>
+            <li class="mb-2"><i class="fas fa-book text-primary-custom mr-2"></i>17+ Subjects Offered</li>
+            <li class="mb-2"><i class="fas fa-futbol text-primary-custom mr-2"></i>Active Sports Programme</li>
+            <li class="mb-2"><i class="fas fa-music text-primary-custom mr-2"></i>Arts &amp; Culture</li>
+          </ul>
+        </div>
+
+        <div class="card border-0 bg-primary-custom text-white p-4 mb-4">
+          <h5 class="text-warning font-weight-bold">Contact Us</h5>
+          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>+263 XXX XXX XXX</p>
+          <p class="small mb-1"><i class="fas fa-envelope mr-2"></i>info@nechilibi.ac.zw</p>
+          <p class="small mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Matabeleland South, Zimbabwe</p>
+          <a href="/contact/" class="btn btn-accent btn-sm mt-1">Get in Touch</a>
+        </div>
+
+        <div class="card border-0 shadow-sm p-4">
+          <h5 class="text-primary-custom font-weight-bold mb-3">Explore More</h5>
+          <a href="/admissions/" class="btn btn-outline-secondary btn-block mb-2"><i class="fas fa-file-alt mr-2"></i>Admissions</a>
+          <a href="/gallery/" class="btn btn-outline-secondary btn-block mb-2"><i class="fas fa-images mr-2"></i>Photo Gallery</a>
+          <a href="/downloads/" class="btn btn-outline-secondary btn-block"><i class="fas fa-download mr-2"></i>Downloads</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

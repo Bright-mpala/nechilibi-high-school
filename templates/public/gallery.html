@@ -1,0 +1,55 @@
+{% extends 'public/base.html' %}
+{% block title %}Gallery - Nechilibi High School{% endblock %}
+
+{% block extra_css %}
+<style>
+.gallery-img { height: 220px; object-fit: cover; width: 100%; cursor: pointer; transition: transform 0.2s; border-radius: 0; }
+.gallery-img:hover { transform: scale(1.03); }
+.gallery-card { overflow: hidden; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">Photo Gallery</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item active text-white">Gallery</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    {% if categories %}
+      {% for category in categories %}
+        {% if category.images.all %}
+        <h3 class="section-title">{{ category.name }}</h3>
+        <div class="row mb-5">
+          {% for image in category.images.all %}
+          <div class="col-md-4 col-6 mb-4">
+            <div class="gallery-card">
+              <img src="{{ image.image.url }}" class="gallery-img" alt="{{ image.title }}">
+            </div>
+            {% if image.caption %}
+            <p class="text-muted small mt-1 text-center">{{ image.caption }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="text-center py-5 text-muted">
+        <i class="fas fa-images fa-4x mb-4 d-block" style="opacity:0.25;color:#6B0000;"></i>
+        <h4>Gallery Coming Soon</h4>
+        <p>Photos will be added here shortly. Please check back soon.</p>
+        <a href="/contact/" class="btn btn-primary-custom mt-3">Contact Us</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

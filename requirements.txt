@@ -1,0 +1,75 @@
+# Core
+Django==4.2.29
+django-environ==0.10.0
+asgiref==3.7.2
+sqlparse==0.5.4
+pytz==2023.3
+
+# Authentication
+django-allauth==0.54.0
+python3-openid==3.2.0
+requests-oauthlib==1.3.1
+oauthlib==3.2.2
+PyJWT==2.7.0
+
+# Roles & Permissions
+django-role-permissions==3.2.0
+
+# Forms & UI
+django-crispy-forms==2.0
+crispy-bootstrap4==2022.1
+django-bootstrap4==23.2
+django-widget-tweaks==1.4.12
+django-tables2==2.6.0
+django-file-form==3.5.2
+
+# Rich Text Editors
+django-ckeditor==6.6.1
+django-tinymce==4.1.0
+
+# Database & Models
+django-model-utils==4.3.1
+django-autoslug==1.9.9
+django-mptt==0.14.0
+django-taggit==4.0.0
+django-extensions==3.2.3
+django-filter==23.2
+django-import-export==3.2.0
+django-countries==7.5.1
+
+# Social sharing (articles)
+django-social-share==2.3.0
+
+# Images & Files
+Pillow==12.1.1
+
+# PDF Generation (results slips)
+reportlab==4.2.5
+xhtml2pdf==0.2.16
+pypdf==6.7.5
+
+# Static files
+whitenoise==6.5.0
+
+# Data export
+openpyxl==3.1.2
+xlrd==2.0.1
+tablib==3.5.0
+
+# Utilities
+requests==2.31.0
+python-slugify==8.0.1
+Markdown==3.8.1
+qrcode==7.4.2
+dateparser==1.1.8
+
+# Production server
+gunicorn
+
+# PostgreSQL (for Railway production only — not needed locally with SQLite)
+# psycopg2-binary==2.9.10  # uncomment on Railway / add to requirements-prod.txt
+
+# Payment gateways — kept intact, disabled by default (USE_PAYMENT_OPTIONS=False)
+braintree==4.6.0
+sslcommerz-lib==1.0
+stripe==14.3.0

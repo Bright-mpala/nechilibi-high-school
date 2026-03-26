@@ -1,0 +1,52 @@
+{% extends 'portal/base.html' %}
+{% block title %}My Results{% endblock %}
+{% block portal_type %}Student Portal{% endblock %}
+{% block page_title %}My Results{% endblock %}
+
+{% block sidebar_nav %}
+<li class="nav-item"><a href="/student/dashboard/"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+<li class="nav-item"><a href="/student/results/" class="active"><i class="fas fa-chart-bar"></i>My Results</a></li>
+<li class="nav-item"><a href="/student/profile/"><i class="fas fa-user"></i>My Profile</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="card stat-card">
+  <div class="card-header bg-white"><h6 class="mb-0 font-weight-bold" style="color:#6B0000">Academic Results &mdash; {{ student.admission_student.name }}</h6></div>
+  <div class="card-body">
+    {% if results %}
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Subject</th>
+            <th>Semester</th>
+            <th>Exam</th>
+            <th>Theory</th>
+            <th>Practical</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in results %}
+          <tr>
+            <td>{{ r.subject }}</td>
+            <td>{{ r.semester }}</td>
+            <td>{{ r.exam|default:"&mdash;" }}</td>
+            <td>{{ r.theory_marks|default:"&mdash;" }}</td>
+            <td>{{ r.practical_marks|default:"&mdash;" }}</td>
+            <td><strong>{{ r.total_marks|default:"&mdash;" }}</strong></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-chart-bar fa-3x mb-3 d-block" style="opacity:0.25"></i>
+      <h5>No results published yet</h5>
+      <p>Check back once your teachers have entered your marks.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

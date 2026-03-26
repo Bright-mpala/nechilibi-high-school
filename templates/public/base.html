@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Nechilibi High School{% endblock %}</title>
+
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #6B0000;
+      --primary-dark: #4a0000;
+      --accent: #FFD700;
+      --text-dark: #222;
+      --text-muted: #666;
+      --bg-light: #f8f5f0;
+    }
+    body { font-family: 'Open Sans', sans-serif; color: var(--text-dark); }
+    h1,h2,h3,h4,h5 { font-family: 'Merriweather', serif; }
+    .navbar-custom { background-color: var(--primary); }
+    .navbar-custom .navbar-brand, .navbar-custom .nav-link { color: #fff !important; }
+    .navbar-custom .nav-link:hover { color: var(--accent) !important; }
+    .navbar-custom .nav-link.active { color: var(--accent) !important; border-bottom: 2px solid var(--accent); }
+    .btn-primary-custom { background-color: var(--primary); color: #fff; border: none; }
+    .btn-primary-custom:hover { background-color: var(--primary-dark); color: var(--accent); }
+    .btn-accent { background-color: var(--accent); color: var(--primary); font-weight: 700; border: none; }
+    .btn-accent:hover { background-color: #e6c200; color: var(--primary); }
+    .section-title { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; display: inline-block; margin-bottom: 30px; }
+    .bg-primary-custom { background-color: var(--primary); }
+    .text-primary-custom { color: var(--primary); }
+    .text-accent { color: var(--accent); }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    footer { background-color: #1a1a1a; color: #ccc; }
+    footer a { color: #ccc; text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-heading { color: var(--accent); font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+    .top-bar { background-color: var(--primary-dark); color: #ccc; font-size: 0.8rem; padding: 5px 0; }
+    .navbar-custom .navbar-toggler { border-color: rgba(255,255,255,0.3); }
+    .navbar-custom .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        {% if school_settings.phone %}<i class="fas fa-phone-alt mr-2"></i>{{ school_settings.phone }}{% else %}<i class="fas fa-phone-alt mr-2"></i>+263 XXX XXX XXX{% endif %}
+        <span class="mx-3">|</span>
+        {% if school_settings.email %}<i class="fas fa-envelope mr-2"></i>{{ school_settings.email }}{% else %}<i class="fas fa-envelope mr-2"></i>info@nechilibi.ac.zw{% endif %}
+      </div>
+      <div>
+        <i class="fas fa-map-marker-alt mr-1"></i>Matabeleland South, Zimbabwe
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand font-weight-bold d-flex align-items-center" href="/">
+        <i class="fas fa-graduation-cap mr-2" style="color: var(--accent); font-size: 1.5rem;"></i>
+        <span style="font-family:'Merriweather',serif; font-size: 1rem; line-height: 1.2;">
+          NECHILIBI<br><small style="font-size:0.65rem; font-weight:400; letter-spacing:2px; color:rgba(255,255,255,0.8);">HIGH SCHOOL</small>
+        </span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admissions/">Admissions</a></li>
+          <li class="nav-item"><a class="nav-link" href="/gallery/">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="/news/">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="/downloads/">Downloads</a></li>
+          <li class="nav-item"><a class="nav-link" href="/events/">Events</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+          <li class="nav-item dropdown ml-2">
+            <a class="nav-link dropdown-toggle btn btn-sm btn-accent px-3" href="#" id="portalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius:4px; margin-top:4px;">
+              <i class="fas fa-sign-in-alt mr-1"></i>Portal
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="portalDropdown">
+              <a class="dropdown-item" href="/accounts/login/?next=/student/dashboard/"><i class="fas fa-user-graduate mr-2"></i>Student Portal</a>
+              <a class="dropdown-item" href="/accounts/login/?next=/teacher/dashboard/"><i class="fas fa-chalkboard-teacher mr-2"></i>Teacher Portal</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/school-admin/"><i class="fas fa-lock mr-2"></i>Admin Panel</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  {% block content %}{% endblock %}
+
+  <!-- FOOTER -->
+  <footer class="pt-5 pb-0 mt-5">
+    <div class="container">
+      <div class="row">
+
+        <!-- Col 1: School info + social -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="footer-heading">
+            <i class="fas fa-graduation-cap mr-2"></i>Nechilibi High School
+          </div>
+          <p class="small" style="color:#aaa;">Nurturing tomorrow's leaders through quality education, strong values, and holistic development in the heart of Matabeleland South.</p>
+          <div class="mt-3 d-flex gap-2">
+            <a href="{% if school_settings.facebook_url %}{{ school_settings.facebook_url }}{% else %}#{% endif %}" class="btn btn-sm mr-2" style="background:#3b5998;color:#fff;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;"><i class="fab fa-facebook-f"></i></a>
+            <a href="{% if school_settings.twitter_url %}{{ school_settings.twitter_url }}{% else %}#{% endif %}" class="btn btn-sm mr-2" style="background:#1da1f2;color:#fff;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;"><i class="fab fa-twitter"></i></a>
+            <a href="{% if school_settings.youtube_url %}{{ school_settings.youtube_url }}{% else %}#{% endif %}" class="btn btn-sm mr-2" style="background:#ff0000;color:#fff;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;"><i class="fab fa-youtube"></i></a>
+            <a href="{% if school_settings.whatsapp_number %}https://wa.me/{{ school_settings.whatsapp_number }}{% else %}#{% endif %}" class="btn btn-sm" style="background:#25d366;color:#fff;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="footer-heading">Quick Links</div>
+          <ul class="list-unstyled small">
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/">Home</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/about/">About Us</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/admissions/">Admissions</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/gallery/">Gallery</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/news/">News</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/downloads/">Downloads</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/events/">Events</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Contact Info -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="footer-heading">Contact Info</div>
+          <ul class="list-unstyled small" style="color:#aaa;">
+            {% if school_settings.address %}
+            <li class="mb-2"><i class="fas fa-map-marker-alt mr-2" style="color:var(--accent);"></i>{{ school_settings.address }}</li>
+            {% else %}
+            <li class="mb-2"><i class="fas fa-map-marker-alt mr-2" style="color:var(--accent);"></i>P.O. Box 123, Nechilibi<br><span class="ml-4">Matabeleland South, Zimbabwe</span></li>
+            {% endif %}
+            <li class="mb-2"><i class="fas fa-phone mr-2" style="color:var(--accent);"></i>{% if school_settings.phone %}{{ school_settings.phone }}{% else %}+263 XXX XXX XXX{% endif %}</li>
+            <li class="mb-2"><i class="fas fa-envelope mr-2" style="color:var(--accent);"></i>{% if school_settings.email %}{{ school_settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}</li>
+            <li class="mb-2"><i class="fas fa-clock mr-2" style="color:var(--accent);"></i>Mon–Fri: 7:30am – 4:30pm</li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Latest News placeholder -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="footer-heading">Latest News</div>
+          <div class="small" style="color:#aaa;">
+            <div class="mb-3 pb-3 border-bottom border-secondary">
+              <i class="fas fa-newspaper mr-2" style="color:var(--accent);"></i>
+              <a href="/news/" style="color:#aaa;">School news and updates will appear here.</a>
+              <div class="mt-1 text-muted" style="font-size:0.75rem;"><i class="far fa-calendar-alt mr-1"></i>Visit our news page</div>
+            </div>
+            <div>
+              <a href="/news/" class="btn btn-sm btn-outline-secondary">View All News <i class="fas fa-arrow-right ml-1"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-4 py-3" style="background:#111; border-top: 1px solid #333;">
+      <div class="container d-flex flex-wrap justify-content-between align-items-center">
+        <p class="mb-0 small" style="color:#888;">&copy; 2025 Nechilibi High School. All rights reserved.</p>
+        <p class="mb-0 small" style="color:#666;">Matabeleland South, Zimbabwe</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Active nav link detection -->
+  <script>
+    (function() {
+      var path = window.location.pathname;
+      document.querySelectorAll('.navbar-nav .nav-link').forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (href === '/' && path === '/') {
+          link.classList.add('active');
+        } else if (href !== '/' && path.startsWith(href)) {
+          link.classList.add('active');
+        }
+      });
+    })();
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

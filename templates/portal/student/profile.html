@@ -1,0 +1,53 @@
+{% extends 'portal/base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block portal_type %}Student Portal{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block sidebar_nav %}
+<li class="nav-item"><a href="/student/dashboard/"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+<li class="nav-item"><a href="/student/results/"><i class="fas fa-chart-bar"></i>My Results</a></li>
+<li class="nav-item"><a href="/student/profile/" class="active"><i class="fas fa-user"></i>My Profile</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="card stat-card p-4">
+  <div class="d-flex align-items-center mb-4">
+    <div style="width:80px;height:80px;border-radius:50%;background:#6B0000;color:#FFD700;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;margin-right:20px">
+      {{ student.admission_student.name|first|upper }}
+    </div>
+    <div>
+      <h4 class="mb-1">{{ student.admission_student.name }}</h4>
+      <p class="text-muted mb-0">Student &mdash; {{ student.admission_student.choosen_department }}</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <p><strong>Student ID:</strong> {{ student.temporary_id|default:"&mdash;" }}</p>
+      <p><strong>Email:</strong> {{ student.admission_student.email }}</p>
+      <p><strong>Mobile:</strong> {{ student.admission_student.mobile_number }}</p>
+      {% if student.admission_student.date_of_birth %}
+      <p><strong>Date of Birth:</strong> {{ student.admission_student.date_of_birth }}</p>
+      {% endif %}
+      {% if student.admission_student.gender %}
+      <p><strong>Gender:</strong> {{ student.admission_student.get_gender_display }}</p>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <p><strong>Department:</strong> {{ student.admission_student.choosen_department }}</p>
+      <p><strong>Semester:</strong> {{ student.semester }}</p>
+      {% if student.batch %}
+      <p><strong>Batch:</strong> {{ student.batch }}</p>
+      {% endif %}
+      {% if student.roll %}
+      <p><strong>Roll:</strong> {{ student.roll }}</p>
+      {% endif %}
+      {% if student.registration_number %}
+      <p><strong>Registration No:</strong> {{ student.registration_number }}</p>
+      {% endif %}
+      <p><strong>Father's Name:</strong> {{ student.admission_student.fathers_name }}</p>
+      <p><strong>Mother's Name:</strong> {{ student.admission_student.mothers_name }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

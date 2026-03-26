@@ -1,0 +1,272 @@
+{% extends 'public/base.html' %}
+{% block title %}Nechilibi High School - Excellence in Education{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+  background: linear-gradient(135deg, #6B0000 0%, #4a0000 60%, #2d0000 100%);
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-badge { background: rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.5); color: #FFD700; display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; }
+.hero-title { font-size: 3.5rem; color: #fff; font-weight: 900; line-height: 1.1; }
+.hero-title span { color: #FFD700; }
+.hero-subtitle { font-size: 1.15rem; color: rgba(255,255,255,0.85); max-width: 520px; margin: 20px 0 35px; }
+.hero-stats { display: flex; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+.stat-box { text-align: center; }
+.stat-box .num { font-size: 2.2rem; font-weight: 900; color: #FFD700; font-family: 'Merriweather', serif; }
+.stat-box .label { font-size: 0.78rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+.hero-image-col { display: flex; align-items: center; justify-content: center; }
+.hero-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 30px; color: #fff; }
+.hero-card .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; }
+.news-card { border: none; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.news-card .card-img-top { height: 180px; object-fit: cover; background: #eee; }
+.news-date { font-size: 0.78rem; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+.event-item { border-left: 4px solid #FFD700; padding-left: 16px; margin-bottom: 20px; }
+.event-date-badge { background: #6B0000; color: #fff; border-radius: 8px; padding: 8px 12px; text-align: center; min-width: 56px; }
+.event-date-badge .day { font-size: 1.4rem; font-weight: 900; line-height: 1; }
+.event-date-badge .mon { font-size: 0.7rem; text-transform: uppercase; }
+.gallery-thumb { height: 200px; object-fit: cover; width: 100%; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
+.gallery-thumb:hover { opacity: 0.85; }
+.section-bg-light { background: var(--bg-light); }
+.why-box { text-align: center; padding: 30px 20px; }
+.why-box .icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.2rem; }
+  .hero-stats { gap: 20px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7 hero-content py-5">
+        <div class="hero-badge"><i class="fas fa-star mr-2"></i>Est. in Zimbabwe's Matabeleland South</div>
+        <h1 class="hero-title">Shaping Tomorrow's<br><span>Leaders</span> Today</h1>
+        <p class="hero-subtitle">Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.</p>
+        <a href="/admissions/" class="btn btn-accent btn-lg mr-3">Apply Now <i class="fas fa-arrow-right ml-2"></i></a>
+        <a href="/about/" class="btn btn-outline-light btn-lg">Learn More</a>
+        <div class="hero-stats">
+          <div class="stat-box"><div class="num">500+</div><div class="label">Students</div></div>
+          <div class="stat-box"><div class="num">40+</div><div class="label">Teachers</div></div>
+          <div class="stat-box"><div class="num">Form 1-6</div><div class="label">Classes</div></div>
+          <div class="stat-box"><div class="num">ZIMSEC</div><div class="label">Accredited</div></div>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-block hero-image-col">
+        <div class="hero-card">
+          <div class="row">
+            <div class="col-6 mb-4">
+              <div class="icon-circle" style="background:rgba(255,215,0,0.2)"><i class="fas fa-book-open text-warning"></i></div>
+              <div style="font-size:0.9rem;font-weight:600;">Academic Excellence</div>
+              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">ZIMSEC &amp; Cambridge</div>
+            </div>
+            <div class="col-6 mb-4">
+              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-trophy text-warning"></i></div>
+              <div style="font-size:0.9rem;font-weight:600;">Sports &amp; Culture</div>
+              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Holistic development</div>
+            </div>
+            <div class="col-6">
+              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-users text-warning"></i></div>
+              <div style="font-size:0.9rem;font-weight:600;">Boarding &amp; Day</div>
+              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Flexible options</div>
+            </div>
+            <div class="col-6">
+              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-flask text-warning"></i></div>
+              <div style="font-size:0.9rem;font-weight:600;">Science Labs</div>
+              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Modern facilities</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NECHILIBI -->
+<section class="py-5 section-bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Why Choose Nechilibi?</h2>
+      <p class="text-muted">A school built on values, excellence, and community</p>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-6">
+        <div class="why-box">
+          <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+          <h5>Academic Excellence</h5>
+          <p class="text-muted small">Consistently high pass rates in ZIMSEC O- and A-Level examinations.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-box">
+          <div class="icon"><i class="fas fa-futbol"></i></div>
+          <h5>Sports &amp; Arts</h5>
+          <p class="text-muted small">Football, netball, athletics, drama and music for every student.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-box">
+          <div class="icon"><i class="fas fa-home"></i></div>
+          <h5>Safe Environment</h5>
+          <p class="text-muted small">Secure boarding and day school facilities in a peaceful rural setting.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-box">
+          <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <h5>Qualified Staff</h5>
+          <p class="text-muted small">Experienced, dedicated teachers committed to student success.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="section-title mb-0">Latest News</h2>
+      <a href="/news/" class="btn btn-sm btn-outline-secondary">View All <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="row">
+      {% if latest_news %}
+        {% for article in latest_news %}
+        <div class="col-md-4 mb-4">
+          <div class="card news-card card-hover h-100">
+            {% if article.featured_image %}
+              <img src="{{ article.featured_image.url }}" class="card-img-top" alt="{{ article.title }}">
+            {% else %}
+              <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px;background:linear-gradient(135deg,#6B0000,#4a0000)">
+                <i class="fas fa-newspaper fa-3x text-white" style="opacity:0.5"></i>
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <p class="news-date"><i class="far fa-calendar-alt mr-1"></i>{{ article.created|date:"d M Y" }}</p>
+              <h6 class="font-weight-bold">{{ article.title }}</h6>
+              <p class="text-muted small">{{ article.content|striptags|truncatechars:100 }}</p>
+            </div>
+            <div class="card-footer bg-white border-0">
+              <a href="{{ article.get_absolute_url }}" class="text-primary-custom font-weight-bold small">Read More <i class="fas fa-arrow-right ml-1"></i></a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12 text-center py-4 text-muted">
+          <i class="fas fa-newspaper fa-2x mb-3 d-block"></i>
+          No news articles yet. Check back soon.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS + QUICK LINKS -->
+<section class="py-5 section-bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <h2 class="section-title">Upcoming Events</h2>
+        {% if upcoming_events %}
+          {% for event in upcoming_events %}
+          <div class="d-flex align-items-start event-item">
+            <div class="event-date-badge mr-3 flex-shrink-0">
+              <div class="day">{{ event.start_date|date:"d" }}</div>
+              <div class="mon">{{ event.start_date|date:"M" }}</div>
+            </div>
+            <div>
+              <h6 class="font-weight-bold mb-1">{{ event.title }}</h6>
+              {% if event.location %}<p class="text-muted small mb-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</p>{% endif %}
+              <p class="text-muted small mb-0">{{ event.description|truncatechars:100 }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted">No upcoming events. Check back soon.</p>
+        {% endif %}
+        <a href="/events/" class="btn btn-primary-custom mt-3">All Events <i class="fas fa-arrow-right ml-2"></i></a>
+      </div>
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <h2 class="section-title">Quick Links</h2>
+        <div class="list-group">
+          <a href="/admissions/" class="list-group-item list-group-item-action"><i class="fas fa-file-alt mr-2 text-primary-custom"></i>Admission Requirements</a>
+          <a href="/downloads/" class="list-group-item list-group-item-action"><i class="fas fa-download mr-2 text-primary-custom"></i>Application Forms</a>
+          <a href="/gallery/" class="list-group-item list-group-item-action"><i class="fas fa-images mr-2 text-primary-custom"></i>Photo Gallery</a>
+          <a href="/contact/" class="list-group-item list-group-item-action"><i class="fas fa-envelope mr-2 text-primary-custom"></i>Contact Us</a>
+          <a href="/school-admin/" class="list-group-item list-group-item-action"><i class="fas fa-lock mr-2 text-primary-custom"></i>Staff Portal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+{% if featured_images %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="section-title mb-0">Photo Gallery</h2>
+      <a href="/gallery/" class="btn btn-sm btn-outline-secondary">View All</a>
+    </div>
+    <div class="row">
+      {% for img in featured_images %}
+      <div class="col-md-4 col-6 mb-3">
+        <img src="{{ img.image.url }}" class="gallery-thumb" alt="{{ img.title }}">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- VIDEOS -->
+{% if videos %}
+<section class="py-5 section-bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="section-title mb-0">School Videos</h2>
+    </div>
+    <div class="row">
+      {% for video in videos %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm card-hover h-100">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <h6 class="font-weight-bold">{{ video.title }}</h6>
+            {% if video.description %}<p class="text-muted small">{{ video.description|truncatechars:100 }}</p>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA BANNER -->
+<section class="py-5 bg-primary-custom text-white text-center">
+  <div class="container">
+    <h2 class="text-white mb-3">Ready to Join Nechilibi High School?</h2>
+    <p class="mb-4" style="opacity:0.85;">Applications for the 2026 academic year are now open for Forms 1 and 2.</p>
+    <a href="/admissions/" class="btn btn-accent btn-lg mr-3">Apply Now</a>
+    <a href="/contact/" class="btn btn-outline-light btn-lg">Contact Us</a>
+  </div>
+</section>
+{% endblock %}

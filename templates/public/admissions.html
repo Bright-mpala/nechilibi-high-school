@@ -1,0 +1,122 @@
+{% extends 'public/base.html' %}
+{% block title %}Admissions - Nechilibi High School{% endblock %}
+{% block content %}
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">Admissions</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item active text-white">Admissions</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2 class="section-title">How to Apply</h2>
+        <p>We welcome applications from academically motivated students who wish to pursue their secondary education at Nechilibi High School. Our admissions process is straightforward and transparent.</p>
+
+        <!-- Steps -->
+        <div class="row mb-5 text-center">
+          <div class="col-md-3 col-6 mb-3">
+            <div class="rounded-circle bg-primary-custom text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;font-weight:900;">1</div>
+            <p class="small font-weight-bold">Download Form</p>
+            <p class="text-muted" style="font-size:0.75rem;">Get the application form from the Downloads page</p>
+          </div>
+          <div class="col-md-3 col-6 mb-3">
+            <div class="rounded-circle bg-primary-custom text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;font-weight:900;">2</div>
+            <p class="small font-weight-bold">Complete &amp; Submit</p>
+            <p class="text-muted" style="font-size:0.75rem;">Fill in all sections and submit with required documents</p>
+          </div>
+          <div class="col-md-3 col-6 mb-3">
+            <div class="rounded-circle bg-primary-custom text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;font-weight:900;">3</div>
+            <p class="small font-weight-bold">Interview</p>
+            <p class="text-muted" style="font-size:0.75rem;">Shortlisted candidates are invited for an interview</p>
+          </div>
+          <div class="col-md-3 col-6 mb-3">
+            <div class="rounded-circle bg-primary-custom text-white d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;font-size:1.5rem;font-weight:900;">4</div>
+            <p class="small font-weight-bold">Enrolment</p>
+            <p class="text-muted" style="font-size:0.75rem;">Successful applicants complete enrolment and fee payment</p>
+          </div>
+        </div>
+
+        <h4 class="section-title">Entry Requirements</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="bg-primary-custom text-white">
+              <tr><th>Form</th><th>Entry Requirements</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Form 1</strong></td><td>Grade 7 certificate with at least 5 passes including English and Mathematics</td></tr>
+              <tr><td><strong>Form 2</strong></td><td>Successful completion of Form 1 or equivalent from another school</td></tr>
+              <tr><td><strong>Form 3</strong></td><td>Successful completion of Form 2</td></tr>
+              <tr><td><strong>Form 4</strong></td><td>Successful completion of Form 3</td></tr>
+              <tr><td><strong>Form 5 (Lower 6th)</strong></td><td>Minimum 5 O-Level passes at Grade C or better, including English Language</td></tr>
+              <tr><td><strong>Form 6 (Upper 6th)</strong></td><td>Successful completion of Form 5 / Lower 6th</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="section-title mt-4">Documents Required</h4>
+        <ul>
+          <li class="mb-2">Completed application form (download from Downloads page)</li>
+          <li class="mb-2">Certified copy of birth certificate</li>
+          <li class="mb-2">Latest school report / end-of-year results</li>
+          <li class="mb-2">Certified copies of relevant certificates (O-Level results for Form 5 entry)</li>
+          <li class="mb-2">Two recent passport-size photographs</li>
+          <li class="mb-2">Transfer letter (for students transferring from another school)</li>
+          <li class="mb-2">Medical / health form (available from the school office)</li>
+        </ul>
+
+        <div class="alert" style="background: #fff8e1; border-left: 4px solid #FFD700;" role="alert">
+          <i class="fas fa-info-circle mr-2 text-warning"></i>
+          <strong>Note:</strong> All certified copies must be certified by a Commissioner of Oaths or Notary Public. Original documents must be presented on enrolment day.
+        </div>
+
+        <a href="/downloads/" class="btn btn-accent btn-lg mt-3">
+          <i class="fas fa-download mr-2"></i>Download Application Form
+        </a>
+        <a href="/contact/" class="btn btn-outline-secondary btn-lg mt-3 ml-2">
+          <i class="fas fa-envelope mr-2"></i>Enquire Now
+        </a>
+      </div>
+
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="text-primary-custom font-weight-bold">Fee Structure</h5>
+          <p class="text-muted small">For current fee information, please contact the school office directly. Fees are reviewed annually.</p>
+          <ul class="list-unstyled small text-muted">
+            <li class="mb-1"><i class="fas fa-check text-primary-custom mr-2"></i>Tuition fees</li>
+            <li class="mb-1"><i class="fas fa-check text-primary-custom mr-2"></i>Boarding fees (optional)</li>
+            <li class="mb-1"><i class="fas fa-check text-primary-custom mr-2"></i>Development levy</li>
+            <li class="mb-1"><i class="fas fa-check text-primary-custom mr-2"></i>Examination fees</li>
+          </ul>
+          <a href="/contact/" class="btn btn-primary-custom btn-sm btn-block mt-2">Enquire About Fees</a>
+        </div>
+
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="text-primary-custom font-weight-bold">Important Dates</h5>
+          <ul class="list-unstyled small text-muted">
+            <li class="mb-2"><i class="fas fa-calendar text-primary-custom mr-2"></i><strong>Applications Open:</strong> October each year</li>
+            <li class="mb-2"><i class="fas fa-calendar text-primary-custom mr-2"></i><strong>Closing Date:</strong> 30 November</li>
+            <li class="mb-2"><i class="fas fa-calendar text-primary-custom mr-2"></i><strong>Interviews:</strong> December</li>
+            <li class="mb-2"><i class="fas fa-calendar text-primary-custom mr-2"></i><strong>Results Announced:</strong> Mid-December</li>
+            <li class="mb-2"><i class="fas fa-calendar text-primary-custom mr-2"></i><strong>Term 1 Begins:</strong> January</li>
+          </ul>
+        </div>
+
+        <div class="card border-0 bg-primary-custom text-white p-4">
+          <h5 class="text-warning">Need Help?</h5>
+          <p class="small">Our admissions team is ready to assist you with the application process.</p>
+          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>+263 XXX XXX XXX</p>
+          <p class="small mb-0"><i class="fas fa-envelope mr-2"></i>admissions@nechilibi.ac.zw</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

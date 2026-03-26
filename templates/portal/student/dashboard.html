@@ -1,0 +1,108 @@
+{% extends 'portal/base.html' %}
+{% block title %}Student Dashboard{% endblock %}
+{% block portal_type %}Student Portal{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block sidebar_nav %}
+<li class="nav-item"><a href="/student/dashboard/" class="active"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+<li class="nav-item"><a href="/student/results/"><i class="fas fa-chart-bar"></i>My Results</a></li>
+<li class="nav-item"><a href="/student/profile/"><i class="fas fa-user"></i>My Profile</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card stat-card p-4">
+      <div class="d-flex align-items-center">
+        <div class="icon mr-3" style="background:#fff3f3"><i class="fas fa-user-graduate" style="color:#6B0000"></i></div>
+        <div>
+          <h5 class="mb-0 font-weight-bold">Welcome, {{ student.admission_student.name }}</h5>
+          <p class="text-muted mb-0 small">
+            {% if student.semester %}Semester {{ student.semester }}{% endif %}
+            {% if student.admission_student.choosen_department %} &bull; {{ student.admission_student.choosen_department }}{% endif %}
+            {% if student.temporary_id %} &bull; ID: {{ student.temporary_id }}{% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <div class="card stat-card p-4 text-center">
+      <div class="icon mx-auto mb-3" style="background:#fff3f3"><i class="fas fa-book" style="color:#6B0000"></i></div>
+      <h4 class="font-weight-bold">{{ results|length }}</h4>
+      <p class="text-muted mb-2">Results Available</p>
+      <a href="/student/results/" class="btn btn-sm btn-outline-secondary">View Results</a>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card stat-card p-4 text-center">
+      <div class="icon mx-auto mb-3" style="background:#fffbf0"><i class="fas fa-calendar-alt" style="color:#FFD700"></i></div>
+      <h4 class="font-weight-bold">{% if current_session %}{{ current_session }}{% else %}&mdash;{% endif %}</h4>
+      <p class="text-muted mb-0">Current Session</p>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card stat-card p-4 text-center">
+      <div class="icon mx-auto mb-3" style="background:#f0fff4"><i class="fas fa-certificate" style="color:#28a745"></i></div>
+      <h4 class="font-weight-bold">ZIMSEC</h4>
+      <p class="text-muted mb-0">Examination Board</p>
+    </div>
+  </div>
+</div>
+
+{% if subjects %}
+<div class="card stat-card mb-4">
+  <div class="card-header bg-white"><h6 class="font-weight-bold mb-0" style="color:#6B0000">My Subjects</h6></div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="thead-light"><tr><th>Subject</th><th>Code</th><th>Theory Marks</th><th>Practical Marks</th></tr></thead>
+        <tbody>
+          {% for s in subjects %}
+          <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.subject_code }}</td>
+            <td>{{ s.theory_marks }}</td>
+            <td>{{ s.practical_marks }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if results %}
+<div class="card stat-card">
+  <div class="card-header bg-white"><h6 class="font-weight-bold mb-0" style="color:#6B0000">Recent Results</h6></div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="thead-light"><tr><th>Subject</th><th>Theory</th><th>Practical</th><th>Total</th><th>Semester</th></tr></thead>
+        <tbody>
+          {% for r in results|slice:":5" %}
+          <tr>
+            <td>{{ r.subject }}</td>
+            <td>{{ r.theory_marks|default:"&mdash;" }}</td>
+            <td>{{ r.practical_marks|default:"&mdash;" }}</td>
+            <td><strong>{{ r.total_marks|default:"&mdash;" }}</strong></td>
+            <td>{{ r.semester }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="card stat-card p-5 text-center text-muted">
+  <i class="fas fa-inbox fa-3x mb-3 d-block" style="opacity:0.25"></i>
+  <h5>No results yet</h5>
+  <p>Your results will appear here once they are published by your teachers.</p>
+</div>
+{% endif %}
+{% endblock %}

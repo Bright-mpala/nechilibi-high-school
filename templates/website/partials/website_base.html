@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="{% block meta_description %}Nechilibi High School — Excellence in Education, Zimbabwe{% endblock %}">
+  <title>{% block page_title %}{% if request_institute.site_title %}{{ request_institute.site_title }}{% else %}Nechilibi High School{% endif %}{% endblock %}</title>
+
+  <!-- Favicon -->
+  {% if request_institute.favicon %}
+    <link rel="shortcut icon" href="{{ request_institute.favicon.url }}" type="image/png">
+  {% else %}
+    <link rel="shortcut icon" href="{% static 'landing/img/favicon.png' %}" type="image/png">
+  {% endif %}
+
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+  <!-- FontAwesome 5 -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" crossorigin="anonymous">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rubik:wght@400;500&display=swap">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}">
+  <!-- Lightbox2 for gallery -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" crossorigin="anonymous">
+  <!-- Nechilibi Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/nechilibi.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div id="top-bar">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div class="d-flex align-items-center gap-3" style="gap:16px;">
+        <span><i class="fas fa-phone-alt mr-1"></i> +263 (0)83 123 4567</span>
+        <span class="d-none d-sm-inline"><i class="fas fa-envelope mr-1"></i> info@nechilibi.ac.zw</span>
+        <span class="d-none d-md-inline"><i class="fas fa-clock mr-1"></i> Mon–Fri: 7:30am – 4:30pm</span>
+      </div>
+      <div class="social-links d-flex align-items-center">
+        {% for link in social_links %}
+          <a href="{{ link.url }}" target="_blank" rel="noopener" title="{{ link.get_platform_display }}">
+            {% if link.platform == 'facebook' %}<i class="fab fa-facebook-f"></i>
+            {% elif link.platform == 'twitter' %}<i class="fab fa-twitter"></i>
+            {% elif link.platform == 'instagram' %}<i class="fab fa-instagram"></i>
+            {% elif link.platform == 'youtube' %}<i class="fab fa-youtube"></i>
+            {% elif link.platform == 'whatsapp' %}<i class="fab fa-whatsapp"></i>
+            {% elif link.platform == 'linkedin' %}<i class="fab fa-linkedin-in"></i>
+            {% else %}<i class="fas fa-link"></i>{% endif %}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN NAVBAR ===== -->
+<nav id="main-nav" class="navbar navbar-expand-lg">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand" href="{% url 'pages:landing' %}">
+      {% if request_institute.logo %}
+        <img src="{{ request_institute.logo.url }}" alt="{{ request_institute.name }}" height="55">
+      {% endif %}
+      <div class="school-name">
+        <strong>{% if request_institute.name %}{{ request_institute.name }}{% else %}Nechilibi High School{% endif %}</strong>
+        <small>Excellence in Education</small>
+      </div>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ml-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link {% block nav_home %}{% endblock %}" href="{% url 'pages:landing' %}">Home</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% block nav_about %}{% endblock %}" href="#" id="aboutDrop" role="button" data-toggle="dropdown">About</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'pages:about' %}">About Us</a>
+            <a class="dropdown-item" href="{% url 'pages:about' %}#history">History</a>
+            <a class="dropdown-item" href="{% url 'pages:about' %}#mission">Mission & Vision</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {% block nav_academics %}{% endblock %}" href="#" id="acadDrop" role="button" data-toggle="dropdown">Academics</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'pages:landing' %}#departments">Departments</a>
+            <a class="dropdown-item" href="{% url 'pages:admission' %}">Admissions</a>
+            <a class="dropdown-item" href="{% url 'pages:downloads' %}">Timetables & Forms</a>
+          </div>
+        </li>
+
+        <li class="nav-item"><a class="nav-link {% block nav_news %}{% endblock %}" href="{% url 'articles:home' %}">News</a></li>
+        <li class="nav-item"><a class="nav-link {% block nav_gallery %}{% endblock %}" href="{% url 'pages:gallery' %}">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link {% block nav_events %}{% endblock %}" href="{% url 'pages:events' %}">Events</a></li>
+        <li class="nav-item"><a class="nav-link {% block nav_notices %}{% endblock %}" href="{% url 'notices:notices' %}">Notices</a></li>
+        <li class="nav-item"><a class="nav-link {% block nav_contact %}{% endblock %}" href="{% url 'pages:contact' %}">Contact</a></li>
+
+        {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link btn-portal ml-lg-2" href="{% url account_urls.dashboard %}">
+              <i class="fas fa-tachometer-alt mr-1"></i>Dashboard
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link btn-portal ml-lg-2" href="{% url 'pages:admission' %}">
+              <i class="fas fa-user-plus mr-1"></i>Apply Now
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== PAGE CONTENT ===== -->
+{% block main_content %}{% endblock %}
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <div class="container">
+    <div class="row">
+      <!-- About column -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        {% if request_institute.logo %}
+          <img src="{{ request_institute.logo.url }}" alt="{{ request_institute.name }}" height="60" class="mb-3">
+        {% endif %}
+        <p>Nechilibi High School is committed to providing quality education that empowers students to achieve excellence in academics and character.</p>
+        <div class="footer-social mt-3">
+          {% for link in social_links %}
+            <a href="{{ link.url }}" target="_blank" rel="noopener" title="{{ link.get_platform_display }}">
+              {% if link.platform == 'facebook' %}<i class="fab fa-facebook-f"></i>
+              {% elif link.platform == 'twitter' %}<i class="fab fa-twitter"></i>
+              {% elif link.platform == 'instagram' %}<i class="fab fa-instagram"></i>
+              {% elif link.platform == 'youtube' %}<i class="fab fa-youtube"></i>
+              {% elif link.platform == 'whatsapp' %}<i class="fab fa-whatsapp"></i>
+              {% elif link.platform == 'linkedin' %}<i class="fab fa-linkedin-in"></i>
+              {% else %}<i class="fas fa-link"></i>{% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="{% url 'pages:about' %}">About Us</a></li>
+          <li><a href="{% url 'pages:admission' %}">Admissions</a></li>
+          <li><a href="{% url 'articles:home' %}">News &amp; Blog</a></li>
+          <li><a href="{% url 'pages:gallery' %}">Gallery</a></li>
+          <li><a href="{% url 'pages:events' %}">Events</a></li>
+          <li><a href="{% url 'notices:notices' %}">Notices</a></li>
+          <li><a href="{% url 'pages:downloads' %}">Downloads</a></li>
+          <li><a href="{% url 'pages:contact' %}">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Portals -->
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h5>Portals</h5>
+        <ul>
+          {% if request.user.is_authenticated %}
+            <li><a href="{% url account_urls.dashboard %}">My Dashboard</a></li>
+            <li><a href="{% url 'account_logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'account_login' %}">Staff Login</a></li>
+            <li><a href="{% url 'pages:admission' %}">Apply Online</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Contact info -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h5>Contact Us</h5>
+        <p><i class="fas fa-map-marker-alt mr-2" style="color:var(--accent)"></i>
+          {% if request_institute.city %}{{ request_institute.city }}, {% endif %}Zimbabwe
+        </p>
+        <p><i class="fas fa-phone mr-2" style="color:var(--accent)"></i>+263 (0)83 123 4567</p>
+        <p><i class="fas fa-envelope mr-2" style="color:var(--accent)"></i>info@nechilibi.ac.zw</p>
+        <p><i class="fas fa-clock mr-2" style="color:var(--accent)"></i>Monday – Friday: 7:30am – 4:30pm</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      &copy; {% now "Y" %} Nechilibi High School. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></a>
+
+<!-- Preloader -->
+<div id="preloader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="width:40px;height:40px;border:4px solid #eee;border-top-color:#8B0000;border-radius:50%;animation:spin .8s linear infinite;"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- Scripts -->
+<script src="{% static 'landing/js/jquery-min.js' %}"></script>
+<script src="{% static 'landing/js/popper.min.js' %}"></script>
+<script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+<!-- Lightbox2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" crossorigin="anonymous"></script>
+
+<script>
+  // Preloader hide
+  $(window).on('load', function(){ $('#preloader').fadeOut(300); });
+
+  // Back to top
+  $(window).on('scroll', function(){
+    if ($(this).scrollTop() > 200) { $('#backToTop').addClass('visible'); }
+    else { $('#backToTop').removeClass('visible'); }
+  });
+  $('#backToTop').on('click', function(e){
+    e.preventDefault();
+    $('html, body').animate({scrollTop: 0}, 400);
+  });
+
+  // Sticky navbar
+  $(window).on('scroll', function(){
+    if ($(this).scrollTop() > 60) { $('#main-nav').addClass('scrolled'); }
+    else { $('#main-nav').removeClass('scrolled'); }
+  });
+
+  // Counter animation
+  function animateCounters() {
+    $('.stat-value[data-target]').each(function(){
+      var $el = $(this);
+      var target = parseInt($el.data('target'));
+      var suffix = $el.data('suffix') || '';
+      $({count: 0}).animate({count: target}, {
+        duration: 1800,
+        easing: 'swing',
+        step: function(){ $el.text(Math.floor(this.count) + suffix); },
+        complete: function(){ $el.text(target + suffix); }
+      });
+    });
+  }
+
+  // Run counter when stats section visible
+  var countersRun = false;
+  $(window).on('scroll load', function(){
+    if (!countersRun && $('#stats').length) {
+      var top = $('#stats').offset().top;
+      if ($(window).scrollTop() + $(window).height() > top) {
+        countersRun = true;
+        animateCounters();
+      }
+    }
+  });
+
+  // Lightbox config
+  if (typeof lightbox !== 'undefined') {
+    lightbox.option({ resizeDuration: 200, wrapAround: true });
+  }
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>
