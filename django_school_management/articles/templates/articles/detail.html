@@ -1,194 +1,213 @@
-{% extends 'website/partials/website_base.html' %}
+{% extends 'public/base.html' %}
 {% load static %}
 
-{% block page_title %}{{ object.title }} | {{ request_institute.name }}{% endblock %}
-{% block meta_description %}{{ object.get_short_description }}{% endblock %}
-{% block nav_news %}active{% endblock %}
+{% block title %}{{ object.title }} | Nechilibi High School{% endblock %}
 
 {% block extra_css %}
 <style>
-  /* ---- Article hero ---- */
+  /* Hero */
   .article-hero {
     position: relative;
-    min-height: 380px;
+    min-height: 420px;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     display: flex;
     align-items: flex-end;
   }
   .article-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.72) 100%);
+    background: linear-gradient(to bottom, rgba(74,0,128,0.3) 0%, rgba(26,0,48,0.85) 100%);
   }
-  .article-hero-content {
+  .article-hero-inner {
     position: relative;
     z-index: 2;
-    padding: 2.5rem 0;
+    padding: 2.5rem 0 2rem;
   }
-  .article-hero h1 {
+  .article-hero-inner h1 {
     color: #fff;
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 900;
     line-height: 1.3;
-    margin-bottom: .75rem;
+    margin-bottom: .6rem;
   }
-  .article-meta {
-    color: rgba(255,255,255,.8);
-    font-size: .9rem;
+  .article-hero-inner .meta {
+    color: rgba(255,255,255,.75);
+    font-size: .88rem;
   }
-  .article-meta a { color: #fff; text-decoration: underline; }
+  .article-hero-inner .meta i { margin-right: .3rem; }
 
-  /* breadcrumb bar */
+  /* Breadcrumb */
   .article-breadcrumb {
-    background: #f8f9fa;
-    padding: .6rem 0;
-    border-bottom: 1px solid #e9ecef;
-    font-size: .85rem;
+    background: #f4f1f8;
+    border-bottom: 1px solid #e0d9ec;
+    padding: .55rem 0;
+    font-size: .82rem;
   }
-  .article-breadcrumb a { color: var(--primary, #8B0000); }
+  .article-breadcrumb a { color: #4a0080; }
+  .article-breadcrumb span { color: #888; }
 
-  /* Article body */
-  .article-body {
-    padding: 2.5rem 0;
-  }
-  .article-body-content {
+  /* Body */
+  .article-wrapper { padding: 2.5rem 0 1rem; }
+  .article-content {
     font-size: 1.05rem;
-    line-height: 1.85;
-    color: #333;
+    line-height: 1.9;
+    color: #2a2a2a;
     word-break: break-word;
   }
-  .article-body-content img {
+  .article-content img {
     max-width: 100%;
     height: auto;
     border-radius: 6px;
     margin: 1rem 0;
   }
-  .article-body-content p { margin-bottom: 1.2rem; }
-
-  /* share row */
-  .share-row {
-    border-top: 1px solid #e9ecef;
-    border-bottom: 1px solid #e9ecef;
-    padding: .75rem 0;
+  .article-content p { margin-bottom: 1.2rem; }
+  .article-content h2,.article-content h3,.article-content h4 {
+    color: #4a0080;
+    margin-top: 1.5rem;
+    margin-bottom: .75rem;
+  }
+  .article-content blockquote {
+    border-left: 4px solid #800020;
+    padding-left: 1rem;
+    color: #555;
+    font-style: italic;
     margin: 1.5rem 0;
   }
-  .share-row a {
+
+  /* Share strip */
+  .share-strip {
+    border-top: 1px solid #e0d9ec;
+    border-bottom: 1px solid #e0d9ec;
+    padding: .8rem 0;
+    margin: 2rem 0 1.5rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .share-strip .label { font-size: .82rem; font-weight: 700; color: #555; margin-right: .3rem; }
+  .share-btn {
     display: inline-flex;
     align-items: center;
-    margin-right: .6rem;
-    padding: .35rem .8rem;
+    padding: .32rem .8rem;
     border-radius: 4px;
     font-size: .82rem;
     font-weight: 600;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
   }
-  .share-row a i { margin-right: .4rem; }
+  .share-btn i { margin-right: .35rem; }
+  .share-btn:hover { opacity: .88; }
   .share-fb  { background: #1877f2; }
   .share-tw  { background: #1da1f2; }
   .share-wa  { background: #25d366; }
-  .share-row a:hover { opacity: .88; color: #fff; }
 
-  /* Related articles */
-  .related-section { background: #f8f9fa; padding: 2.5rem 0; }
-  .related-section h4 { font-weight: 700; margin-bottom: 1.5rem; }
-  .related-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); height: 100%; }
-  .related-card img { width: 100%; height: 160px; object-fit: cover; }
-  .related-card-body { padding: 1rem; }
-  .related-card-body a { color: #222; font-weight: 600; font-size: .92rem; text-decoration: none; }
-  .related-card-body a:hover { color: var(--primary, #8B0000); }
-  .related-card-body small { color: #888; }
-  .related-card-placeholder { height: 160px; background: linear-gradient(135deg, #8B0000, #b22222); }
+  /* Related */
+  .related-section { background: #f4f1f8; padding: 2.5rem 0 3rem; margin-top: 2rem; }
+  .related-section h4 { color: #4a0080; font-weight: 800; margin-bottom: 1.5rem; }
+  .related-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(74,0,128,.1);
+    height: 100%;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .related-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(74,0,128,.15); }
+  .related-card img { width: 100%; height: 155px; object-fit: cover; }
+  .related-card-placeholder { height: 155px; background: linear-gradient(135deg, #4a0080, #800020); }
+  .related-card-body { padding: .9rem; }
+  .related-card-body a { color: #1a0030; font-weight: 700; font-size: .9rem; text-decoration: none; }
+  .related-card-body a:hover { color: #4a0080; }
+  .related-card-body small { color: #888; font-size: .78rem; }
 </style>
 {% endblock %}
 
-{% block main_content %}
+{% block content %}
 
 <!-- Breadcrumb -->
 <div class="article-breadcrumb">
   <div class="container">
-    <a href="{% url 'pages:landing' %}">Home</a>
-    <span class="mx-1 text-muted">/</span>
-    <a href="{% url 'articles:home' %}">News &amp; Blog</a>
-    <span class="mx-1 text-muted">/</span>
-    <span class="text-muted">{{ object.title|truncatechars:60 }}</span>
+    <a href="/">Home</a>
+    <span class="mx-1">/</span>
+    <a href="/news/">News &amp; Blog</a>
+    <span class="mx-1">/</span>
+    <span>{{ object.title|truncatechars:55 }}</span>
   </div>
 </div>
 
-<!-- Hero banner -->
+<!-- Article hero banner -->
 <div class="article-hero"
   {% if object.featured_image %}
     style="background-image: url('{{ object.featured_image.url }}')"
   {% else %}
-    style="background: linear-gradient(135deg, #8B0000 0%, #b22222 100%)"
+    style="background: linear-gradient(135deg, #4a0080 0%, #800020 100%)"
   {% endif %}>
   <div class="article-hero-overlay"></div>
-  <div class="container article-hero-content">
-    <div class="row">
-      <div class="col-lg-9">
-        {% if object.categories.all %}
-          {% for cat in object.categories.all %}
-            <a href="{{ cat.get_absolute_url }}"
-               class="badge badge-light mb-2 mr-1"
-               style="font-size:.78rem;padding:.35rem .65rem;">{{ cat.name }}</a>
-          {% endfor %}
-        {% endif %}
-        <h1>{{ object.title }}</h1>
-        <p class="article-meta">
-          <i class="fas fa-user-edit mr-1"></i>
-          {% if object.author.get_full_name %}{{ object.author.get_full_name }}
-          {% else %}{{ object.author.username }}{% endif %}
-          &nbsp;&nbsp;
-          <i class="fas fa-calendar-alt mr-1"></i>{{ object.created|date:"F j, Y" }}
-        </p>
-      </div>
+  <div class="container article-hero-inner">
+    {% if object.categories.all %}
+    <div class="mb-2">
+      {% for cat in object.categories.all %}
+        <a href="{{ cat.get_absolute_url }}"
+           class="badge mr-1"
+           style="background:rgba(255,255,255,.2);color:#fff;font-size:.75rem;padding:.3rem .65rem;border-radius:3px;text-decoration:none;">
+          {{ cat.name }}
+        </a>
+      {% endfor %}
     </div>
+    {% endif %}
+    <h1>{{ object.title }}</h1>
+    <p class="meta">
+      <i class="fas fa-user-edit"></i>
+      {% if object.author.get_full_name %}{{ object.author.get_full_name }}
+      {% else %}{{ object.author.username }}{% endif %}
+      &nbsp;&nbsp;
+      <i class="fas fa-calendar-alt"></i>{{ object.created|date:"F j, Y" }}
+    </p>
   </div>
 </div>
 
 <!-- Article body -->
-<section class="article-body">
+<div class="article-wrapper">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-9 col-md-10">
+    <div class="row justify-content-center">
+      <div class="col-lg-9 col-md-11">
 
-        <!-- Article content -->
-        <div class="article-body-content">
+        <div class="article-content">
           {{ object.content|safe }}
         </div>
 
         <!-- Share buttons -->
-        <div class="share-row">
-          <span class="text-muted mr-3" style="font-size:.85rem;font-weight:600;">Share:</span>
-          <a class="share-fb"
+        <div class="share-strip">
+          <span class="label">Share:</span>
+          <a class="share-btn share-fb"
              href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
              target="_blank" rel="noopener">
-            <i class="fab fa-facebook-f"></i> Facebook
+            <i class="fab fa-facebook-f"></i>Facebook
           </a>
-          <a class="share-tw"
+          <a class="share-btn share-tw"
              href="https://twitter.com/intent/tweet?text={{ object.title|urlencode }}&url={{ request.build_absolute_uri }}"
              target="_blank" rel="noopener">
-            <i class="fab fa-twitter"></i> Twitter
+            <i class="fab fa-twitter"></i>Twitter
           </a>
-          <a class="share-wa"
+          <a class="share-btn share-wa"
              href="https://wa.me/?text={{ object.title|urlencode }}%20{{ request.build_absolute_uri }}"
              target="_blank" rel="noopener">
-            <i class="fab fa-whatsapp"></i> WhatsApp
+            <i class="fab fa-whatsapp"></i>WhatsApp
           </a>
         </div>
 
-        <!-- Back link -->
-        <a href="{% url 'articles:home' %}" class="btn btn-outline-secondary btn-sm">
+        <a href="/news/" class="btn btn-sm btn-outline-secondary">
           <i class="fas fa-arrow-left mr-1"></i> Back to News
         </a>
 
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- Related Articles -->
+<!-- Related articles -->
 {% with related=object.get_related_articles %}
 {% if related %}
 <section class="related-section">
@@ -196,7 +215,7 @@
     <h4>You may also like</h4>
     <div class="row">
       {% for article in related %}
-      <div class="col-sm-6 col-md-3 mb-4">
+      <div class="col-sm-6 col-lg-3 mb-4">
         <div class="related-card">
           {% if article.featured_image %}
             <img src="{{ article.featured_image.url }}" alt="{{ article.title }}">
@@ -216,4 +235,4 @@
 {% endif %}
 {% endwith %}
 
-{% endblock main_content %}
+{% endblock content %}
