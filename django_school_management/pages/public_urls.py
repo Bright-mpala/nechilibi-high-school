@@ -17,4 +17,5 @@ urlpatterns = [
     path('results/', public_views.zimsec_results, name='zimsec_results'),
     path('fees/', public_views.fee_structure, name='fee_structure'),
     path('subjects/', public_views.subjects_offered, name='subjects_offered'),
+    path('newsletter/subscribe/', public_views.newsletter_subscribe, name='newsletter_subscribe'),
 ]

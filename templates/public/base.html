@@ -199,19 +199,36 @@
           </ul>
         </div>
 
-        <!-- Col 4: Latest News placeholder -->
+        <!-- Col 4: Newsletter signup -->
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="footer-heading">Latest News</div>
-          <div class="small" style="color:#aaa;">
-            <div class="mb-3 pb-3 border-bottom border-secondary">
-              <i class="fas fa-newspaper mr-2" style="color:var(--accent);"></i>
-              <a href="/news/" style="color:#aaa;">School news and updates will appear here.</a>
-              <div class="mt-1 text-muted" style="font-size:0.75rem;"><i class="far fa-calendar-alt mr-1"></i>Visit our news page</div>
-            </div>
-            <div>
-              <a href="/news/" class="btn btn-sm btn-outline-secondary">View All News <i class="fas fa-arrow-right ml-1"></i></a>
-            </div>
+          <div class="footer-heading"><i class="fas fa-envelope mr-2"></i>Stay Informed</div>
+          <p class="small" style="color:#aaa;">Get school news, events, and notices delivered to your inbox.</p>
+          {% if request.GET.subscribed %}
+          <div class="alert alert-success py-2 small" style="background:#1a3a1a;border-color:#2e7d32;color:#a5d6a7;">
+            <i class="fas fa-check-circle mr-1"></i> You're subscribed — thank you!
           </div>
+          {% else %}
+          <form method="post" action="/newsletter/subscribe/" class="mt-2">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="mb-2">
+              <input type="text" name="name" placeholder="Your name (optional)"
+                class="form-control form-control-sm"
+                style="background:#1a1a2e;border:1px solid #444;color:#ddd;border-radius:4px;">
+            </div>
+            <div class="input-group input-group-sm">
+              <input type="email" name="email" placeholder="your@email.com" required
+                class="form-control"
+                style="background:#1a1a2e;border:1px solid #444;color:#ddd;border-radius:4px 0 0 4px;">
+              <div class="input-group-append">
+                <button class="btn btn-sm" type="submit"
+                  style="background:var(--accent);color:#1a1a2e;font-weight:700;border-radius:0 4px 4px 0;">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+          {% endif %}
         </div>
 
       </div>
@@ -225,6 +242,22 @@
       </div>
     </div>
   </footer>
+
+  <!-- WhatsApp Floating Button -->
+  {% if school_settings.whatsapp_number %}
+  <a href="https://wa.me/{{ school_settings.whatsapp_number }}?text=Hello%20Nechilibi%20High%20School%2C%20I%20would%20like%20to%20enquire%20about..."
+     target="_blank" rel="noopener"
+     title="Chat with us on WhatsApp"
+     style="position:fixed;bottom:24px;right:24px;z-index:9999;
+            background:#25d366;color:#fff;border-radius:50%;
+            width:56px;height:56px;display:flex;align-items:center;justify-content:center;
+            box-shadow:0 4px 16px rgba(0,0,0,.3);text-decoration:none;
+            transition:transform .2s,box-shadow .2s;"
+     onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 6px 24px rgba(0,0,0,.4)'"
+     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 16px rgba(0,0,0,.3)'">
+    <i class="fab fa-whatsapp" style="font-size:1.7rem;"></i>
+  </a>
+  {% endif %}
 
   <!-- jQuery + Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

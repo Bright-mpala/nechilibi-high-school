@@ -198,6 +198,21 @@ class FeeItem(models.Model):
         return self.amount
 
 
+class NewsletterSubscriber(models.Model):
+    email       = models.EmailField(unique=True)
+    name        = models.CharField(max_length=100, blank=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_active   = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-subscribed_at']
+        verbose_name = 'Newsletter Subscriber'
+        verbose_name_plural = 'Newsletter Subscribers'
+
+    def __str__(self):
+        return self.email
+
+
 class SubjectOffered(models.Model):
     LEVEL_CHOICES = [
         ('o_level', 'O-Level (Form 1–4)'),

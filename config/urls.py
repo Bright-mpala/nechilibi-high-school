@@ -3,8 +3,13 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.shortcuts import render
 
 from django_school_management.accounts.views import dashboard
+
+
+def handler404_view(request, exception=None):
+    return render(request, '404.html', status=404)
 
 admin.site.site_header = 'Nechilibi High School — Admin'
 admin.site.site_title = 'Nechilibi High School'
@@ -63,6 +68,8 @@ urlpatterns = [
     path('dashboard/payments/', include('django_school_management.payments.urls')),
     path('upload/', include('django_file_form.urls')),
 ]
+
+handler404 = handler404_view
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

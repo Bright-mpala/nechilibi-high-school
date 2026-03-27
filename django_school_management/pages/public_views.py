@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib import messages
 from django_school_management.gallery.models import GalleryCategory, GalleryImage, VideoGallery
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered, NewsletterSubscriber
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -180,6 +181,24 @@ def fee_structure(request):
         'selected_year': selected_year,
         'groups': ordered_groups,
     })
+
+
+def newsletter_subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip().lower()
+        name  = request.POST.get('name', '').strip()
+        next_url = request.POST.get('next', '/')
+        if email:
+            obj, created = NewsletterSubscriber.objects.get_or_create(
+                email=email,
+                defaults={'name': name, 'is_active': True}
+            )
+            if not created and not obj.is_active:
+                obj.is_active = True
+                obj.name = name or obj.name
+                obj.save()
+        return redirect(next_url + '?subscribed=1')
+    return redirect('/')
 
 
 def subjects_offered(request):

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (SchoolSettings, SchoolVideo, Download, Testimonial,
                      TermDate, CalendarEvent, ZIMSECResult, SubjectResult,
-                     FeeStructure, FeeItem, SubjectOffered)
+                     FeeStructure, FeeItem, SubjectOffered, NewsletterSubscriber)
 
 
 @admin.register(SchoolSettings)
@@ -54,6 +54,21 @@ class FeeStructureAdmin(admin.ModelAdmin):
     list_editable = ['is_published']
     ordering      = ['-academic_year']
     inlines       = [FeeItemInline]
+
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display  = ['email', 'name', 'subscribed_at', 'is_active']
+    list_editable = ['is_active']
+    list_filter   = ['is_active']
+    search_fields = ['email', 'name']
+    ordering      = ['-subscribed_at']
+    actions       = ['export_emails']
+
+    @admin.action(description='Copy selected emails (display in message)')
+    def export_emails(self, request, queryset):
+        emails = ', '.join(queryset.values_list('email', flat=True))
+        self.message_user(request, f'Emails: {emails}')
 
 
 @admin.register(SubjectOffered)
