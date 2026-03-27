@@ -230,21 +230,10 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-xl-7">
-          <div class="hero-badge"><span class="dot"></span>Est. in Zimbabwe's Matabeleland South</div>
+          <div class="hero-badge"><span class="dot"></span>Est. in Zimbabwe's Matabeleland North</div>
           <h1 class="hero-heading">Shaping Tomorrow's<br><span>Leaders</span> Today</h1>
           <p class="hero-sub">Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.</p>
-          <div class="hero-stats">
-            <div class="hero-stat-pill"><strong>500+</strong> Students</div>
-            <div class="hero-stat-pill"><strong>40+</strong> Teachers</div>
-            <div class="hero-stat-pill"><strong>Form 1–6</strong> Classes</div>
-            <div class="hero-stat-pill"><i class="fas fa-certificate" style="color:var(--accent);"></i>&nbsp;ZIMSEC Accredited</div>
-          </div>
-          <div class="hero-features">
-            <div class="hero-feat-tag"><i class="fas fa-graduation-cap"></i>Academic Excellence<small>ZIMSEC &amp; Cambridge</small></div>
-            <div class="hero-feat-tag"><i class="fas fa-running"></i>Sports &amp; Culture<small>Holistic development</small></div>
-            <div class="hero-feat-tag"><i class="fas fa-home"></i>Boarding &amp; Day<small>Flexible options</small></div>
-            <div class="hero-feat-tag"><i class="fas fa-flask"></i>Science Labs<small>Modern facilities</small></div>
-          </div>
+          
           <div class="hero-btns">
             <a href="/admissions/" class="btn-hero">Apply Now &nbsp;<i class="fas fa-arrow-right"></i></a>
             <a href="#about" class="btn-hero-outline"><i class="fas fa-play-circle mr-1"></i>Learn More</a>
@@ -329,6 +318,45 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP SECTION -->
+<section class="py-5" style="background:#fff">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">School Leadership</h2>
+      <p class="text-muted">Meet the dedicated team leading Nechilibi High School.</p>
+    </div>
+    {% if leadership_teachers %}
+    <div class="row justify-content-center">
+      {% for teacher in leadership_teachers %}
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card border-0 shadow-sm h-100 text-center p-4">
+          {% if teacher.photo %}
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:110px;height:110px;object-fit:cover;border:4px solid #6B0000" alt="{{ teacher.name }}">
+          {% else %}
+          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:110px;height:110px;background:#6B0000;color:#FFD700;font-size:2.5rem;font-weight:700">{{ teacher.name|first }}</div>
+          {% endif %}
+          <h5 class="font-weight-bold mb-0">{{ teacher.name }}</h5>
+          <span class="badge badge-pill mt-1 mb-2" style="background:#6B0000;color:#FFD700;font-size:0.8rem">{{ teacher.designation }}</span>
+          {% if teacher.bio %}<p class="text-muted small">{{ teacher.bio }}</p>{% endif %}
+          {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
+          <div class="mt-2">
+            {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="mx-1" style="color:#6B0000" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
+            {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank" class="mx-1" style="color:#3b5998"><i class="fab fa-facebook"></i></a>{% endif %}
+            {% if teacher.twitter %}<a href="{{ teacher.twitter }}" target="_blank" class="mx-1" style="color:#1da1f2"><i class="fab fa-twitter"></i></a>{% endif %}
+            {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank" class="mx-1" style="color:#0077b5"><i class="fab fa-linkedin"></i></a>{% endif %}
+            {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank" class="mx-1" style="color:#25d366"><i class="fab fa-whatsapp"></i></a>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-3">
+      <a href="/about/" class="btn btn-outline-primary">Meet All Our Staff &rarr;</a>
+    </div>
+    {% endif %}
   </div>
 </section>
 

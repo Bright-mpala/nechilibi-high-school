@@ -1,5 +1,43 @@
 {% extends 'public/base.html' %}
-{% block title %}About Us - Nechilibi High School{% endblock %}
+{% block title %}About Us - Nechilibi High School
+<!-- STAFF / TEACHERS SECTION -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Our Teaching Staff</h2>
+      <p class="text-muted">Dedicated educators shaping the future of our students.</p>
+    </div>
+    {% if all_teachers %}
+    <div class="row">
+      {% for teacher in all_teachers %}
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card border-0 shadow-sm h-100 text-center p-4">
+          {% if teacher.photo %}
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary-color)" alt="{{ teacher.name }}">
+          {% else %}
+          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;background:#6B0000;color:#FFD700;font-size:2rem;font-weight:700">{{ teacher.name|first }}</div>
+          {% endif %}
+          <h6 class="font-weight-bold mb-0">{{ teacher.name }}</h6>
+          <small class="text-primary-custom font-weight-bold">{{ teacher.designation }}</small>
+          {% if teacher.bio %}<p class="text-muted small mt-2">{{ teacher.bio }}</p>{% endif %}
+          {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
+          <div class="mt-2">
+            {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="text-muted mx-1" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
+            {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank" class="text-muted mx-1" title="Facebook"><i class="fab fa-facebook"></i></a>{% endif %}
+            {% if teacher.twitter %}<a href="{{ teacher.twitter }}" target="_blank" class="text-muted mx-1" title="Twitter"><i class="fab fa-twitter"></i></a>{% endif %}
+            {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank" class="text-muted mx-1" title="LinkedIn"><i class="fab fa-linkedin"></i></a>{% endif %}
+            {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank" class="text-muted mx-1" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted">Staff information will be updated soon.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
 {% block content %}
 <!-- PAGE HEADER -->
 <div class="bg-primary-custom text-white py-5">
@@ -97,6 +135,44 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- STAFF / TEACHERS SECTION -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Our Teaching Staff</h2>
+      <p class="text-muted">Dedicated educators shaping the future of our students.</p>
+    </div>
+    {% if all_teachers %}
+    <div class="row">
+      {% for teacher in all_teachers %}
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card border-0 shadow-sm h-100 text-center p-4">
+          {% if teacher.photo %}
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary-color)" alt="{{ teacher.name }}">
+          {% else %}
+          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;background:#6B0000;color:#FFD700;font-size:2rem;font-weight:700">{{ teacher.name|first }}</div>
+          {% endif %}
+          <h6 class="font-weight-bold mb-0">{{ teacher.name }}</h6>
+          <small class="text-primary-custom font-weight-bold">{{ teacher.designation }}</small>
+          {% if teacher.bio %}<p class="text-muted small mt-2">{{ teacher.bio }}</p>{% endif %}
+          {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
+          <div class="mt-2">
+            {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="text-muted mx-1" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
+            {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank" class="text-muted mx-1" title="Facebook"><i class="fab fa-facebook"></i></a>{% endif %}
+            {% if teacher.twitter %}<a href="{{ teacher.twitter }}" target="_blank" class="text-muted mx-1" title="Twitter"><i class="fab fa-twitter"></i></a>{% endif %}
+            {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank" class="text-muted mx-1" title="LinkedIn"><i class="fab fa-linkedin"></i></a>{% endif %}
+            {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank" class="text-muted mx-1" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted">Staff information will be updated soon.</p>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

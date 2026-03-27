@@ -4,6 +4,7 @@ from django_school_management.gallery.models import GalleryCategory, GalleryImag
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings
+from django_school_management.teachers.models import Teacher, Designation
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
 try:
@@ -54,12 +55,18 @@ def home(request):
             context['recent_articles'] = articles
         except Exception:
             pass
+    # Leadership teachers for homepage (Headmaster, Deputy, Senior Teacher)
+    context['leadership_teachers'] = Teacher.objects.filter(
+        is_active=True,
+        designation__role__in=[Designation.ROLE_HEADMASTER, Designation.ROLE_DEPUTY, Designation.ROLE_SENIOR]
+    ).select_related('designation').prefetch_related('subjects').order_by('designation__role', 'name')
     return render(request, 'public/home.html', context)
 
 
 def about(request):
     settings = SchoolSettings.get()
-    return render(request, 'public/about.html', {'settings': settings})
+    all_teachers = Teacher.objects.filter(is_active=True).select_related("designation").prefetch_related("subjects").order_by("designation__role", "name")
+    return render(request, "public/about.html", {"settings": settings, "all_teachers": all_teachers})
 
 
 def admissions(request):
