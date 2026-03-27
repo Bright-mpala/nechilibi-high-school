@@ -78,61 +78,192 @@
             border-bottom: none;
         }
 
-        /* CAROUSEL */
-        .hero-carousel { position: relative; }
-        .hero-carousel .carousel-item { height: 580px; }
-        .hero-carousel .carousel-item img {
+        /* HERO SECTION */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            min-height: 620px;
+            max-height: 860px;
+            overflow: hidden;
+        }
+
+        /* Slideshow background */
+        .hero-bg-carousel {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-bg-carousel .carousel-inner,
+        .hero-bg-carousel .carousel-item {
+            height: 100%;
+        }
+        .hero-bg-carousel .carousel-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.65);
+            object-position: center;
+            filter: brightness(0.45);
         }
-        .hero-carousel .carousel-caption {
-            bottom: 20%;
-            left: 10%;
-            right: 10%;
-            text-align: left;
+        /* subtle dark gradient on left so text pops */
+        .hero-bg-carousel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to right,
+                rgba(30,0,60,0.75) 0%,
+                rgba(30,0,60,0.45) 55%,
+                rgba(0,0,0,0.15) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
         }
-        .hero-carousel .carousel-caption h2 {
-            font-size: 42px;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
+
+        /* Content that sits on top */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 60px 0 40px;
         }
-        .hero-carousel .carousel-caption p {
-            font-size: 18px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.35);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 6px 16px;
+            border-radius: 50px;
             margin-bottom: 20px;
+            backdrop-filter: blur(4px);
         }
-        .hero-carousel .carousel-caption .btn-hero {
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .hero-heading {
+            font-size: clamp(32px, 5vw, 58px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 18px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        .hero-heading span { color: var(--gold); }
+        .hero-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.88);
+            max-width: 540px;
+            line-height: 1.75;
+            margin-bottom: 30px;
+        }
+
+        /* Stat pills inside hero */
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .hero-stat-pill {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.28);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            border-radius: 50px;
+            padding: 7px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+        .hero-stat-pill strong {
+            font-size: 17px;
+            color: var(--gold);
+            font-weight: 800;
+        }
+
+        /* Feature tags */
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+        .hero-feat-tag {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            backdrop-filter: blur(4px);
+        }
+        .hero-feat-tag i { color: var(--gold); margin-right: 5px; }
+        .hero-feat-tag small { opacity: 0.75; display: block; font-size: 11px; }
+
+        /* CTA buttons */
+        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn-hero {
             background: var(--maroon);
             color: white;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
+            padding: 13px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 6px;
             text-decoration: none;
-            margin-right: 10px;
             display: inline-block;
+            transition: background 0.25s, transform 0.2s;
+            box-shadow: 0 4px 16px rgba(128,0,32,0.45);
         }
-        .hero-carousel .carousel-caption .btn-hero-outline {
+        .btn-hero:hover { background: #9e0028; color: white; transform: translateY(-2px); text-decoration: none; }
+        .btn-hero-outline {
             background: transparent;
             color: white;
-            padding: 11px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 6px;
             text-decoration: none;
-            border: 2px solid white;
+            border: 2px solid rgba(255,255,255,0.7);
             display: inline-block;
+            transition: all 0.25s;
         }
+        .btn-hero-outline:hover { background: rgba(255,255,255,0.15); color: white; text-decoration: none; }
+
+        /* Carousel dot indicators repositioned to bottom-right */
+        .hero-bg-carousel .carousel-indicators {
+            justify-content: flex-end;
+            padding-right: 30px;
+            margin-bottom: 20px;
+        }
+        .hero-bg-carousel .carousel-indicators li {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+            border: none;
+        }
+        .hero-bg-carousel .carousel-indicators .active {
+            background: var(--gold);
+            width: 24px;
+            border-radius: 4px;
+        }
+        .carousel-control-prev, .carousel-control-next { z-index: 3; }
         .carousel-control-prev-icon, .carousel-control-next-icon {
-            background-color: var(--purple);
+            background-color: rgba(74,0,128,0.7);
             border-radius: 50%;
             padding: 15px;
         }
 
-        /* QUICK STATS */
+        /* QUICK STATS bar (below hero) */
         .stats-bar {
             background: var(--purple);
             color: white;
@@ -331,9 +462,11 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .hero-carousel .carousel-item { height: 350px; }
-            .hero-carousel .carousel-caption h2 { font-size: 24px; }
-            .hero-carousel .carousel-caption p { font-size: 14px; }
+            .hero-section { height: auto; min-height: 100vh; max-height: none; }
+            .hero-content { padding: 100px 0 50px; }
+            .hero-stats { gap: 8px; }
+            .hero-stat-pill { font-size: 12px; padding: 6px 12px; }
+            .hero-feat-tag { font-size: 11.5px; }
             .stats-bar .stat-item { border-right: none; margin-bottom: 15px; }
         }
     </style>
@@ -383,45 +516,119 @@
     </div>
 </nav>
 
-<!-- HERO CAROUSEL -->
-<div id="heroCarousel" class="carousel slide hero-carousel" data-ride="carousel" data-interval="5000">
-    <ol class="carousel-indicators">
-        {% for img in carousel_images %}
-        <li data-target="#heroCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-        {% empty %}
-        <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
-        {% endfor %}
-    </ol>
-    <div class="carousel-inner">
-        {% for img in carousel_images %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ img.image.url }}" alt="{{ img.title }}">
-            <div class="carousel-caption">
-                <h2>{{ img.title }}</h2>
-                <p>{{ img.description|default:"Providing quality education in Zimbabwe" }}</p>
-                <a href="#about" class="btn-hero">Learn More</a>
-                <a href="/admissions/" class="btn-hero-outline">Apply Now</a>
+<!-- ======= HERO SECTION ======= -->
+<section class="hero-section">
+
+    <!-- Background slideshow (images 1–5, loops silently behind text) -->
+    <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-ride="carousel" data-interval="5000" data-pause="false">
+        <ol class="carousel-indicators">
+            <li data-target="#heroBgCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#heroBgCarousel" data-slide-to="1"></li>
+            <li data-target="#heroBgCarousel" data-slide-to="2"></li>
+            <li data-target="#heroBgCarousel" data-slide-to="3"></li>
+            <li data-target="#heroBgCarousel" data-slide-to="4"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/media/gallery/1.jpg" alt="Nechilibi High School">
+            </div>
+            <div class="carousel-item">
+                <img src="/media/gallery/2.jpg" alt="Nechilibi High School">
+            </div>
+            <div class="carousel-item">
+                <img src="/media/gallery/3.jpg" alt="Nechilibi High School">
+            </div>
+            <div class="carousel-item">
+                <img src="/media/gallery/4.jpg" alt="Nechilibi High School">
+            </div>
+            <div class="carousel-item">
+                <img src="/media/gallery/5.jpg" alt="Nechilibi High School">
             </div>
         </div>
-        {% empty %}
-        <div class="carousel-item active">
-            <img src="{% static 'img/hero-default.jpg' %}" alt="Nechilibi High School" onerror="this.src='https://via.placeholder.com/1200x580/4a0080/ffffff?text=Nechilibi+High+School'">
-            <div class="carousel-caption">
-                <h2>Welcome to Nechilibi High School</h2>
-                <p>Providing quality education in Zimbabwe since our founding.</p>
-                <a href="#about" class="btn-hero">Learn More</a>
-                <a href="/admissions/" class="btn-hero-outline">Apply Now</a>
-            </div>
-        </div>
-        {% endfor %}
+        <a class="carousel-control-prev" href="#heroBgCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#heroBgCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
     </div>
-    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </a>
-    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </a>
-</div>
+
+    <!-- Foreground content — always visible over the sliding images -->
+    <div class="hero-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-xl-7">
+
+                    <!-- Location badge -->
+                    <div class="hero-badge">
+                        <span class="dot"></span>
+                        Est. in Zimbabwe's Matabeleland South
+                    </div>
+
+                    <!-- Main heading -->
+                    <h1 class="hero-heading">
+                        Shaping Tomorrow's<br>
+                        <span>Leaders</span> Today
+                    </h1>
+
+                    <!-- Sub-text -->
+                    <p class="hero-sub">
+                        Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.
+                    </p>
+
+                    <!-- Stats pills -->
+                    <div class="hero-stats">
+                        <div class="hero-stat-pill">
+                            <strong>500+</strong> Students
+                        </div>
+                        <div class="hero-stat-pill">
+                            <strong>40+</strong> Teachers
+                        </div>
+                        <div class="hero-stat-pill">
+                            <strong>Form 1–6</strong> Classes
+                        </div>
+                        <div class="hero-stat-pill">
+                            <i class="fas fa-certificate" style="color:var(--gold);font-size:13px;"></i>
+                            ZIMSEC Accredited
+                        </div>
+                    </div>
+
+                    <!-- Feature tags -->
+                    <div class="hero-features">
+                        <div class="hero-feat-tag">
+                            <i class="fas fa-graduation-cap"></i> Academic Excellence
+                            <small>ZIMSEC &amp; Cambridge</small>
+                        </div>
+                        <div class="hero-feat-tag">
+                            <i class="fas fa-running"></i> Sports &amp; Culture
+                            <small>Holistic development</small>
+                        </div>
+                        <div class="hero-feat-tag">
+                            <i class="fas fa-home"></i> Boarding &amp; Day
+                            <small>Flexible options</small>
+                        </div>
+                        <div class="hero-feat-tag">
+                            <i class="fas fa-flask"></i> Science Labs
+                            <small>Modern facilities</small>
+                        </div>
+                    </div>
+
+                    <!-- CTA buttons -->
+                    <div class="hero-btns">
+                        <a href="/admissions/" class="btn-hero">
+                            Apply Now &nbsp;<i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#about" class="btn-hero-outline">
+                            <i class="fas fa-play-circle mr-1"></i> Learn More
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section><!-- end hero -->
 
 <!-- STATS BAR -->
 <div class="stats-bar">
@@ -436,12 +643,12 @@
                 <div class="stat-label">Teachers</div>
             </div>
             <div class="col-6 col-md-3 stat-item">
-                <div class="stat-number">30+</div>
-                <div class="stat-label">Years of Excellence</div>
+                <div class="stat-number">Form 1–6</div>
+                <div class="stat-label">Classes</div>
             </div>
             <div class="col-6 col-md-3 stat-item">
-                <div class="stat-number">95%</div>
-                <div class="stat-label">Pass Rate</div>
+                <div class="stat-number">ZIMSEC</div>
+                <div class="stat-label">Accredited</div>
             </div>
         </div>
     </div>
