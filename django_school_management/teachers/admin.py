@@ -4,21 +4,20 @@ from .models import Teacher, Designation
 
 @admin.register(Designation)
 class DesignationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'role')
-    list_editable = ('role',)
-    ordering = ('role', 'title')
+    list_display = ('title',)
+    ordering = ('title',)
 
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('name', 'designation', 'email', 'mobile', 'is_active', 'joining_date')
-    list_filter = ('designation__role', 'is_active')
-    list_editable = ('is_active',)
+    list_display = ('name', 'role', 'designation', 'email', 'mobile', 'is_active')
+    list_filter = ('role', 'is_active')
+    list_editable = ('role', 'is_active')
     search_fields = ('name', 'email', 'employee_id')
     filter_horizontal = ('subjects',)
     fieldsets = (
         ('Basic Info', {
-            'fields': ('employee_id', 'name', 'photo', 'date_of_birth', 'designation', 'bio', 'is_active')
+            'fields': ('employee_id', 'name', 'photo', 'date_of_birth', 'role', 'designation', 'bio', 'is_active')
         }),
         ('Subjects', {
             'fields': ('subjects', 'expertise')

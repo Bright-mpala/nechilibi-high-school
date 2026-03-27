@@ -334,12 +334,12 @@
       <div class="col-md-4 col-sm-6 mb-4">
         <div class="card border-0 shadow-sm h-100 text-center p-4">
           {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:110px;height:110px;object-fit:cover;border:4px solid #6B0000" alt="{{ teacher.name }}">
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:110px;height:110px;object-fit:cover;border:4px solid #6B0000" alt="{{ teacher.name }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           {% else %}
           <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:110px;height:110px;background:#6B0000;color:#FFD700;font-size:2.5rem;font-weight:700">{{ teacher.name|first }}</div>
           {% endif %}
           <h5 class="font-weight-bold mb-0">{{ teacher.name }}</h5>
-          <span class="badge badge-pill mt-1 mb-2" style="background:#6B0000;color:#FFD700;font-size:0.8rem">{{ teacher.designation }}</span>
+          <span class="badge badge-pill mt-1 mb-2" style="background:#6B0000;color:#FFD700;font-size:0.8rem">{{ teacher.get_role_display }}</span><br><small class="text-muted">{{ teacher.designation }}</small>
           {% if teacher.bio %}<p class="text-muted small">{{ teacher.bio }}</p>{% endif %}
           {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
           <div class="mt-2">

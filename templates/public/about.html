@@ -13,12 +13,12 @@
       <div class="col-md-4 col-sm-6 mb-4">
         <div class="card border-0 shadow-sm h-100 text-center p-4">
           {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary-color)" alt="{{ teacher.name }}">
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary)" alt="{{ teacher.name }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           {% else %}
           <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;background:#6B0000;color:#FFD700;font-size:2rem;font-weight:700">{{ teacher.name|first }}</div>
           {% endif %}
           <h6 class="font-weight-bold mb-0">{{ teacher.name }}</h6>
-          <small class="text-primary-custom font-weight-bold">{{ teacher.designation }}</small>
+          <small class="text-primary-custom font-weight-bold">{{ teacher.get_role_display }}</small><br><small class="text-muted">{{ teacher.designation }}</small>
           {% if teacher.bio %}<p class="text-muted small mt-2">{{ teacher.bio }}</p>{% endif %}
           {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
           <div class="mt-2">
@@ -151,12 +151,12 @@
       <div class="col-md-4 col-sm-6 mb-4">
         <div class="card border-0 shadow-sm h-100 text-center p-4">
           {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary-color)" alt="{{ teacher.name }}">
+          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;border:3px solid var(--primary)" alt="{{ teacher.name }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           {% else %}
           <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;background:#6B0000;color:#FFD700;font-size:2rem;font-weight:700">{{ teacher.name|first }}</div>
           {% endif %}
           <h6 class="font-weight-bold mb-0">{{ teacher.name }}</h6>
-          <small class="text-primary-custom font-weight-bold">{{ teacher.designation }}</small>
+          <small class="text-primary-custom font-weight-bold">{{ teacher.get_role_display }}</small><br><small class="text-muted">{{ teacher.designation }}</small>
           {% if teacher.bio %}<p class="text-muted small mt-2">{{ teacher.bio }}</p>{% endif %}
           {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
           <div class="mt-2">

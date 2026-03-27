@@ -4,7 +4,7 @@ from django_school_management.gallery.models import GalleryCategory, GalleryImag
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings
-from django_school_management.teachers.models import Teacher, Designation
+from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
 try:
@@ -58,7 +58,7 @@ def home(request):
     # Leadership teachers for homepage (Headmaster, Deputy, Senior Teacher)
     context['leadership_teachers'] = Teacher.objects.filter(
         is_active=True,
-        designation__role__in=[Designation.ROLE_HEADMASTER, Designation.ROLE_DEPUTY, Designation.ROLE_SENIOR]
+        role__in=LEADERSHIP_ROLES
     ).select_related('designation').prefetch_related('subjects').order_by('designation__role', 'name')
     return render(request, 'public/home.html', context)
 
