@@ -230,10 +230,12 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-xl-7">
-          <div class="hero-badge"><span class="dot"></span>Est. in Zimbabwe's Matabeleland North</div>
-          <h1 class="hero-heading">Shaping Tomorrow's<br><span>Leaders</span> Today</h1>
-          <p class="hero-sub">Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.</p>
-          
+          <div class="hero-badge"><span class="dot"></span>Est. in Zimbabwe's Matabeleland South</div>
+          <h1 class="hero-heading">
+            {% if settings.hero_heading %}{{ settings.hero_heading }}{% else %}Shaping Tomorrow's<br><span>Leaders</span> Today{% endif %}
+          </h1>
+          <p class="hero-sub">{% if settings.hero_subheading %}{{ settings.hero_subheading }}{% else %}Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.{% endif %}</p>
+
           <div class="hero-btns">
             <a href="/admissions/" class="btn-hero">Apply Now &nbsp;<i class="fas fa-arrow-right"></i></a>
             <a href="#about" class="btn-hero-outline"><i class="fas fa-play-circle mr-1"></i>Learn More</a>
@@ -249,8 +251,14 @@
 <div class="stats-bar">
   <div class="container">
     <div class="row">
-      <div class="col-6 col-md-3 stat-item"><div class="stat-number">500+</div><div class="stat-label">Students</div></div>
-      <div class="col-6 col-md-3 stat-item"><div class="stat-number">40+</div><div class="stat-label">Teachers</div></div>
+      <div class="col-6 col-md-3 stat-item">
+        <div class="stat-number">{% if settings.total_students %}{{ settings.total_students }}+{% else %}500+{% endif %}</div>
+        <div class="stat-label">Students</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item">
+        <div class="stat-number">{% if settings.total_teachers %}{{ settings.total_teachers }}+{% else %}40+{% endif %}</div>
+        <div class="stat-label">Teachers</div>
+      </div>
       <div class="col-6 col-md-3 stat-item"><div class="stat-number">Form 1–6</div><div class="stat-label">Classes</div></div>
       <div class="col-6 col-md-3 stat-item"><div class="stat-number">ZIMSEC</div><div class="stat-label">Accredited</div></div>
     </div>
@@ -445,6 +453,104 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════════ NOTICES TICKER ═══════════ -->
+{% if recent_notices %}
+<div style="background:#fff8e1; border-top:2px solid var(--accent); border-bottom:2px solid var(--accent); padding:10px 0;">
+  <div class="container d-flex align-items-center">
+    <span class="badge mr-3 px-3 py-2 flex-shrink-0" style="background:var(--secondary);color:#fff;font-size:0.8rem;letter-spacing:1px;">NOTICES</span>
+    <div style="overflow:hidden;flex:1;">
+      <ul class="list-unstyled mb-0">
+        {% for notice in recent_notices %}
+        <li class="d-inline mr-5 small">
+          <i class="fas fa-bell mr-1" style="color:var(--secondary);"></i>
+          <a href="/notices/{{ notice.pk }}/" style="color:var(--text-dark);">{{ notice.title }}</a>
+          <span class="text-muted ml-2" style="font-size:0.75rem;">{{ notice.created|date:"d M Y" }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <a href="/notices/" class="btn btn-sm ml-3 flex-shrink-0" style="background:var(--primary);color:#fff;white-space:nowrap;">View All</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+{% if testimonials %}
+<section class="py-5" style="background:#fff;">
+  <div class="container">
+    <div class="sec-heading">
+      <h2>What People Say</h2>
+      <p>Hear from our students, parents, and staff</p>
+    </div>
+    <div class="row">
+      {% for t in testimonials %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm h-100 p-4" style="border-top:4px solid var(--accent) !important;">
+          <div class="mb-3" style="color:var(--accent);font-size:1.5rem;">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <p class="text-muted flex-grow-1">{{ t.message }}</p>
+          <div class="d-flex align-items-center mt-3">
+            {% if t.photo %}
+            <img src="{{ t.photo.url }}" alt="{{ t.name }}" class="rounded-circle mr-3"
+                 style="width:50px;height:50px;object-fit:cover;border:2px solid var(--primary);">
+            {% else %}
+            <div class="rounded-circle mr-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:50px;height:50px;background:var(--primary);color:#fff;font-size:1.2rem;font-weight:700;">
+              {{ t.name|first }}
+            </div>
+            {% endif %}
+            <div>
+              <strong class="d-block" style="color:var(--primary);">{{ t.name }}</strong>
+              <small class="text-muted">{{ t.role }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══════════ SCHOOL VIDEOS ═══════════ -->
+{% if school_videos %}
+<section class="py-5" style="background:var(--bg-light);">
+  <div class="container">
+    <div class="sec-heading">
+      <h2>School Videos</h2>
+      <p>See Nechilibi High School in action</p>
+    </div>
+    <div class="row">
+      {% for video in school_videos %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          {% if video.youtube_url %}
+          {% with embed_id=video.youtube_url %}
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item"
+              src="{% with url=video.youtube_url %}{% if 'watch?v=' in url %}https://www.youtube.com/embed/{{ url|slice:'32:' }}{% elif 'youtu.be/' in url %}https://www.youtube.com/embed/{{ url|slice:'17:' }}{% else %}{{ url }}{% endif %}{% endwith %}"
+              allowfullscreen title="{{ video.title }}"></iframe>
+          </div>
+          {% endwith %}
+          {% elif video.thumbnail %}
+          <img src="{{ video.thumbnail.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ video.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h6 class="font-weight-bold">{{ video.title }}</h6>
+            {% if video.description %}<p class="text-muted small mb-0">{{ video.description|truncatechars:100 }}</p>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-2">
+      <a href="/gallery/" class="btn btn-primary-custom">View Full Gallery <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+  </div>
+</section>
+{% endif %}
 
 <!-- ═══════════ CTA ═══════════ -->
 <div class="cta-section">

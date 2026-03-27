@@ -72,6 +72,27 @@
           <li class="mb-2">Medical / health form (available from the school office)</li>
         </ul>
 
+        {% if education_boards %}
+        <h4 class="section-title mt-4">Examination Boards</h4>
+        <p class="text-muted">Nechilibi High School prepares students for the following examination boards:</p>
+        <div class="row mb-4">
+          {% for board in education_boards %}
+          <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm p-3 h-100" style="border-left: 4px solid var(--primary) !important;">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-award text-primary-custom fa-2x mr-3"></i>
+                <div>
+                  <h6 class="font-weight-bold mb-0">{{ board.name }}</h6>
+                  {% if board.code %}<span class="badge badge-secondary">{{ board.code }}</span>{% endif %}
+                  {% if board.country %}<small class="text-muted d-block">{{ board.country.name }}</small>{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="alert" style="background: #fff8e1; border-left: 4px solid #FFD700;" role="alert">
           <i class="fas fa-info-circle mr-2 text-warning"></i>
           <strong>Note:</strong> All certified copies must be certified by a Commissioner of Oaths or Notary Public. Original documents must be presented on enrolment day.
@@ -112,8 +133,8 @@
         <div class="card border-0 bg-primary-custom text-white p-4">
           <h5 class="text-warning">Need Help?</h5>
           <p class="small">Our admissions team is ready to assist you with the application process.</p>
-          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>+263 XXX XXX XXX</p>
-          <p class="small mb-0"><i class="fas fa-envelope mr-2"></i>admissions@nechilibi.ac.zw</p>
+          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>{% if settings.phone %}{{ settings.phone }}{% else %}+263 XXX XXX XXX{% endif %}</p>
+          <p class="small mb-0"><i class="fas fa-envelope mr-2"></i>{% if settings.email %}{{ settings.email }}{% else %}admissions@nechilibi.ac.zw{% endif %}</p>
         </div>
       </div>
     </div>

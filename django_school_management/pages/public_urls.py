@@ -12,4 +12,5 @@ urlpatterns = [
     path('downloads/', public_views.downloads_page, name='downloads'),
     path('events/', public_views.events_page, name='events'),
     path('contact/', public_views.contact, name='contact'),
+    path('school-notices/', public_views.notices_page, name='notices'),
 ]

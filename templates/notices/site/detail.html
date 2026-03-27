@@ -1,0 +1,105 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ notice.title }} — Nechilibi High School{% endblock %}
+
+{% block content %}
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">{{ notice.title }}</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'notices:notices' %}" class="text-warning">Notices</a></li>
+        <li class="breadcrumb-item active text-white">{{ notice.title|truncatechars:40 }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge mr-3"
+              style="background:{% if notice.notice_type == 'h' %}var(--accent){% else %}var(--primary){% endif %};color:#fff;font-size:0.85rem;padding:6px 12px;">
+              {% if notice.notice_type == 'h' %}Holiday{% else %}General Notice{% endif %}
+            </span>
+            <small class="text-muted"><i class="far fa-calendar-alt mr-1"></i>Posted: {{ notice.created|date:"d M Y" }}</small>
+            <small class="text-muted ml-3"><i class="fas fa-clock mr-1"></i>Expires: {{ notice.expires_at|date:"d M Y" }}</small>
+          </div>
+
+          <h2 class="section-title">{{ notice.title }}</h2>
+
+          {% if notice.content %}
+          <div class="mt-3" style="line-height:1.8;">
+            {{ notice.content|safe }}
+          </div>
+          {% endif %}
+
+          {% if notice.notice_file_type == 'img' %}
+          <div class="mt-4">
+            <img src="{{ notice.file.url }}" class="img-fluid rounded shadow-sm" alt="{{ notice.title }}">
+          </div>
+          {% elif notice.notice_file_type == 'pdf' %}
+          <div class="mt-4 p-3 border rounded d-flex align-items-center">
+            <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
+            <div class="flex-grow-1">
+              <strong>Attachment</strong>
+              <div class="small text-muted">PDF document attached to this notice</div>
+            </div>
+            <a href="{{ notice.file.url }}" target="_blank" class="btn btn-sm btn-primary-custom ml-3">
+              <i class="fas fa-download mr-1"></i>Download
+            </a>
+          </div>
+          {% endif %}
+
+          {% if notice.documents.all %}
+          <div class="mt-4">
+            <h6 class="font-weight-bold mb-2">Additional Documents</h6>
+            {% for doc in notice.documents.all %}
+            <div class="d-flex align-items-center p-2 border rounded mb-2">
+              <i class="fas fa-paperclip text-primary-custom mr-2"></i>
+              <a href="{{ doc.file.url }}" target="_blank" class="text-primary-custom">Download Document {{ forloop.counter }}</a>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <a href="{% url 'notices:notices' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left mr-1"></i>Back to Notices
+        </a>
+      </div>
+
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h6 class="font-weight-bold text-primary-custom mb-3">Notice Details</h6>
+          <ul class="list-unstyled small text-muted mb-0">
+            <li class="mb-2"><i class="fas fa-tag mr-2" style="color:var(--accent);"></i>
+              Type: {% if notice.notice_type == 'h' %}Holiday{% else %}General{% endif %}
+            </li>
+            <li class="mb-2"><i class="far fa-calendar-alt mr-2" style="color:var(--accent);"></i>
+              Posted: {{ notice.created|date:"d M Y" }}
+            </li>
+            <li class="mb-2"><i class="fas fa-calendar-times mr-2" style="color:var(--accent);"></i>
+              Expires: {{ notice.expires_at|date:"d M Y" }}
+            </li>
+            {% if notice.is_past_due %}
+            <li><span class="badge badge-secondary">Expired</span></li>
+            {% else %}
+            <li><span class="badge" style="background:var(--primary);color:#fff;">Active</span></li>
+            {% endif %}
+          </ul>
+        </div>
+
+        <div class="card border-0 bg-primary-custom text-white p-4">
+          <h6 class="text-warning font-weight-bold">Need Help?</h6>
+          <p class="small mb-2">Contact the school office for more information about this notice.</p>
+          <a href="/contact/" class="btn btn-sm btn-accent">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

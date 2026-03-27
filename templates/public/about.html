@@ -72,9 +72,16 @@
         <div class="card border-0 shadow-sm p-4 mb-4 bg-light">
           <h5 class="text-primary-custom font-weight-bold mb-3">Quick Facts</h5>
           <ul class="list-unstyled mb-0">
-            <li class="mb-2"><i class="fas fa-map-marker-alt text-primary-custom mr-2"></i>Matabeleland South, Zimbabwe</li>
+            <li class="mb-2"><i class="fas fa-map-marker-alt text-primary-custom mr-2"></i>
+              {% if settings.address %}{{ settings.address }}{% else %}Matabeleland South, Zimbabwe{% endif %}
+            </li>
+            {% if institute and institute.date_of_estashment %}
+            <li class="mb-2"><i class="fas fa-calendar-alt text-primary-custom mr-2"></i>Est. {{ institute.date_of_estashment|date:"Y" }}</li>
+            {% endif %}
             <li class="mb-2"><i class="fas fa-graduation-cap text-primary-custom mr-2"></i>Form 1 – Form 6</li>
-            <li class="mb-2"><i class="fas fa-certificate text-primary-custom mr-2"></i>ZIMSEC Accredited</li>
+            <li class="mb-2"><i class="fas fa-certificate text-primary-custom mr-2"></i>
+              {% if education_boards %}{% for board in education_boards %}{{ board.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% else %}ZIMSEC Accredited{% endif %}
+            </li>
             <li class="mb-2"><i class="fas fa-users text-primary-custom mr-2"></i>Boarding &amp; Day School</li>
             <li class="mb-2"><i class="fas fa-book text-primary-custom mr-2"></i>17+ Subjects Offered</li>
             <li class="mb-2"><i class="fas fa-futbol text-primary-custom mr-2"></i>Active Sports Programme</li>
@@ -82,11 +89,26 @@
           </ul>
         </div>
 
+        {% if education_boards %}
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="text-primary-custom font-weight-bold mb-3">Examination Boards</h5>
+          <ul class="list-unstyled mb-0">
+            {% for board in education_boards %}
+            <li class="mb-2">
+              <i class="fas fa-award text-primary-custom mr-2"></i>
+              <strong>{{ board.name }}</strong>{% if board.code %} <span class="badge badge-secondary ml-1">{{ board.code }}</span>{% endif %}
+              {% if board.country %}<small class="text-muted d-block ml-4">{{ board.country.name }}</small>{% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
         <div class="card border-0 bg-primary-custom text-white p-4 mb-4">
           <h5 class="text-warning font-weight-bold">Contact Us</h5>
-          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>+263 XXX XXX XXX</p>
-          <p class="small mb-1"><i class="fas fa-envelope mr-2"></i>info@nechilibi.ac.zw</p>
-          <p class="small mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Matabeleland South, Zimbabwe</p>
+          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>{% if settings.phone %}{{ settings.phone }}{% else %}+263 XXX XXX XXX{% endif %}</p>
+          <p class="small mb-1"><i class="fas fa-envelope mr-2"></i>{% if settings.email %}{{ settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}</p>
+          <p class="small mb-2"><i class="fas fa-map-marker-alt mr-2"></i>{% if settings.address %}{{ settings.address|truncatechars:60 }}{% else %}Matabeleland South, Zimbabwe{% endif %}</p>
           <a href="/contact/" class="btn btn-accent btn-sm mt-1">Get in Touch</a>
         </div>
 

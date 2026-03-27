@@ -29,7 +29,7 @@
           </div>
           <div>
             <h6 class="font-weight-bold mb-1">Address</h6>
-            <p class="text-muted mb-0">P.O. Box 123, Nechilibi<br>Matabeleland South, Zimbabwe</p>
+            <p class="text-muted mb-0">{% if settings.address %}{{ settings.address }}{% else %}P.O. Box 123, Nechilibi<br>Matabeleland South, Zimbabwe{% endif %}</p>
           </div>
         </div>
 
@@ -41,7 +41,7 @@
           </div>
           <div>
             <h6 class="font-weight-bold mb-1">Phone</h6>
-            <p class="text-muted mb-0">+263 XXX XXX XXX</p>
+            <p class="text-muted mb-0">{% if settings.phone %}{{ settings.phone }}{% else %}+263 XXX XXX XXX{% endif %}</p>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
           </div>
           <div>
             <h6 class="font-weight-bold mb-1">Email</h6>
-            <p class="text-muted mb-0">info@nechilibi.ac.zw<br>admissions@nechilibi.ac.zw</p>
+            <p class="text-muted mb-0">{% if settings.email %}{{ settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}</p>
           </div>
         </div>
 
@@ -71,15 +71,31 @@
 
         <div class="mt-4">
           <p class="font-weight-bold mb-2">Follow Us</p>
-          <a href="#" class="btn btn-sm mr-2 mb-2" style="background:#3b5998;color:#fff;border-radius:4px;">
+          {% if settings.facebook_url %}
+          <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener" class="btn btn-sm mr-2 mb-2" style="background:#3b5998;color:#fff;border-radius:4px;">
             <i class="fab fa-facebook-f mr-1"></i>Facebook
           </a>
-          <a href="#" class="btn btn-sm mr-2 mb-2" style="background:#25d366;color:#fff;border-radius:4px;">
+          {% endif %}
+          {% if settings.whatsapp_number %}
+          <a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" rel="noopener" class="btn btn-sm mr-2 mb-2" style="background:#25d366;color:#fff;border-radius:4px;">
             <i class="fab fa-whatsapp mr-1"></i>WhatsApp
           </a>
-          <a href="#" class="btn btn-sm mb-2" style="background:#ff0000;color:#fff;border-radius:4px;">
+          {% endif %}
+          {% if settings.youtube_url %}
+          <a href="{{ settings.youtube_url }}" target="_blank" rel="noopener" class="btn btn-sm mr-2 mb-2" style="background:#ff0000;color:#fff;border-radius:4px;">
             <i class="fab fa-youtube mr-1"></i>YouTube
           </a>
+          {% endif %}
+          {% if settings.twitter_url %}
+          <a href="{{ settings.twitter_url }}" target="_blank" rel="noopener" class="btn btn-sm mb-2" style="background:#1da1f2;color:#fff;border-radius:4px;">
+            <i class="fab fa-twitter mr-1"></i>Twitter
+          </a>
+          {% endif %}
+          {% if not settings.facebook_url and not settings.whatsapp_number and not settings.youtube_url and not settings.twitter_url %}
+          <a href="#" class="btn btn-sm mr-2 mb-2" style="background:#3b5998;color:#fff;border-radius:4px;"><i class="fab fa-facebook-f mr-1"></i>Facebook</a>
+          <a href="#" class="btn btn-sm mr-2 mb-2" style="background:#25d366;color:#fff;border-radius:4px;"><i class="fab fa-whatsapp mr-1"></i>WhatsApp</a>
+          <a href="#" class="btn btn-sm mb-2" style="background:#ff0000;color:#fff;border-radius:4px;"><i class="fab fa-youtube mr-1"></i>YouTube</a>
+          {% endif %}
         </div>
       </div>
 

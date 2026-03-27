@@ -3,8 +3,10 @@ from django.utils import timezone
 from django_school_management.gallery.models import GalleryCategory, GalleryImage, VideoGallery
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
-from django_school_management.institute.models import SchoolSettings
+from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo
+from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
 try:
@@ -19,10 +21,21 @@ def home(request):
 
     # Gallery images for homepage (use gallery app's canonical model)
     carousel_images = GalleryImage.objects.filter(is_featured=True, is_active=True).order_by('order')[:5]
-    gallery_images = GalleryImage.objects.filter(is_active=True).order_by('order', '-uploaded_at')[:3]
+    gallery_images = GalleryImage.objects.filter(is_active=True).order_by('order', '-uploaded_at')[:6]
+
+    # Testimonials
+    testimonials = Testimonial.objects.filter(is_active=True)
+
+    # School videos (from nechilibi app)
+    school_videos = SchoolVideo.objects.filter(is_active=True).order_by('-is_featured', '-uploaded_at')[:6]
+
+    # Recent notices (non-expired)
+    today = timezone.now().date()
+    recent_notices = Notice.objects.filter(expires_at__gte=today).order_by('-created')[:5]
 
     context = {
         'settings': settings,
+        'school_settings': settings,
         'carousel_images': carousel_images,
         'gallery_images': gallery_images,
         'featured_images': GalleryImage.objects.filter(is_featured=True)[:6],
@@ -33,10 +46,12 @@ def home(request):
         'latest_news': [],
         'recent_articles': [],
         'videos': [],
+        'testimonials': testimonials,
+        'school_videos': school_videos,
+        'recent_notices': recent_notices,
     }
-    # add videos
+    # Gallery videos
     try:
-        from django_school_management.gallery.models import VideoGallery
         context['videos'] = VideoGallery.objects.filter(is_published=True)[:3]
     except Exception:
         pass
@@ -60,11 +75,27 @@ def home(request):
 def about(request):
     settings = SchoolSettings.get()
     all_teachers = Teacher.objects.filter(is_active=True).select_related("designation").prefetch_related("subjects").order_by("designation__role", "name")
-    return render(request, "public/about.html", {"settings": settings, "all_teachers": all_teachers})
+    institute = InstituteProfile.objects.filter(active=True).first()
+    education_boards = EducationBoard.objects.all().order_by('name')
+    return render(request, "public/about.html", {
+        "settings": settings,
+        "school_settings": settings,
+        "all_teachers": all_teachers,
+        "institute": institute,
+        "education_boards": education_boards,
+    })
 
 
 def admissions(request):
-    return render(request, 'public/admissions.html')
+    settings = SchoolSettings.get()
+    education_boards = EducationBoard.objects.all().order_by('name')
+    institute = InstituteProfile.objects.filter(active=True).first()
+    return render(request, 'public/admissions.html', {
+        'settings': settings,
+        'school_settings': settings,
+        'education_boards': education_boards,
+        'institute': institute,
+    })
 
 
 def gallery(request):
@@ -115,4 +146,13 @@ def events_page(request):
 
 def contact(request):
     settings = SchoolSettings.get()
-    return render(request, 'public/contact.html', {'settings': settings})
+    return render(request, 'public/contact.html', {
+        'settings': settings,
+        'school_settings': settings,
+    })
+
+
+def notices_page(request):
+    today = timezone.now().date()
+    notices = Notice.objects.filter(expires_at__gte=today).order_by('-created')
+    return render(request, 'public/notices.html', {'notices': notices})

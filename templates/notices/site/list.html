@@ -1,0 +1,68 @@
+{% extends 'public/base.html' %}
+{% block title %}Notices — Nechilibi High School{% endblock %}
+
+{% block content %}
+<div class="bg-primary-custom text-white py-5">
+  <div class="container">
+    <h1 class="text-white">School Notices</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 m-0">
+        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+        <li class="breadcrumb-item active text-white">Notices</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    {% if notices %}
+    <div class="row">
+      {% for notice in notices %}
+      <div class="col-md-6 mb-4">
+        <div class="card border-0 shadow-sm h-100 card-hover">
+          <div class="card-body">
+            <div class="d-flex align-items-start mb-2">
+              <span class="badge mr-2 flex-shrink-0"
+                style="background:{% if notice.notice_type == 'h' %}var(--accent){% else %}var(--primary){% endif %};color:#fff;">
+                {% if notice.notice_type == 'h' %}Holiday{% else %}Notice{% endif %}
+              </span>
+              <h6 class="font-weight-bold mb-0">
+                <a href="{% url 'notices:notice_detail' notice.pk %}" style="color:var(--primary);text-decoration:none;">{{ notice.title }}</a>
+              </h6>
+            </div>
+            {% if notice.content %}
+            <p class="text-muted small">{{ notice.content|striptags|truncatechars:150 }}</p>
+            {% endif %}
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <small class="text-muted"><i class="far fa-calendar-alt mr-1"></i>{{ notice.created|date:"d M Y" }}</small>
+              <small class="text-muted"><i class="fas fa-clock mr-1"></i>Expires: {{ notice.expires_at|date:"d M Y" }}</small>
+            </div>
+            {% if notice.notice_file_type %}
+            <div class="mt-2">
+              <a href="{{ notice.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-{% if notice.notice_file_type == 'pdf' %}file-pdf{% else %}image{% endif %} mr-1"></i>View Attachment
+              </a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="card-footer bg-white border-0 pt-0">
+            <a href="{% url 'notices:notice_detail' notice.pk %}" class="text-primary-custom font-weight-bold small">
+              Read More <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-bell-slash fa-4x mb-4 d-block" style="opacity:0.25;color:var(--primary);"></i>
+      <h4>No current notices</h4>
+      <p>There are no active notices at this time. Please check back soon.</p>
+      <a href="/" class="btn btn-primary-custom mt-3">Back to Home</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
