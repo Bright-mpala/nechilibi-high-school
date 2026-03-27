@@ -19,7 +19,7 @@ def home(request):
 
     # Gallery images for homepage (use gallery app's canonical model)
     carousel_images = GalleryImage.objects.filter(is_featured=True, is_active=True).order_by('order')[:5]
-    gallery_images = GalleryImage.objects.filter(is_active=True).order_by('order', '-uploaded_at')[:6]
+    gallery_images = GalleryImage.objects.filter(is_active=True).order_by('order', '-uploaded_at')[:3]
 
     context = {
         'settings': settings,
