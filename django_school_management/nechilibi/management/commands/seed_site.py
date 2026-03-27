@@ -25,6 +25,7 @@ class Command(BaseCommand):
         self._seed_notices()
         self._seed_events()
         self._seed_downloads()
+        self._seed_articles()
         self.stdout.write(self.style.SUCCESS('\nAll content seeded successfully!'))
 
     # ------------------------------------------------------------------
@@ -517,3 +518,98 @@ class Command(BaseCommand):
 
             action = 'Created' if created else 'Updated'
             self.stdout.write(f'  {action} download: {data["title"]}')
+
+    # ------------------------------------------------------------------
+    # Articles / News (20 articles using Logo as featured image)
+    # ------------------------------------------------------------------
+
+    def _seed_articles(self):
+        from django.core.files import File
+        from django_school_management.articles.models import Article, Category
+
+        logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo.jpg')
+
+        cat, _ = Category.objects.get_or_create(
+            name='School News',
+            defaults={'slug': 'school-news'},
+        )
+
+        articles_data = [
+            ('Nechilibi Students Excel in ZIMSEC 2025 Examinations',
+             '<p>We are proud to announce that Nechilibi High School students achieved outstanding results in the 2025 ZIMSEC O-Level and A-Level examinations. The school recorded a 95% pass rate at O-Level, with 60% of students achieving 5 or more subjects. At A-Level, several students earned university entrance passes in Mathematics, Sciences and Commerce. The school congratulates all students and thanks the dedicated teaching staff for their efforts.</p>'),
+
+            ('New Science Laboratory Officially Opens at Nechilibi',
+             '<p>Nechilibi High School officially opened its newly renovated Science Laboratory this term. The modern facility is equipped with microscopes, chemistry apparatus and computer-aided learning resources for Biology, Chemistry and Physics. The laboratory will serve Form 3 to Form 6 students and is expected to significantly improve practical science education at the school.</p>'),
+
+            ('Sports Day 2025 Highlights — Yellow House Takes the Trophy',
+             '<p>The annual Nechilibi High School Sports Day 2025 was a tremendous success. Students competed in track and field events, team relays and cultural performances. Yellow House emerged as the overall champions, edging out Red House in the final tally. The day was attended by parents, guardians and community members who cheered on the students.</p>'),
+
+            ('Form 1 Intake 2026 — Applications Now Open',
+             '<p>Nechilibi High School is now accepting applications for Form 1 intake for the 2026 academic year. Parents and guardians of Grade 7 graduates are invited to collect application forms from the school office. The school offers both day and boarding options. Successful applicants will be notified by 30 November 2025.</p>'),
+
+            ('Prize Giving Day 2025 — Celebrating Academic Excellence',
+             '<p>The 2025 Annual Prize Giving Day was a colourful celebration of student achievement at Nechilibi High School. Top students in each form were recognised for academic excellence, leadership and sportsmanship. The Guest of Honour, a distinguished alumnus, delivered an inspiring address encouraging students to work hard and serve their communities.</p>'),
+
+            ('Nechilibi Hosts Matabeleland South Inter-School Debate',
+             '<p>Nechilibi High School proudly hosted the Matabeleland South Inter-School Debate Competition this term. Twelve schools from across the region participated. Nechilibi\'s debate team reached the semi-finals, demonstrating excellent oratory and critical thinking skills on topics including climate change and youth entrepreneurship.</p>'),
+
+            ('School Library Receives 500 New Books',
+             '<p>Thanks to a generous donation from a local development organisation, Nechilibi High School\'s library has received 500 new books covering Science, Mathematics, Literature, History and career guidance. The new titles are now available to all students. The school encourages students to make regular use of the library to supplement classroom learning.</p>'),
+
+            ('Career Guidance Day Inspires Form 5 and Form 6 Students',
+             '<p>Nechilibi High School hosted a Career Guidance Day for Form 5 and Form 6 students. Professionals from medicine, engineering, law, agriculture and education addressed students about career pathways, university requirements and scholarship opportunities available to Zimbabwean students.</p>'),
+
+            ('School Garden Project Wins District Award',
+             '<p>The Nechilibi High School Agriculture Department has won the Gwanda District Best School Garden Award for 2025. The school garden, managed by Form 3 and Form 4 Agriculture students, produces vegetables that supplement the school boarding kitchen. The award recognises innovation, sustainability and student engagement in agriculture.</p>'),
+
+            ('Girls Football Team Qualifies for Provincial Championships',
+             '<p>The Nechilibi High School Girls Football Team has qualified for the Matabeleland South Provincial Football Championships after winning all their district fixtures. The team will represent the school at the provincial level. The school congratulates the team and calls on the community to support them.</p>'),
+
+            ('End of Term 1 Report — Academic Performance Update',
+             '<p>As Term 1 2026 comes to a close, the school is pleased to report strong academic performance across all forms. Teachers have observed improved attendance, class participation and homework submission rates. Parents are reminded to review their children\'s report cards and attend the upcoming Parents and Teachers Meeting.</p>'),
+
+            ('Nechilibi Launches Environmental Club',
+             '<p>Nechilibi High School has launched the Nechilibi Environmental Club, open to all students from Form 1 to Form 6. The club will focus on tree planting, waste management, water conservation and environmental awareness campaigns in the school and surrounding community.</p>'),
+
+            ('Music and Drama Festival — Nechilibi Shines on Stage',
+             '<p>Students of Nechilibi High School gave a spectacular performance at the Gwanda District Music and Drama Festival. The school\'s choir placed second in the choral category, while the drama group\'s original play earned special recognition for creativity and social message from the adjudicators.</p>'),
+
+            ('School Fees Reminder — Term 2 2026',
+             '<p>The school administration reminds all parents and guardians that Term 2 2026 school fees are due by the first week of term. Parents experiencing financial difficulties are encouraged to contact the school bursar to discuss payment arrangements. The school appreciates the continued support of parents.</p>'),
+
+            ('Nechilibi Participates in National Science Fair',
+             '<p>Three Nechilibi High School students represented the school at the National Science Fair held in Harare. The students presented projects on solar energy, water purification and drought-resistant crop varieties. Their projects were praised by judges for their relevance to Zimbabwe\'s development challenges.</p>'),
+
+            ('New Computer Laboratory Enhances ICT Education',
+             '<p>Nechilibi High School has commissioned a new Computer Laboratory with 30 workstations, providing students with improved access to ICT education. The lab supports the ZIMSEC ICT curriculum and provides students with internet access for research purposes. Form 3 to Form 6 students will have scheduled ICT lessons starting this term.</p>'),
+
+            ('Alumni Association Donates School Bus',
+             '<p>The Nechilibi High School Alumni Association has donated a 30-seater school bus to assist with student transportation for sports events, educational tours and inter-school competitions. The school\'s administration expressed deep gratitude to the alumni for their continued investment in the institution.</p>'),
+
+            ('Form 6 Students Visit University of Zimbabwe',
+             '<p>Form 6 students at Nechilibi High School recently visited the University of Zimbabwe in Harare as part of a university awareness programme. Students toured faculties including Medicine, Engineering, Law and Education, and received insights about entry requirements and bursary opportunities.</p>'),
+
+            ('Annual General Meeting — Parents Invited',
+             '<p>Nechilibi High School cordially invites all parents and guardians to the Annual General Meeting scheduled for the last Saturday of Term 2. The AGM will cover academic performance, financial statements, development projects and plans for the coming year. A School Development Committee election will also be held.</p>'),
+
+            ('Headmaster\'s Message — Beginning of 2026 Academic Year',
+             '<p>On behalf of the entire Nechilibi High School family, the Headmaster warmly welcomes all students, parents and staff to the 2026 academic year. This year we will focus on improving examination results, expanding co-curricular activities and enhancing school infrastructure. Let us work together to make 2026 a year of excellence at Nechilibi High School.</p>'),
+        ]
+
+        for title, content in articles_data:
+            obj, created = Article.objects.update_or_create(
+                title=title,
+                defaults={
+                    'content': content,
+                    'status': 'published',
+                    'is_featured': False,
+                }
+            )
+            if (created or not obj.featured_image) and os.path.exists(logo_path):
+                with open(logo_path, 'rb') as f:
+                    obj.featured_image.save('nechilibi_news.jpg', File(f), save=False)
+                    obj.save()
+            if created:
+                obj.categories.set([cat])
+            action = 'Created' if created else 'Updated'
+            self.stdout.write(f'  {action} article: {title[:60]}')
