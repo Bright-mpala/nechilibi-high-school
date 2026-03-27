@@ -24,8 +24,8 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
 
-    <link rel="icon" 
-      href="{% if request_institute.site_favicon %}{{request_institute.site_favicon.url}}{% else %}{% static 'articles/images/favicons/favicon.ico' %}{% endif %}">
+    <link rel="icon" type="image/jpeg" href="{% static 'img/logo.jpg' %}">
+    <link rel="shortcut icon" href="{% static 'img/logo.jpg' %}">
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="{% static 'articles/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Your stuff: Third-party CSS libraries go here -->
@@ -95,6 +95,11 @@
                   <a class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
                 </li>
               {% endif %}
+              <li class="nav-item ml-2">
+                <a class="nav-link btn btn-sm btn-outline-light px-3" href="/">
+                  <i class="fas fa-school mr-1"></i> School Site
+                </a>
+              </li>
             </ul>
           </div>
         </div>
