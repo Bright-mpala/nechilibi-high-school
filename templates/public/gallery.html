@@ -1,122 +1,351 @@
 {% extends 'public/base.html' %}
-{% block title %}Gallery - Nechilibi High School{% endblock %}
+{% block title %}Gallery — Nechilibi High School{% endblock %}
 
 {% block extra_css %}
 <style>
-.gallery-img { height: 220px; object-fit: cover; width: 100%; cursor: pointer; transition: transform 0.2s; }
-.gallery-card { overflow: hidden; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.gallery-card:hover .gallery-img { transform: scale(1.03); }
-/* Lightbox */
-.lightbox-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; align-items:center; justify-content:center; }
-.lightbox-overlay.active { display:flex; }
-.lightbox-overlay img { max-width:90%; max-height:90vh; border-radius:4px; }
-.lightbox-close { position:fixed; top:20px; right:30px; font-size:2rem; color:#fff; cursor:pointer; line-height:1; }
+  /* ── Page header ── */
+  .gallery-header { background: linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .gallery-header h1 { color:#fff; margin-bottom:.4rem; }
+  .gallery-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .gallery-header .breadcrumb-item a { color:#c9a227; }
+  .gallery-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+  .gallery-header .breadcrumb-item+.breadcrumb-item::before { color:rgba(255,255,255,.4); }
+
+  /* ── Layout ── */
+  .gallery-layout { display:flex; gap:28px; align-items:flex-start; padding:2.5rem 0; }
+
+  /* ── Sidebar ── */
+  .gallery-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+  }
+  .sidebar-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(74,0,128,.1);
+    overflow: hidden;
+  }
+  .sidebar-card .sidebar-heading {
+    background: linear-gradient(135deg,#4a0080,#800020);
+    color: #fff;
+    padding: .75rem 1rem;
+    font-weight: 700;
+    font-size: .88rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .sidebar-cat-list { list-style: none; margin: 0; padding: .5rem 0; }
+  .sidebar-cat-list li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .55rem 1rem;
+    color: #333;
+    font-size: .88rem;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar-cat-list li a:hover,
+  .sidebar-cat-list li a.active {
+    background: #f4f1f8;
+    color: #4a0080;
+    border-left-color: #4a0080;
+    font-weight: 600;
+  }
+  .sidebar-cat-list li a .cat-count {
+    background: #e8e0f5;
+    color: #4a0080;
+    font-size: .72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: .1rem .5rem;
+    min-width: 22px;
+    text-align: center;
+  }
+  .sidebar-cat-list li a:hover .cat-count,
+  .sidebar-cat-list li a.active .cat-count {
+    background: #4a0080;
+    color: #fff;
+  }
+  .sidebar-all { border-bottom: 1px solid #f0eaf8; margin-bottom: .25rem; }
+
+  /* ── Gallery main ── */
+  .gallery-main { flex: 1; min-width: 0; }
+
+  .cat-section { margin-bottom: 3rem; }
+  .cat-section-title {
+    color: #4a0080;
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding-bottom: .5rem;
+    border-bottom: 3px solid #800020;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .cat-section-title i { color: #800020; font-size: 1rem; }
+
+  /* Image cards */
+  .gallery-card {
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    cursor: pointer;
+    background: #f4f1f8;
+  }
+  .gallery-card:hover .gallery-img { transform: scale(1.05); }
+  .gallery-img {
+    height: 190px;
+    object-fit: cover;
+    width: 100%;
+    transition: transform .25s ease;
+    display: block;
+  }
+  .gallery-caption { padding: .4rem .6rem; font-size: .78rem; color: #666; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Empty state ── */
+  .gallery-empty { text-align:center; padding:4rem 1rem; color:#999; }
+  .gallery-empty i { font-size:3.5rem; opacity:.2; margin-bottom:1rem; display:block; color:#4a0080; }
+
+  /* ── Lightbox ── */
+  .lightbox-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.93); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
+  .lightbox-overlay.active { display:flex; }
+  .lightbox-overlay img { max-width:90%; max-height:82vh; border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.6); }
+  .lightbox-close { position:fixed; top:18px; right:28px; font-size:2.2rem; color:#fff; cursor:pointer; line-height:1; z-index:10000; }
+  .lightbox-caption { color:rgba(255,255,255,.7); font-size:.85rem; margin-top:.75rem; }
+
+  /* ── Video section ── */
+  .video-section { margin-top: 1rem; }
+
+  /* ── Mobile: sidebar becomes horizontal tabs ── */
+  @media (max-width: 767px) {
+    .gallery-layout { flex-direction: column; gap: 0; }
+    .gallery-sidebar { width: 100%; position: static; margin-bottom: 1.5rem; }
+    .sidebar-cat-list { display: flex; flex-wrap: wrap; padding: .5rem; gap: .4rem; }
+    .sidebar-cat-list li a {
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      border-radius: 20px;
+      padding: .3rem .75rem;
+      background: #f4f1f8;
+      font-size: .8rem;
+    }
+    .sidebar-cat-list li a:hover,
+    .sidebar-cat-list li a.active {
+      background: #4a0080;
+      color: #fff;
+      border-color: #4a0080;
+    }
+    .sidebar-cat-list li a .cat-count { background:rgba(255,255,255,.25); color:inherit; }
+    .sidebar-all { border-bottom: none; }
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-primary-custom text-white py-5">
+
+<!-- Page header -->
+<div class="gallery-header">
   <div class="container">
-    <h1 class="text-white">Photo Gallery</h1>
+    <h1><i class="fas fa-images mr-2"></i>Photo Gallery</h1>
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 m-0">
-        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-        <li class="breadcrumb-item active text-white">Gallery</li>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Gallery</li>
       </ol>
     </nav>
   </div>
 </div>
 
-<section class="py-5">
-  <div class="container">
+<div class="container">
+  <div class="gallery-layout">
 
-    {% if all_images %}
+    <!-- ── SIDEBAR ── -->
+    <aside class="gallery-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-heading">
+          <i class="fas fa-folder-open"></i> Categories
+        </div>
+        <ul class="sidebar-cat-list">
+          <!-- All photos link -->
+          <li class="sidebar-all">
+            <a href="#all" class="active" id="filter-all" onclick="filterCat('all',this)">
+              <span><i class="fas fa-th mr-1"></i>All Photos</span>
+              <span class="cat-count">{{ all_images.count }}</span>
+            </a>
+          </li>
+          {% for cat in categories %}
+            {% with count=cat.images.all|length %}
+            {% if count > 0 %}
+            <li>
+              <a href="#cat-{{ cat.id }}"
+                 id="filter-{{ cat.id }}"
+                 onclick="filterCat('{{ cat.id }}',this)">
+                <span>{{ cat.name }}</span>
+                <span class="cat-count">{{ count }}</span>
+              </a>
+            </li>
+            {% endif %}
+            {% endwith %}
+          {% endfor %}
+          {% if uncategorised %}
+          <li>
+            <a href="#cat-other"
+               id="filter-other"
+               onclick="filterCat('other',this)">
+              <span>Other Photos</span>
+              <span class="cat-count">{{ uncategorised|length }}</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </aside>
 
-      {% comment %} Categorised groups {% endcomment %}
-      {% for category in categories %}
-        {% if category.images.all %}
-        <h3 class="section-title mb-4">{{ category.name }}</h3>
-        <div class="row mb-5">
-          {% for image in category.images.all %}
-          {% if image.is_active %}
-          <div class="col-md-3 col-6 mb-4">
-            <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}')">
-              <img src="{{ image.image.url }}" class="gallery-img" alt="{{ image.title }}"
-                   onerror="this.closest('.col-md-3').style.display='none'">
+    <!-- ── MAIN CONTENT ── -->
+    <div class="gallery-main">
+
+      {% if all_images %}
+
+        <!-- Categorised sections -->
+        {% for cat in categories %}
+          {% if cat.images.all %}
+          <div class="cat-section" id="cat-{{ cat.id }}" data-cat="{{ cat.id }}">
+            <h3 class="cat-section-title">
+              <i class="fas fa-folder"></i>{{ cat.name }}
+            </h3>
+            <div class="row">
+              {% for image in cat.images.all %}
+              {% if image.is_active %}
+              <div class="col-6 col-md-4 col-lg-3 mb-3">
+                <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}','{{ image.title|default:'' }}')">
+                  <img src="{{ image.image.url }}" class="gallery-img"
+                       alt="{{ image.title|default:cat.name }}"
+                       onerror="this.closest('.col-6').style.display='none'">
+                  {% if image.title %}
+                  <div class="gallery-caption">{{ image.title }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
             </div>
-            {% if image.title %}<p class="text-muted small mt-1 text-center">{{ image.title }}</p>{% endif %}
           </div>
           {% endif %}
-          {% endfor %}
+        {% endfor %}
+
+        <!-- Uncategorised -->
+        {% if uncategorised %}
+        <div class="cat-section" id="cat-other" data-cat="other">
+          {% if categories %}
+          <h3 class="cat-section-title">
+            <i class="fas fa-folder"></i>Other Photos
+          </h3>
+          {% endif %}
+          <div class="row">
+            {% for image in uncategorised %}
+            <div class="col-6 col-md-4 col-lg-3 mb-3">
+              <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}','{{ image.title|default:'' }}')">
+                <img src="{{ image.image.url }}" class="gallery-img"
+                     alt="{{ image.title|default:'Photo' }}"
+                     onerror="this.closest('.col-6').style.display='none'">
+                {% if image.title %}
+                <div class="gallery-caption">{{ image.title }}</div>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
         </div>
         {% endif %}
-      {% endfor %}
 
-      {% comment %} Uncategorised images {% endcomment %}
-      {% if uncategorised %}
-        {% if categories %}<h3 class="section-title mb-4">Other Photos</h3>{% endif %}
-        <div class="row mb-4">
-          {% for image in uncategorised %}
-          <div class="col-md-3 col-6 mb-4">
-            <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}')">
-              <img src="{{ image.image.url }}" class="gallery-img" alt="{{ image.title|default:'Photo' }}"
-                   onerror="this.closest('.col-md-3').style.display='none'">
+        <!-- Videos -->
+        {% if videos %}
+        <div class="video-section cat-section" id="cat-videos" data-cat="videos">
+          <h3 class="cat-section-title">
+            <i class="fas fa-play-circle"></i>Videos
+          </h3>
+          <div class="row">
+            {% for video in videos %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                  <h6 class="font-weight-bold mb-1">{{ video.title }}</h6>
+                  {% if video.description %}<p class="text-muted small mb-0">{{ video.description }}</p>{% endif %}
+                </div>
+              </div>
             </div>
-            {% if image.title %}<p class="text-muted small mt-1 text-center">{{ image.title }}</p>{% endif %}
+            {% endfor %}
           </div>
-          {% endfor %}
+        </div>
+        {% endif %}
+
+      {% else %}
+        <div class="gallery-empty">
+          <i class="fas fa-images"></i>
+          <h4>Gallery Coming Soon</h4>
+          <p>Photos will be added here shortly. Please check back soon.</p>
+          <a href="/contact/" class="btn btn-primary-custom mt-2">Contact Us</a>
         </div>
       {% endif %}
 
-    {% else %}
-      <div class="text-center py-5 text-muted">
-        <i class="fas fa-images fa-4x mb-4 d-block" style="opacity:0.25;color:#6B0000;"></i>
-        <h4>Gallery Coming Soon</h4>
-        <p>Photos will be added here shortly. Please check back soon.</p>
-        <a href="/contact/" class="btn btn-primary-custom mt-3">Contact Us</a>
-      </div>
-    {% endif %}
-
-    {% comment %} Video section {% endcomment %}
-    {% if videos %}
-    <h3 class="section-title mt-5 mb-4">Videos</h3>
-    <div class="row">
-      {% for video in videos %}
-      <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
-          </div>
-          <div class="card-body">
-            <h6 class="font-weight-bold">{{ video.title }}</h6>
-            {% if video.description %}<p class="text-muted small mb-0">{{ video.description }}</p>{% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-
-  </div>
-</section>
+    </div><!-- /gallery-main -->
+  </div><!-- /gallery-layout -->
+</div>
 
 <!-- Lightbox -->
 <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
   <img id="lightbox-img" src="" alt="Photo">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
+
 {% endblock %}
 
 {% block extra_js %}
 <script>
-function openLightbox(url) {
-  document.getElementById('lightbox-img').src = url;
-  document.getElementById('lightbox').classList.add('active');
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('active');
-  document.getElementById('lightbox-img').src = '';
-}
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+  // Lightbox
+  function openLightbox(url, caption) {
+    document.getElementById('lightbox-img').src = url;
+    document.getElementById('lightbox-caption').textContent = caption || '';
+    document.getElementById('lightbox').classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.getElementById('lightbox-img').src = '';
+  }
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+
+  // Sidebar category filter
+  function filterCat(catId, link) {
+    // Update active state on sidebar links
+    document.querySelectorAll('.sidebar-cat-list a').forEach(function(a){ a.classList.remove('active'); });
+    link.classList.add('active');
+
+    var sections = document.querySelectorAll('.cat-section');
+    sections.forEach(function(sec) {
+      if (catId === 'all') {
+        sec.style.display = '';
+      } else {
+        sec.style.display = (sec.dataset.cat === catId) ? '' : 'none';
+      }
+    });
+
+    // Scroll to top of gallery main
+    var main = document.querySelector('.gallery-main');
+    if (main) { main.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+    return false;
+  }
 </script>
 {% endblock %}
