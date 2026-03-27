@@ -1,15 +1,35 @@
 {% extends 'public/base.html' %}
-{% block title %}Downloads - Nechilibi High School{% endblock %}
+{% block title %}Downloads — Nechilibi High School{% endblock %}
+{% block meta_description %}Download application forms, timetables, the student handbook, and other documents from Nechilibi High School.{% endblock %}
+
+{% block extra_css %}
+<style>
+  @media print {
+    nav, footer, .no-print { display:none !important; }
+    .d-flex.align-items-center { break-inside:avoid; }
+    body { font-size:12px; }
+    a[href]:after { content:none !important; }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="bg-primary-custom text-white py-5">
   <div class="container">
-    <h1 class="text-white">Downloads</h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 m-0">
-        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-        <li class="breadcrumb-item active text-white">Downloads</li>
-      </ol>
-    </nav>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h1 class="text-white mb-1">Downloads</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent p-0 m-0">
+            <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+            <li class="breadcrumb-item active text-white">Downloads</li>
+          </ol>
+        </nav>
+      </div>
+      <button class="btn btn-sm btn-outline-light no-print mt-2" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print List
+      </button>
+    </div>
   </div>
 </div>
 
@@ -32,7 +52,7 @@
               <p class="mb-0 small text-muted">{{ dl.description }}</p>
               {% endif %}
             </div>
-            <a href="{{ dl.file.url }}" class="btn btn-sm btn-accent ml-3" download>
+            <a href="{{ dl.file.url }}" class="btn btn-sm btn-accent ml-3 no-print" download>
               <i class="fas fa-download"></i>
             </a>
           </div>

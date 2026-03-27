@@ -1,0 +1,226 @@
+{% extends 'public/base.html' %}
+{% block title %}Sports & Co-curricular Activities — Nechilibi High School{% endblock %}
+{% block meta_description %}Discover sports teams, clubs, and societies at Nechilibi High School — football, netball, athletics, debating, and more. See our achievements and how to get involved.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .sports-header { background:linear-gradient(135deg,#2e7d32,#1a5276); color:#fff; padding:48px 0 32px; }
+  .sports-header h1 { color:#fff; }
+  .sports-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .sports-header .breadcrumb-item a { color:#c9a227; }
+  .sports-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+
+  /* Type filter tabs */
+  .type-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .type-tabs button {
+    padding:.35rem 1.2rem; border-radius:20px; border:2px solid #2e7d32;
+    background:transparent; color:#2e7d32; font-weight:700; font-size:.88rem; cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .type-tabs button.active, .type-tabs button:hover { background:#2e7d32; color:#fff; }
+  .type-tabs button.club-btn  { border-color:#4a0080; color:#4a0080; }
+  .type-tabs button.club-btn.active, .type-tabs button.club-btn:hover { background:#4a0080; color:#fff; }
+  .type-tabs button.soc-btn   { border-color:#800020; color:#800020; }
+  .type-tabs button.soc-btn.active, .type-tabs button.soc-btn:hover { background:#800020; color:#fff; }
+
+  /* Section header */
+  .sc-section { margin-bottom:2.5rem; }
+  .sc-heading {
+    display:flex; align-items:center; gap:.7rem;
+    padding:.8rem 1.2rem; border-radius:8px; color:#fff;
+    font-weight:800; font-size:1rem; margin-bottom:1.2rem;
+  }
+  .sc-heading.sport   { background:linear-gradient(90deg,#2e7d32,#388e3c); }
+  .sc-heading.club    { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .sc-heading.society { background:linear-gradient(90deg,#800020,#a0203a); }
+
+  /* Card */
+  .sc-card {
+    background:#fff; border-radius:10px; overflow:hidden;
+    box-shadow:0 2px 12px rgba(0,0,0,.08); height:100%;
+    transition:box-shadow .2s, transform .2s;
+    border-top:4px solid #2e7d32;
+  }
+  .sc-card.club    { border-top-color:#4a0080; }
+  .sc-card.society { border-top-color:#800020; }
+  .sc-card:hover   { box-shadow:0 6px 24px rgba(0,0,0,.14); transform:translateY(-3px); }
+  .sc-card .card-img-wrap { height:160px; overflow:hidden; background:#e8f5e9; display:flex; align-items:center; justify-content:center; }
+  .sc-card .card-img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .sc-card .card-icon { font-size:2.8rem; color:#2e7d32; }
+  .sc-card.club    .card-icon { color:#4a0080; }
+  .sc-card.society .card-icon { color:#800020; }
+  .sc-card-body { padding:1.1rem; }
+  .sc-card-body h5 { font-weight:800; font-size:.95rem; color:#1a1a1a; margin-bottom:.5rem; }
+  .sc-card-body p  { font-size:.82rem; color:#666; margin-bottom:.75rem; line-height:1.5; }
+  .achievements-box {
+    background:#f4fbf4; border-left:3px solid #2e7d32; border-radius:3px;
+    padding:.6rem .8rem; font-size:.78rem; color:#2e4a2e;
+  }
+  .sc-card.club    .achievements-box { background:#f4f0f8; border-color:#4a0080; color:#2d0050; }
+  .sc-card.society .achievements-box { background:#fdf0f0; border-color:#800020; color:#500010; }
+  .achievements-box strong { display:block; margin-bottom:.2rem; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; }
+
+  /* Stat pills */
+  .stat-pills { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .stat-pill { background:#fff; border-radius:30px; padding:.5rem 1.3rem; box-shadow:0 2px 8px rgba(0,0,0,.08); font-weight:700; font-size:.88rem; display:flex; align-items:center; gap:.5rem; }
+  .stat-pill .pill-num { font-size:1.3rem; font-weight:900; }
+
+  .section-group { display:none; }
+  .section-group.visible { display:block; }
+
+  @media print {
+    .sports-header, nav, footer, .type-tabs, .stat-pills { display:none !important; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sports-header">
+  <div class="container">
+    <h1><i class="fas fa-running mr-2"></i>Sports &amp; Co-curricular Activities</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Sports &amp; Co-curriculars</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    {% if sports or clubs or societies %}
+
+    <!-- Stat pills -->
+    <div class="stat-pills">
+      <div class="stat-pill"><i class="fas fa-trophy" style="color:#c9a227;"></i><span class="pill-num" style="color:#2e7d32;">{{ total }}</span> Activities</div>
+      {% if sports %}<div class="stat-pill"><i class="fas fa-futbol" style="color:#2e7d32;"></i><span class="pill-num" style="color:#2e7d32;">{{ sports|length }}</span> Sports</div>{% endif %}
+      {% if clubs %}<div class="stat-pill"><i class="fas fa-users" style="color:#4a0080;"></i><span class="pill-num" style="color:#4a0080;">{{ clubs|length }}</span> Clubs</div>{% endif %}
+      {% if societies %}<div class="stat-pill"><i class="fas fa-star" style="color:#800020;"></i><span class="pill-num" style="color:#800020;">{{ societies|length }}</span> Societies</div>{% endif %}
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="type-tabs" id="typeTabs">
+      <button class="active" onclick="filterType(this,'all')"><i class="fas fa-th mr-1"></i>All</button>
+      {% if sports %}<button onclick="filterType(this,'sport')"><i class="fas fa-futbol mr-1"></i>Sports</button>{% endif %}
+      {% if clubs %}<button class="club-btn" onclick="filterType(this,'club')"><i class="fas fa-users mr-1"></i>Clubs</button>{% endif %}
+      {% if societies %}<button class="soc-btn" onclick="filterType(this,'society')"><i class="fas fa-star mr-1"></i>Societies</button>{% endif %}
+    </div>
+
+    {% if sports %}
+    <div class="sc-section section-group visible" data-type="sport">
+      <div class="sc-heading sport"><i class="fas fa-futbol"></i>Sports Teams</div>
+      <div class="row">
+        {% for item in sports %}
+        <div class="col-md-4 col-sm-6 mb-4">
+          <div class="sc-card sport">
+            <div class="card-img-wrap">
+              {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}">
+              {% else %}<i class="{{ item.icon }} card-icon"></i>{% endif %}
+            </div>
+            <div class="sc-card-body">
+              <h5><i class="{{ item.icon }} mr-2" style="color:#2e7d32;font-size:.9rem;"></i>{{ item.name }}</h5>
+              {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+              {% if item.achievements %}
+              <div class="achievements-box">
+                <strong><i class="fas fa-trophy mr-1"></i>Achievements</strong>
+                {{ item.achievements|linebreaksbr }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if clubs %}
+    <div class="sc-section section-group visible" data-type="club">
+      <div class="sc-heading club"><i class="fas fa-users"></i>Clubs</div>
+      <div class="row">
+        {% for item in clubs %}
+        <div class="col-md-4 col-sm-6 mb-4">
+          <div class="sc-card club">
+            <div class="card-img-wrap" style="background:#ede7f6;">
+              {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}">
+              {% else %}<i class="{{ item.icon }} card-icon"></i>{% endif %}
+            </div>
+            <div class="sc-card-body">
+              <h5><i class="{{ item.icon }} mr-2" style="color:#4a0080;font-size:.9rem;"></i>{{ item.name }}</h5>
+              {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+              {% if item.achievements %}
+              <div class="achievements-box">
+                <strong><i class="fas fa-star mr-1"></i>Highlights</strong>
+                {{ item.achievements|linebreaksbr }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if societies %}
+    <div class="sc-section section-group visible" data-type="society">
+      <div class="sc-heading society"><i class="fas fa-star"></i>Societies</div>
+      <div class="row">
+        {% for item in societies %}
+        <div class="col-md-4 col-sm-6 mb-4">
+          <div class="sc-card society">
+            <div class="card-img-wrap" style="background:#fce4ec;">
+              {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}">
+              {% else %}<i class="{{ item.icon }} card-icon"></i>{% endif %}
+            </div>
+            <div class="sc-card-body">
+              <h5><i class="{{ item.icon }} mr-2" style="color:#800020;font-size:.9rem;"></i>{{ item.name }}</h5>
+              {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+              {% if item.achievements %}
+              <div class="achievements-box">
+                <strong><i class="fas fa-star mr-1"></i>Highlights</strong>
+                {{ item.achievements|linebreaksbr }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="alert mt-2" style="background:#e8f5e9;border-left:4px solid #2e7d32;border-radius:4px;font-size:.85rem;">
+      <i class="fas fa-info-circle mr-2" style="color:#2e7d32;"></i>
+      Interested in joining a team or starting a new club? <a href="/contact/">Contact us</a> or speak to a teacher during the first week of term.
+    </div>
+
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-running fa-3x mb-3 d-block" style="color:#d0e8d0;"></i>
+      <h4>Sports &amp; activities coming soon</h4>
+      <p>We will list all sports teams, clubs, and societies here shortly.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterType(btn, type) {
+  document.querySelectorAll('#typeTabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section-group').forEach(function(sec) {
+    if (type === 'all' || sec.dataset.type === type) {
+      sec.classList.add('visible');
+    } else {
+      sec.classList.remove('visible');
+    }
+  });
+}
+</script>
+{% endblock %}

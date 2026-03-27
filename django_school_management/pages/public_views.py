@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.contrib import messages
+from django.db.models import Q
 from django_school_management.gallery.models import GalleryCategory, GalleryImage, VideoGallery
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered, NewsletterSubscriber
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered, NewsletterSubscriber, SportClub
+from django_school_management.notices.models import Notice
+from django_school_management.downloads.models import Download
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -180,6 +182,69 @@ def fee_structure(request):
         'years': years,
         'selected_year': selected_year,
         'groups': ordered_groups,
+    })
+
+
+def sports_cocurriculars(request):
+    all_items = SportClub.objects.filter(is_active=True)
+    sports  = [x for x in all_items if x.type == 'sport']
+    clubs   = [x for x in all_items if x.type == 'club']
+    societies = [x for x in all_items if x.type == 'society']
+    return render(request, 'public/sports_cocurriculars.html', {
+        'sports': sports,
+        'clubs': clubs,
+        'societies': societies,
+        'total': all_items.count(),
+    })
+
+
+def staff_directory(request):
+    leadership = Teacher.objects.filter(
+        is_active=True, role__in=LEADERSHIP_ROLES
+    ).select_related('designation').prefetch_related('subjects').order_by('role', 'name')
+    staff = Teacher.objects.filter(
+        is_active=True
+    ).exclude(role__in=LEADERSHIP_ROLES).select_related('designation').prefetch_related('subjects').order_by('designation__title', 'name')
+    return render(request, 'public/staff_directory.html', {
+        'leadership': leadership,
+        'staff': staff,
+        'total': Teacher.objects.filter(is_active=True).count(),
+    })
+
+
+def search(request):
+    q = request.GET.get('q', '').strip()
+    today = timezone.now().date()
+    results_notices   = []
+    results_downloads = []
+    results_articles  = []
+    total = 0
+
+    if q and len(q) >= 2:
+        results_notices = list(Notice.objects.filter(
+            Q(title__icontains=q) | Q(content__icontains=q),
+            expires_at__gte=today
+        )[:10])
+        results_downloads = list(Download.objects.filter(
+            Q(title__icontains=q) | Q(description__icontains=q),
+            is_published=True
+        )[:10])
+        if HAS_ARTICLES:
+            try:
+                results_articles = list(Article.objects.filter(
+                    Q(title__icontains=q) | Q(content__icontains=q),
+                    status='published'
+                ).order_by('-created')[:10])
+            except Exception:
+                pass
+        total = len(results_notices) + len(results_downloads) + len(results_articles)
+
+    return render(request, 'public/search.html', {
+        'q': q,
+        'notices': results_notices,
+        'downloads': results_downloads,
+        'articles': results_articles,
+        'total': total,
     })
 
 

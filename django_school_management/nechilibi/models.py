@@ -198,6 +198,31 @@ class FeeItem(models.Model):
         return self.amount
 
 
+class SportClub(models.Model):
+    TYPE_CHOICES = [
+        ('sport',   'Sport'),
+        ('club',    'Club'),
+        ('society', 'Society'),
+    ]
+    name         = models.CharField(max_length=100)
+    type         = models.CharField(max_length=10, choices=TYPE_CHOICES, default='sport')
+    description  = models.TextField(blank=True)
+    achievements = models.TextField(blank=True, help_text='Notable achievements, trophies, league titles etc.')
+    icon         = models.CharField(max_length=60, blank=True, default='fas fa-trophy',
+                                    help_text='FontAwesome class e.g. fas fa-futbol')
+    image        = models.ImageField(upload_to='sports/', blank=True, null=True)
+    is_active    = models.BooleanField(default=True)
+    order        = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['type', 'order', 'name']
+        verbose_name = 'Sport / Club'
+        verbose_name_plural = 'Sports & Clubs'
+
+    def __str__(self):
+        return f'{self.name} ({self.get_type_display()})'
+
+
 class NewsletterSubscriber(models.Model):
     email       = models.EmailField(unique=True)
     name        = models.CharField(max_length=100, blank=True)

@@ -1,0 +1,195 @@
+{% extends 'public/base.html' %}
+{% block title %}Staff Directory — Nechilibi High School{% endblock %}
+{% block meta_description %}Meet the dedicated teaching staff at Nechilibi High School. View staff names, subjects taught, and designations. Qualified, experienced educators committed to academic excellence.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .staff-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .staff-header h1 { color:#fff; }
+  .staff-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .staff-header .breadcrumb-item a { color:#c9a227; }
+  .staff-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+
+  /* Stat pill */
+  .staff-stat { display:inline-flex; align-items:center; gap:.6rem; background:#fff; border-radius:30px; padding:.5rem 1.3rem; box-shadow:0 2px 8px rgba(74,0,128,.1); font-weight:700; font-size:.88rem; margin-bottom:2rem; }
+  .staff-stat .num { font-size:1.4rem; font-weight:900; color:#4a0080; }
+
+  /* Section heading */
+  .staff-section-head { display:flex; align-items:center; gap:.7rem; padding:.8rem 1.2rem; border-radius:8px; color:#fff; font-weight:800; font-size:1rem; margin-bottom:1.2rem; }
+  .staff-section-head.leadership { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .staff-section-head.general    { background:linear-gradient(90deg,#1a5276,#217dbb); }
+
+  /* Card */
+  .staff-card {
+    background:#fff; border-radius:10px; overflow:hidden;
+    box-shadow:0 2px 12px rgba(74,0,128,.08);
+    border-top:4px solid #4a0080; height:100%;
+    transition:box-shadow .2s, transform .2s;
+  }
+  .staff-card:hover { box-shadow:0 6px 24px rgba(74,0,128,.16); transform:translateY(-2px); }
+  .staff-card .photo-wrap {
+    height:140px; overflow:hidden; background:linear-gradient(135deg,#ede7f6,#fce4ec);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .staff-card .photo-wrap img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .staff-card .photo-wrap .initials {
+    width:80px; height:80px; border-radius:50%;
+    background:linear-gradient(135deg,#4a0080,#800020);
+    color:#fff; font-size:1.8rem; font-weight:900; font-family:'Merriweather',serif;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .staff-card-body { padding:1rem; }
+  .staff-card-body h6 { font-weight:800; color:#2d2d2d; margin-bottom:.15rem; font-size:.9rem; }
+  .designation-badge { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#4a0080; background:#ede7f6; border-radius:4px; padding:.1rem .45rem; display:inline-block; margin-bottom:.5rem; }
+  .subjects-line { font-size:.78rem; color:#555; line-height:1.5; }
+  .subjects-line i { color:#4a0080; font-size:.7rem; }
+  .bio-text { font-size:.78rem; color:#888; margin-top:.4rem; line-height:1.4; }
+
+  /* Leadership cards are slightly larger */
+  .leadership-grid .staff-card { border-top-color:#c9a227; }
+  .leadership-grid .staff-card .photo-wrap { height:180px; }
+  .leadership-grid .designation-badge { background:#fff8e1; color:#b8860b; }
+
+  /* Search filter */
+  .staff-search { max-width:380px; margin-bottom:1.8rem; }
+  .staff-search input { border:2px solid #e0d9ec; border-radius:30px; padding:.4rem 1.1rem; font-size:.88rem; width:100%; outline:none; }
+  .staff-search input:focus { border-color:#4a0080; }
+
+  @media print {
+    .staff-header, nav, footer, .staff-search, .staff-stat { display:none !important; }
+    .staff-card:hover { box-shadow:none; transform:none; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="staff-header">
+  <div class="container">
+    <h1><i class="fas fa-chalkboard-teacher mr-2"></i>Staff Directory</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Staff Directory</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    {% if leadership or staff %}
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
+      <div class="staff-stat mb-2">
+        <i class="fas fa-chalkboard-teacher" style="color:#4a0080;"></i>
+        <span class="num">{{ total }}</span> Teaching Staff
+      </div>
+      <button class="btn btn-outline-secondary btn-sm print-btn mb-2" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print Directory
+      </button>
+    </div>
+
+    <!-- Live search filter -->
+    <div class="staff-search">
+      <input type="text" id="staffFilter" placeholder="&#xf002;  Filter by name or subject…" oninput="filterStaff(this.value)">
+    </div>
+
+    {% if leadership %}
+    <div class="mb-5">
+      <div class="staff-section-head leadership">
+        <i class="fas fa-star"></i>School Leadership
+      </div>
+      <div class="row leadership-grid" id="leadershipGrid">
+        {% for teacher in leadership %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 staff-item"
+             data-name="{{ teacher.name|lower }}"
+             data-subjects="{{ teacher.subject_list|lower }}">
+          <div class="staff-card">
+            <div class="photo-wrap">
+              {% if teacher.photo %}
+                <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
+              {% else %}
+                <div class="initials">{{ teacher.name|slice:":1" }}</div>
+              {% endif %}
+            </div>
+            <div class="staff-card-body">
+              <h6>{{ teacher.name }}</h6>
+              <span class="designation-badge">{{ teacher.designation.title }}</span>
+              {% if teacher.subject_list %}
+              <div class="subjects-line">
+                <i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}
+              </div>
+              {% endif %}
+              {% if teacher.bio %}<p class="bio-text">{{ teacher.bio|truncatechars:90 }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if staff %}
+    <div>
+      <div class="staff-section-head general">
+        <i class="fas fa-users"></i>Teaching Staff
+      </div>
+      <div class="row" id="staffGrid">
+        {% for teacher in staff %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 staff-item"
+             data-name="{{ teacher.name|lower }}"
+             data-subjects="{{ teacher.subject_list|lower }}">
+          <div class="staff-card">
+            <div class="photo-wrap">
+              {% if teacher.photo %}
+                <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
+              {% else %}
+                <div class="initials">{{ teacher.name|slice:":1" }}</div>
+              {% endif %}
+            </div>
+            <div class="staff-card-body">
+              <h6>{{ teacher.name }}</h6>
+              <span class="designation-badge">{{ teacher.designation.title }}</span>
+              {% if teacher.subject_list %}
+              <div class="subjects-line">
+                <i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="alert mt-4" style="background:#f4f1f8;border-left:4px solid #4a0080;border-radius:4px;font-size:.85rem;">
+      <i class="fas fa-info-circle mr-2" style="color:#4a0080;"></i>
+      Contact details are not published online. To reach a specific teacher please <a href="/contact/">contact the school office</a>.
+    </div>
+
+    {% else %}
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-chalkboard-teacher fa-3x mb-3 d-block" style="color:#d0c8e8;"></i>
+      <h4>Staff directory coming soon</h4>
+      <p>Staff profiles will be published here once added through the admin panel.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterStaff(val) {
+  var q = val.toLowerCase().trim();
+  document.querySelectorAll('.staff-item').forEach(function(el) {
+    var name = el.dataset.name || '';
+    var subj = el.dataset.subjects || '';
+    el.style.display = (!q || name.includes(q) || subj.includes(q)) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

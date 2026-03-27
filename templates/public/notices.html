@@ -1,16 +1,35 @@
 {% extends 'public/base.html' %}
-{% block title %}Notices — Nechilibi High School{% endblock %}
+{% block title %}School Notices — Nechilibi High School{% endblock %}
+{% block meta_description %}Current school notices, holiday announcements, and important updates from Nechilibi High School administration.{% endblock %}
+
+{% block extra_css %}
+<style>
+  @media print {
+    nav, footer, .notices-actions, .no-print { display:none !important; }
+    .card { box-shadow:none !important; border:1px solid #ccc !important; }
+    body { font-size:12px; }
+    .bg-primary-custom { background:#4a0080 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="bg-primary-custom text-white py-5">
   <div class="container">
-    <h1 class="text-white">School Notices</h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 m-0">
-        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-        <li class="breadcrumb-item active text-white">Notices</li>
-      </ol>
-    </nav>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h1 class="text-white mb-1">School Notices</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent p-0 m-0">
+            <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
+            <li class="breadcrumb-item active text-white">Notices</li>
+          </ol>
+        </nav>
+      </div>
+      <button class="btn btn-sm btn-outline-light notices-actions mt-2" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print Notices
+      </button>
+    </div>
   </div>
 </div>
 
@@ -50,10 +69,13 @@
             </div>
             {% endif %}
           </div>
-          <div class="card-footer bg-white border-0 pt-0">
+          <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-between align-items-center">
             <a href="/notices/{{ notice.pk }}/" class="text-primary-custom font-weight-bold small">
               Read More <i class="fas fa-arrow-right ml-1"></i>
             </a>
+            <button class="btn btn-sm btn-outline-secondary no-print" onclick="printNotice({{ notice.pk }}, '{{ notice.title|escapejs }}')">
+              <i class="fas fa-print mr-1"></i>Print
+            </button>
           </div>
         </div>
       </div>
@@ -69,4 +91,14 @@
     {% endif %}
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function printNotice(id, title) {
+  // Open the notice detail page in a new tab and trigger print
+  var win = window.open('/notices/' + id + '/', '_blank');
+  win.addEventListener('load', function() { win.print(); });
+}
+</script>
 {% endblock %}

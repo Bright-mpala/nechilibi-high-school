@@ -1,0 +1,150 @@
+{% extends 'public/base.html' %}
+{% block title %}Search{% if q %}: {{ q }}{% endif %} — Nechilibi High School{% endblock %}
+{% block meta_description %}Search notices, news, and downloads at Nechilibi High School.{% endblock %}
+
+{% block extra_css %}
+<style>
+  .search-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .search-header h1 { color:#fff; }
+  .search-form-wrap { max-width:600px; }
+  .search-form-wrap .input-group input {
+    border:none; border-radius:30px 0 0 30px; padding:.7rem 1.4rem;
+    font-size:1rem; outline:none; box-shadow:none;
+  }
+  .search-form-wrap .input-group button {
+    border-radius:0 30px 30px 0; padding:.7rem 1.4rem;
+    background:var(--accent); border:none; color:#1a1a2e; font-weight:700;
+  }
+
+  .result-section { margin-bottom:2.5rem; }
+  .result-section-head {
+    display:flex; align-items:center; gap:.7rem;
+    padding:.65rem 1rem; border-radius:6px; color:#fff;
+    font-weight:800; font-size:.9rem; margin-bottom:1rem;
+  }
+  .result-section-head.notices   { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .result-section-head.news      { background:linear-gradient(90deg,#800020,#a0203a); }
+  .result-section-head.downloads { background:linear-gradient(90deg,#1a5276,#217dbb); }
+
+  .result-item {
+    display:flex; align-items:flex-start; gap:1rem;
+    padding:.9rem 1rem; background:#fff; border-radius:8px;
+    border:1px solid #e8e0f4; margin-bottom:.6rem;
+    transition:box-shadow .15s;
+  }
+  .result-item:hover { box-shadow:0 3px 12px rgba(74,0,128,.1); }
+  .result-item .ri-icon {
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; color:#fff;
+  }
+  .ri-icon.notice   { background:#4a0080; }
+  .ri-icon.news     { background:#800020; }
+  .ri-icon.download { background:#1a5276; }
+  .result-item h6 { font-weight:700; font-size:.88rem; margin:0 0 .2rem; }
+  .result-item h6 a { color:#2d2d2d; text-decoration:none; }
+  .result-item h6 a:hover { color:#4a0080; }
+  .result-item .snippet { font-size:.78rem; color:#888; line-height:1.4; margin:0; }
+  .result-item .meta    { font-size:.72rem; color:#bbb; margin-top:.2rem; }
+
+  .no-results { text-align:center; padding:3rem 1rem; }
+  .no-results i { font-size:3rem; color:#d0c8e8; display:block; margin-bottom:1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-header">
+  <div class="container">
+    <h1><i class="fas fa-search mr-2"></i>Search</h1>
+    <div class="search-form-wrap mt-3">
+      <form method="get" action="/search/">
+        <div class="input-group">
+          <input type="text" name="q" value="{{ q }}" placeholder="Search notices, news, downloads…" autofocus>
+          <div class="input-group-append">
+            <button type="submit"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    {% if q %}
+      {% if total %}
+        <p class="text-muted mb-4">Found <strong>{{ total }}</strong> result{{ total|pluralize }} for <strong>"{{ q }}"</strong></p>
+      {% else %}
+        <div class="no-results">
+          <i class="fas fa-search-minus"></i>
+          <h4 class="text-muted">No results for "{{ q }}"</h4>
+          <p class="text-muted">Try a shorter or different search term.</p>
+        </div>
+      {% endif %}
+
+      {% if notices %}
+      <div class="result-section">
+        <div class="result-section-head notices">
+          <i class="fas fa-bell"></i>Notices <span class="ml-1 font-weight-400" style="opacity:.8;font-size:.8rem;">({{ notices|length }})</span>
+        </div>
+        {% for item in notices %}
+        <div class="result-item">
+          <div class="ri-icon notice"><i class="fas fa-bell"></i></div>
+          <div class="flex-grow-1">
+            <h6><a href="/notices/{{ item.pk }}/">{{ item.title }}</a></h6>
+            {% if item.content %}<p class="snippet">{{ item.content|striptags|truncatechars:120 }}</p>{% endif %}
+            <p class="meta"><i class="far fa-calendar-alt mr-1"></i>{{ item.created|date:"d M Y" }} &nbsp;·&nbsp; Expires {{ item.expires_at|date:"d M Y" }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if articles %}
+      <div class="result-section">
+        <div class="result-section-head news">
+          <i class="fas fa-newspaper"></i>News &amp; Articles <span class="ml-1 font-weight-400" style="opacity:.8;font-size:.8rem;">({{ articles|length }})</span>
+        </div>
+        {% for item in articles %}
+        <div class="result-item">
+          <div class="ri-icon news"><i class="fas fa-newspaper"></i></div>
+          <div class="flex-grow-1">
+            <h6><a href="/blog/{{ item.slug }}/">{{ item.title }}</a></h6>
+            {% if item.content %}<p class="snippet">{{ item.content|striptags|truncatechars:120 }}</p>{% endif %}
+            <p class="meta"><i class="far fa-calendar-alt mr-1"></i>{{ item.created|date:"d M Y" }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if downloads %}
+      <div class="result-section">
+        <div class="result-section-head downloads">
+          <i class="fas fa-download"></i>Downloads <span class="ml-1 font-weight-400" style="opacity:.8;font-size:.8rem;">({{ downloads|length }})</span>
+        </div>
+        {% for item in downloads %}
+        <div class="result-item">
+          <div class="ri-icon download"><i class="fas fa-file-alt"></i></div>
+          <div class="flex-grow-1">
+            <h6><a href="{{ item.file.url }}" target="_blank">{{ item.title }}</a></h6>
+            {% if item.description %}<p class="snippet">{{ item.description|truncatechars:120 }}</p>{% endif %}
+            <p class="meta"><i class="fas fa-tag mr-1"></i>{{ item.category.name }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    {% else %}
+    <div class="no-results">
+      <i class="fas fa-search"></i>
+      <h4 class="text-muted">What are you looking for?</h4>
+      <p class="text-muted">Enter a keyword above to search notices, news articles, and downloadable documents.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

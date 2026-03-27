@@ -18,4 +18,7 @@ urlpatterns = [
     path('fees/', public_views.fee_structure, name='fee_structure'),
     path('subjects/', public_views.subjects_offered, name='subjects_offered'),
     path('newsletter/subscribe/', public_views.newsletter_subscribe, name='newsletter_subscribe'),
+    path('sports/', public_views.sports_cocurriculars, name='sports_cocurriculars'),
+    path('staff/', public_views.staff_directory, name='staff_directory'),
+    path('search/', public_views.search, name='search'),
 ]

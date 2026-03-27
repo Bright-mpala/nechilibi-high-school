@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Nechilibi High School{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Nechilibi High School — Providing quality secondary education in Matabeleland South, Zimbabwe. Enrolment, news, results, and school information.{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Nechilibi High School{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Quality secondary education in Matabeleland South, Zimbabwe.{% endblock %}">
+  <meta name="theme-color" content="#4a0080">
 
   {% load static %}
   <link rel="icon" type="image/jpeg" href="{% static 'img/logo.jpg' %}">
   <link rel="shortcut icon" href="{% static 'img/logo.jpg' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/logo.jpg' %}">
   <!-- Bootstrap 4 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <!-- Font Awesome 6 -->
@@ -129,10 +134,22 @@
               <a class="dropdown-item" href="/subjects/"><i class="fas fa-book-open mr-2"></i>Subjects Offered</a>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="schoolLifeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">School Life</a>
+            <div class="dropdown-menu" aria-labelledby="schoolLifeDropdown">
+              <a class="dropdown-item" href="/sports/"><i class="fas fa-running mr-2"></i>Sports &amp; Co-curriculars</a>
+              <a class="dropdown-item" href="/staff/"><i class="fas fa-chalkboard-teacher mr-2"></i>Staff Directory</a>
+            </div>
+          </li>
           <li class="nav-item"><a class="nav-link" href="/events/">Events</a></li>
           <li class="nav-item"><a class="nav-link" href="/notices/">Notices</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
-          <li class="nav-item ml-2">
+          <li class="nav-item">
+            <a class="nav-link" href="/search/" title="Search" style="padding-right:.5rem;">
+              <i class="fas fa-search"></i>
+            </a>
+          </li>
+          <li class="nav-item ml-1">
             <a class="nav-link btn btn-sm btn-accent px-3" href="/school-admin/" style="border-radius:4px; margin-top:4px;">
               <i class="fas fa-lock mr-1"></i>Admin Panel
             </a>
@@ -178,6 +195,8 @@
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/results/">ZIMSEC Results</a></li>
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/fees/">Fee Structure</a></li>
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/subjects/">Subjects Offered</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/sports/">Sports &amp; Co-curriculars</a></li>
+            <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/staff/">Staff Directory</a></li>
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/events/">Events</a></li>
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/notices/">Notices</a></li>
             <li class="mb-1"><i class="fas fa-chevron-right mr-2" style="color:var(--accent);font-size:0.7rem;"></i><a href="/contact/">Contact</a></li>
