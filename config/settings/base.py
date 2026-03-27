@@ -36,6 +36,7 @@ except ImproperlyConfigured:
     DJANGO_ADMIN_URL = 'admin'
 
 DEFAULT_APPS = [
+    'jazzmin',  # must be before django.contrib.admin
     'django_school_management.accounts.apps.AccountsConfig',  # must be on top
     'django.contrib.admin',
     'django.contrib.auth',
@@ -267,3 +268,124 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 IS_DEMO_ENV = env('IS_DEMO_ENV')
+
+# ========================= JAZZMIN ADMIN UI =========================
+JAZZMIN_SETTINGS = {
+    # Title on the browser tab & login page
+    "site_title": "Nechilibi High School",
+    "site_header": "Nechilibi High School",
+    "site_brand": "Nechilibi High",
+    "site_logo": "img/logo.jpg",
+    "site_logo_classes": "img-circle elevation-3",
+    "login_logo": "img/logo.jpg",
+    "login_logo_dark": "img/logo.jpg",
+    "site_icon": "img/logo.jpg",
+    "welcome_sign": "Welcome to Nechilibi High School Admin",
+    "copyright": "Nechilibi High School © 2025",
+
+    # Top navigation links
+    "topmenu_links": [
+        {"name": "Public Site", "url": "/", "new_window": True},
+        {"model": "auth.user"},
+    ],
+
+    # User menu in top-right corner
+    "usermenu_links": [
+        {"name": "Public Site", "url": "/", "new_window": True},
+    ],
+
+    # Side navigation
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+
+    "order_with_respect_to": [
+        "auth",
+        "accounts",
+        "students",
+        "teachers",
+        "academics",
+        "result",
+        "nechilibi",
+        "gallery",
+        "articles",
+        "notices",
+        "downloads",
+        "events",
+        "institute",
+        "pages",
+        "payments",
+    ],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "students.Student": "fas fa-user-graduate",
+        "teachers.Teacher": "fas fa-chalkboard-teacher",
+        "academics.Department": "fas fa-building",
+        "academics.Subject": "fas fa-book",
+        "academics.AcademicSession": "fas fa-calendar-alt",
+        "academics.Semester": "fas fa-layer-group",
+        "result.Result": "fas fa-chart-bar",
+        "nechilibi.HeroSlide": "fas fa-images",
+        "nechilibi.SchoolStat": "fas fa-chart-pie",
+        "nechilibi.SchoolFeature": "fas fa-star",
+        "gallery.GalleryImage": "fas fa-camera",
+        "gallery.VideoGallery": "fas fa-video",
+        "articles.Article": "fas fa-newspaper",
+        "notices.Notice": "fas fa-bell",
+        "downloads.Download": "fas fa-download",
+        "events.Event": "fas fa-calendar-check",
+        "institute.InstituteProfile": "fas fa-school",
+        "pages.AdmissionForm": "fas fa-file-alt",
+    },
+
+    "default_icon_parents": "fas fa-folder",
+    "default_icon_children": "fas fa-circle",
+
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+        "auth.group": "vertical_tabs",
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-purple",
+    "accent": "accent-purple",
+    "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-purple",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}

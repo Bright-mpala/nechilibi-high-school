@@ -73,3 +73,4 @@ gunicorn
 braintree==4.6.0
 sslcommerz-lib==1.0
 stripe==14.3.0
+django-jazzmin>=2.6.0
