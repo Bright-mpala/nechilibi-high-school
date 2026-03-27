@@ -19,6 +19,10 @@ RUN pip install -r requirements-prod.txt
 # copy project
 COPY . .
 
+# Copy seeded school images to media directory for Railway deployment
+RUN mkdir -p /usr/src/app/media/gallery && \
+    cp -r /usr/src/app/static/img/school/. /usr/src/app/media/gallery/ 2>/dev/null || true
+
 RUN chmod +x pre-deploy.sh
 
 # Run collectstatic at build time (uses dummy values since DB/secrets not needed for static files)
