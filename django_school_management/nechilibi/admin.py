@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SchoolSettings, SchoolVideo, SchoolEvent, Download, Testimonial
+from .models import SchoolSettings, SchoolVideo, Download, Testimonial
 
 
 @admin.register(SchoolSettings)
@@ -11,12 +11,6 @@ class SchoolSettingsAdmin(admin.ModelAdmin):
 class SchoolVideoAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_featured', 'is_active', 'uploaded_at']
     list_editable = ['is_featured', 'is_active']
-
-
-@admin.register(SchoolEvent)
-class SchoolEventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'event_date', 'venue', 'is_active']
-    list_editable = ['is_active']
 
 
 @admin.register(Download)

@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from .models import GalleryImage, SchoolEvent, Testimonial
+from .models import GalleryImage, Testimonial
 
 
 def home(request):
     carousel_images = GalleryImage.objects.filter(is_carousel=True, is_active=True).order_by('carousel_order')[:5]
     gallery_images = GalleryImage.objects.filter(is_active=True)[:6]
-    upcoming_events = SchoolEvent.objects.filter(is_active=True)[:3]
+    upcoming_events = []
 
     # Try to get articles from the articles app
     recent_articles = []
