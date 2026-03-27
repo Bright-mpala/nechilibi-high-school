@@ -29,9 +29,10 @@ else:
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Media files
+# Media files — use Railway Volume if mounted, else fallback
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+_vol = os.environ.get('RAILWAY_VOLUME_MOUNT_PATH', '')
+MEDIA_ROOT = _vol + '/media' if _vol else str(BASE_DIR / 'media')
 
 # Security
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
