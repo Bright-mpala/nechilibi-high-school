@@ -14,4 +14,5 @@ urlpatterns = [
     path('contact/', public_views.contact, name='contact'),
     path('school-notices/', public_views.notices_page, name='notices'),
     path('academic-calendar/', public_views.academic_calendar, name='academic_calendar'),
+    path('results/', public_views.zimsec_results, name='zimsec_results'),
 ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SchoolSettings, SchoolVideo, Download, Testimonial, TermDate, CalendarEvent
+from .models import SchoolSettings, SchoolVideo, Download, Testimonial, TermDate, CalendarEvent, ZIMSECResult, SubjectResult
 
 
 @admin.register(SchoolSettings)
@@ -38,3 +38,26 @@ class CalendarEventAdmin(admin.ModelAdmin):
     list_display = ['title', 'event_type', 'date_from', 'date_to', 'academic_year']
     list_filter = ['event_type', 'academic_year']
     ordering = ['date_from']
+
+
+class SubjectResultInline(admin.TabularInline):
+    model = SubjectResult
+    extra = 1
+    fields = ['subject', 'candidates', 'passes', 'distinctions']
+
+
+@admin.register(ZIMSECResult)
+class ZIMSECResultAdmin(admin.ModelAdmin):
+    list_display  = ['year', 'get_level', 'total_candidates', 'total_passes', 'pass_rate', 'distinctions', 'is_published']
+    list_editable = ['is_published']
+    list_filter   = ['level', 'year']
+    ordering      = ['-year', 'level']
+    inlines       = [SubjectResultInline]
+
+    @admin.display(description='Level')
+    def get_level(self, obj):
+        return obj.get_level_display()
+
+    @admin.display(description='Pass Rate %')
+    def pass_rate(self, obj):
+        return f'{obj.pass_rate}%'

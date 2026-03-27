@@ -5,7 +5,7 @@ from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -156,6 +156,37 @@ def notices_page(request):
     today = timezone.now().date()
     notices = Notice.objects.filter(expires_at__gte=today).order_by('-created')
     return render(request, 'public/notices.html', {'notices': notices})
+
+
+def zimsec_results(request):
+    years = ZIMSECResult.objects.filter(is_published=True)\
+                .values_list('year', flat=True).distinct().order_by('-year')
+    selected_year = request.GET.get('year', years[0] if years else None)
+
+    o_level = None
+    a_level = None
+    if selected_year:
+        o_level = ZIMSECResult.objects.filter(
+            year=selected_year, level='o_level', is_published=True
+        ).prefetch_related('subjects').first()
+        a_level = ZIMSECResult.objects.filter(
+            year=selected_year, level='a_level', is_published=True
+        ).prefetch_related('subjects').first()
+
+    # All published years for trend chart (ordered oldest→newest)
+    trend_data = list(
+        ZIMSECResult.objects.filter(is_published=True)
+            .order_by('year', 'level')
+            .values('year', 'level', 'total_candidates', 'total_passes', 'national_average')
+    )
+
+    return render(request, 'public/zimsec_results.html', {
+        'years': years,
+        'selected_year': selected_year,
+        'o_level': o_level,
+        'a_level': a_level,
+        'trend_data': trend_data,
+    })
 
 
 def academic_calendar(request):

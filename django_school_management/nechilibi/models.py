@@ -133,3 +133,68 @@ class CalendarEvent(models.Model):
     @property
     def is_multiday(self):
         return bool(self.date_to and self.date_to != self.date_from)
+
+
+class ZIMSECResult(models.Model):
+    LEVEL_CHOICES = [
+        ('o_level', 'O-Level'),
+        ('a_level', 'A-Level'),
+    ]
+    year             = models.CharField(max_length=4, help_text='e.g. 2025')
+    level            = models.CharField(max_length=10, choices=LEVEL_CHOICES)
+    total_candidates = models.PositiveIntegerField(default=0)
+    total_passes     = models.PositiveIntegerField(default=0)
+    distinctions     = models.PositiveIntegerField(default=0, help_text='Number of A/A* grades')
+    national_average = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True,
+                                           help_text='National pass rate % for comparison')
+    notes            = models.TextField(blank=True)
+    is_published     = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-year', 'level']
+        unique_together = ['year', 'level']
+        verbose_name = 'ZIMSEC Result'
+        verbose_name_plural = 'ZIMSEC Results'
+
+    def __str__(self):
+        return f'{self.year} {self.get_level_display()}'
+
+    @property
+    def pass_rate(self):
+        if self.total_candidates:
+            return round((self.total_passes / self.total_candidates) * 100, 1)
+        return 0
+
+    @property
+    def distinction_rate(self):
+        if self.total_candidates:
+            return round((self.distinctions / self.total_candidates) * 100, 1)
+        return 0
+
+    @property
+    def above_national(self):
+        if self.national_average:
+            return self.pass_rate > float(self.national_average)
+        return None
+
+
+class SubjectResult(models.Model):
+    exam          = models.ForeignKey(ZIMSECResult, on_delete=models.CASCADE, related_name='subjects')
+    subject       = models.CharField(max_length=100)
+    candidates    = models.PositiveIntegerField(default=0)
+    passes        = models.PositiveIntegerField(default=0)
+    distinctions  = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['subject']
+        verbose_name = 'Subject Result'
+        verbose_name_plural = 'Subject Results'
+
+    def __str__(self):
+        return f'{self.exam} — {self.subject}'
+
+    @property
+    def pass_rate(self):
+        if self.candidates:
+            return round((self.passes / self.candidates) * 100, 1)
+        return 0

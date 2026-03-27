@@ -1,0 +1,373 @@
+{% extends 'public/base.html' %}
+{% block title %}ZIMSEC Results — Nechilibi High School{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Header */
+  .results-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .results-header h1 { color:#fff; }
+  .results-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .results-header .breadcrumb-item a { color:#c9a227; }
+  .results-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+
+  /* Year tabs */
+  .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .year-tabs a {
+    padding:.35rem 1.1rem; border-radius:20px;
+    border:2px solid #4a0080; color:#4a0080;
+    font-weight:700; font-size:.88rem; text-decoration:none;
+    transition:background .15s,color .15s;
+  }
+  .year-tabs a.active,.year-tabs a:hover { background:#4a0080; color:#fff; }
+
+  /* Stat cards */
+  .stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2rem; }
+  .stat-card {
+    border-radius:10px; padding:1.2rem 1rem; text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+  .stat-card .stat-num { font-size:2.2rem; font-weight:900; line-height:1; }
+  .stat-card .stat-label { font-size:.78rem; margin-top:.3rem; opacity:.8; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+  .stat-primary  { background:linear-gradient(135deg,#4a0080,#6a20a0); color:#fff; }
+  .stat-success  { background:linear-gradient(135deg,#1a7a4a,#27ae60); color:#fff; }
+  .stat-gold     { background:linear-gradient(135deg,#b8860b,#c9a227); color:#fff; }
+  .stat-compare  { background:#f4f1f8; color:#4a0080; border:2px solid #e0d9ec; }
+  .stat-compare .stat-num { font-size:1.6rem; }
+  .above-nat  { color:#1a7a4a !important; }
+  .below-nat  { color:#800020 !important; }
+
+  /* Section headings */
+  .level-heading {
+    display:flex; align-items:center; gap:.75rem;
+    background:linear-gradient(90deg,#4a0080,#800020);
+    color:#fff; border-radius:8px 8px 0 0;
+    padding:.8rem 1.2rem; margin-top:2.5rem; margin-bottom:0;
+    font-size:1.05rem; font-weight:800;
+  }
+  .level-heading.a-level { background:linear-gradient(90deg,#800020,#1a5276); }
+
+  /* Subject table */
+  .subject-table-wrap { border:1px solid #e0d9ec; border-top:none; border-radius:0 0 8px 8px; overflow:hidden; margin-bottom:2rem; }
+  .subject-table { width:100%; border-collapse:collapse; background:#fff; }
+  .subject-table th { background:#f4f1f8; color:#4a0080; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; padding:.65rem 1rem; text-align:left; }
+  .subject-table td { padding:.6rem 1rem; font-size:.88rem; border-bottom:1px solid #f0eaf8; }
+  .subject-table tr:last-child td { border-bottom:none; }
+  .subject-table tr:hover td { background:#faf8fd; }
+  .pass-bar-wrap { background:#e8e0f5; border-radius:20px; height:8px; width:120px; display:inline-block; vertical-align:middle; overflow:hidden; }
+  .pass-bar      { height:100%; border-radius:20px; background:linear-gradient(90deg,#4a0080,#800020); }
+  .rate-val      { font-weight:700; margin-right:.5rem; }
+  .rate-high { color:#1a7a4a; }
+  .rate-mid  { color:#b8860b; }
+  .rate-low  { color:#800020; }
+
+  /* Trend chart */
+  .trend-section { background:#f4f1f8; border-radius:10px; padding:1.5rem; margin-bottom:2rem; }
+  .trend-section h5 { color:#4a0080; font-weight:800; margin-bottom:1rem; }
+  .trend-bars { display:flex; align-items:flex-end; gap:.6rem; height:120px; }
+  .trend-bar-group { display:flex; flex-direction:column; align-items:center; flex:1; }
+  .trend-bar-pair { display:flex; gap:3px; align-items:flex-end; width:100%; justify-content:center; }
+  .trend-bar {
+    width:18px; border-radius:4px 4px 0 0;
+    position:relative; cursor:pointer;
+    transition:opacity .15s;
+  }
+  .trend-bar:hover { opacity:.85; }
+  .trend-bar.o { background:linear-gradient(to top,#4a0080,#6a20a0); }
+  .trend-bar.a { background:linear-gradient(to top,#800020,#a0203a); }
+  .trend-bar .tooltip-val {
+    display:none; position:absolute; bottom:105%; left:50%; transform:translateX(-50%);
+    background:#222; color:#fff; font-size:.68rem; padding:.15rem .4rem;
+    border-radius:3px; white-space:nowrap; z-index:10;
+  }
+  .trend-bar:hover .tooltip-val { display:block; }
+  .trend-year { font-size:.72rem; color:#666; margin-top:.3rem; font-weight:700; }
+  .trend-legend { display:flex; gap:1rem; font-size:.78rem; margin-top:.75rem; }
+  .trend-legend span { display:flex; align-items:center; gap:.3rem; }
+  .legend-dot { width:10px; height:10px; border-radius:2px; display:inline-block; }
+
+  /* Empty / print */
+  .results-empty { text-align:center; padding:4rem 1rem; }
+  .results-empty i { font-size:3rem; color:#d0c8e8; display:block; margin-bottom:1rem; }
+
+  @media print {
+    .results-header, nav, footer, .year-tabs, .print-btn, .top-bar { display:none !important; }
+    .level-heading { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .stat-card { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="results-header">
+  <div class="container">
+    <h1><i class="fas fa-chart-bar mr-2"></i>ZIMSEC Examination Results</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">ZIMSEC Results</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    {% if years %}
+    <!-- Controls -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+      <div class="year-tabs">
+        {% for yr in years %}
+          <a href="?year={{ yr }}" class="{% if yr == selected_year %}active{% endif %}">{{ yr }}</a>
+        {% endfor %}
+      </div>
+      <button class="btn btn-outline-secondary btn-sm print-btn" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print / Save PDF
+      </button>
+    </div>
+
+    <!-- Trend chart (only if multiple years) -->
+    {% if trend_data %}
+    <div class="trend-section">
+      <h5><i class="fas fa-chart-line mr-2"></i>Pass Rate Trend</h5>
+      <div class="trend-bars" id="trendBars"></div>
+      <div class="trend-legend">
+        <span><span class="legend-dot" style="background:#4a0080;"></span>O-Level</span>
+        <span><span class="legend-dot" style="background:#800020;"></span>A-Level</span>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if o_level or a_level %}
+
+      <!-- ── O-LEVEL ── -->
+      {% if o_level %}
+      <h4 class="level-heading"><i class="fas fa-graduation-cap"></i>O-Level Results — {{ selected_year }}</h4>
+      <div class="subject-table-wrap">
+        <!-- stat cards -->
+        <div class="p-3" style="background:#faf8fd; border-bottom:1px solid #e0d9ec;">
+          <div class="stat-row">
+            <div class="stat-card stat-primary">
+              <div class="stat-num">{{ o_level.total_candidates }}</div>
+              <div class="stat-label">Candidates</div>
+            </div>
+            <div class="stat-card stat-success">
+              <div class="stat-num">{{ o_level.pass_rate }}%</div>
+              <div class="stat-label">Pass Rate</div>
+            </div>
+            <div class="stat-card stat-gold">
+              <div class="stat-num">{{ o_level.distinction_rate }}%</div>
+              <div class="stat-label">Distinctions</div>
+            </div>
+            {% if o_level.national_average %}
+            <div class="stat-card stat-compare">
+              <div class="stat-num {% if o_level.above_national %}above-nat{% else %}below-nat{% endif %}">
+                {{ o_level.national_average }}%
+              </div>
+              <div class="stat-label">
+                National Avg
+                {% if o_level.above_national %}
+                  &nbsp;<i class="fas fa-arrow-up" style="color:#1a7a4a;"></i>
+                {% else %}
+                  &nbsp;<i class="fas fa-arrow-down" style="color:#800020;"></i>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          {% if o_level.notes %}
+          <p class="text-muted small mb-0 mt-2"><i class="fas fa-info-circle mr-1"></i>{{ o_level.notes }}</p>
+          {% endif %}
+        </div>
+
+        {% if o_level.subjects.all %}
+        <table class="subject-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Candidates</th>
+              <th>Passes</th>
+              <th>Distinctions</th>
+              <th>Pass Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subj in o_level.subjects.all %}
+            <tr>
+              <td><strong>{{ subj.subject }}</strong></td>
+              <td>{{ subj.candidates }}</td>
+              <td>{{ subj.passes }}</td>
+              <td>{{ subj.distinctions }}</td>
+              <td>
+                <span class="rate-val {% if subj.pass_rate >= 80 %}rate-high{% elif subj.pass_rate >= 50 %}rate-mid{% else %}rate-low{% endif %}">
+                  {{ subj.pass_rate }}%
+                </span>
+                <span class="pass-bar-wrap"><span class="pass-bar" style="width:{{ subj.pass_rate }}%"></span></span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="p-3 text-muted small mb-0">Subject breakdown not yet available for this year.</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- ── A-LEVEL ── -->
+      {% if a_level %}
+      <h4 class="level-heading a-level"><i class="fas fa-university"></i>A-Level Results — {{ selected_year }}</h4>
+      <div class="subject-table-wrap">
+        <div class="p-3" style="background:#faf8fd; border-bottom:1px solid #e0d9ec;">
+          <div class="stat-row">
+            <div class="stat-card stat-primary">
+              <div class="stat-num">{{ a_level.total_candidates }}</div>
+              <div class="stat-label">Candidates</div>
+            </div>
+            <div class="stat-card stat-success">
+              <div class="stat-num">{{ a_level.pass_rate }}%</div>
+              <div class="stat-label">Pass Rate</div>
+            </div>
+            <div class="stat-card stat-gold">
+              <div class="stat-num">{{ a_level.distinction_rate }}%</div>
+              <div class="stat-label">Distinctions</div>
+            </div>
+            {% if a_level.national_average %}
+            <div class="stat-card stat-compare">
+              <div class="stat-num {% if a_level.above_national %}above-nat{% else %}below-nat{% endif %}">
+                {{ a_level.national_average }}%
+              </div>
+              <div class="stat-label">
+                National Avg
+                {% if a_level.above_national %}
+                  &nbsp;<i class="fas fa-arrow-up" style="color:#1a7a4a;"></i>
+                {% else %}
+                  &nbsp;<i class="fas fa-arrow-down" style="color:#800020;"></i>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          {% if a_level.notes %}
+          <p class="text-muted small mb-0 mt-2"><i class="fas fa-info-circle mr-1"></i>{{ a_level.notes }}</p>
+          {% endif %}
+        </div>
+
+        {% if a_level.subjects.all %}
+        <table class="subject-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Candidates</th>
+              <th>Passes</th>
+              <th>Distinctions</th>
+              <th>Pass Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subj in a_level.subjects.all %}
+            <tr>
+              <td><strong>{{ subj.subject }}</strong></td>
+              <td>{{ subj.candidates }}</td>
+              <td>{{ subj.passes }}</td>
+              <td>{{ subj.distinctions }}</td>
+              <td>
+                <span class="rate-val {% if subj.pass_rate >= 80 %}rate-high{% elif subj.pass_rate >= 50 %}rate-mid{% else %}rate-low{% endif %}">
+                  {{ subj.pass_rate }}%
+                </span>
+                <span class="pass-bar-wrap"><span class="pass-bar" style="width:{{ subj.pass_rate }}%"></span></span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="p-3 text-muted small mb-0">Subject breakdown not yet available for this year.</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    {% else %}
+      <div class="results-empty">
+        <i class="fas fa-chart-bar"></i>
+        <h4 class="text-muted">No results published for {{ selected_year }}</h4>
+        <p class="text-muted">Results for this year have not been published yet. Please check back after the examination period.</p>
+      </div>
+    {% endif %}
+
+    <!-- Footer note -->
+    <div class="alert mt-3" style="background:#f4f1f8;border-left:4px solid #4a0080;border-radius:4px;font-size:.88rem;">
+      <i class="fas fa-info-circle mr-2" style="color:#4a0080;"></i>
+      Results shown are based on the November ZIMSEC examination sitting. For official transcripts and certificates, contact <a href="https://www.zimsec.co.zw" target="_blank" rel="noopener">ZIMSEC directly</a>.
+    </div>
+
+    {% else %}
+    <!-- No data at all -->
+    <div class="results-empty">
+      <i class="fas fa-chart-bar"></i>
+      <h4 class="text-muted">Results Coming Soon</h4>
+      <p class="text-muted">ZIMSEC examination results will be published here once they are available.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Build trend chart from Django data
+var trendData = {{ trend_data|safe }};
+
+var years = [...new Set(trendData.map(d => d.year))].sort();
+var container = document.getElementById('trendBars');
+if (container && years.length > 1) {
+  var maxRate = 100;
+  var height = 100; // px
+
+  years.forEach(function(yr) {
+    var ol = trendData.find(d => d.year === yr && d.level === 'o_level');
+    var al = trendData.find(d => d.year === yr && d.level === 'a_level');
+
+    function passRate(d) {
+      if (!d || !d.total_candidates) return 0;
+      return Math.round((d.total_passes / d.total_candidates) * 1000) / 10;
+    }
+
+    var olRate = passRate(ol);
+    var alRate = passRate(al);
+
+    var group = document.createElement('div');
+    group.className = 'trend-bar-group';
+
+    var pair = document.createElement('div');
+    pair.className = 'trend-bar-pair';
+
+    if (ol) {
+      var olBar = document.createElement('div');
+      olBar.className = 'trend-bar o';
+      olBar.style.height = (olRate / maxRate * height) + 'px';
+      olBar.innerHTML = '<span class="tooltip-val">O: ' + olRate + '%</span>';
+      pair.appendChild(olBar);
+    }
+    if (al) {
+      var alBar = document.createElement('div');
+      alBar.className = 'trend-bar a';
+      alBar.style.height = (alRate / maxRate * height) + 'px';
+      alBar.innerHTML = '<span class="tooltip-val">A: ' + alRate + '%</span>';
+      pair.appendChild(alBar);
+    }
+
+    var label = document.createElement('div');
+    label.className = 'trend-year';
+    label.textContent = yr;
+
+    group.appendChild(pair);
+    group.appendChild(label);
+    container.appendChild(group);
+  });
+} else if (container) {
+  container.closest('.trend-section').style.display = 'none';
+}
+</script>
+{% endblock %}
