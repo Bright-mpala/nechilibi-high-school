@@ -33,4 +33,4 @@ ENV UWSGI_WSGI_FILE=./config/wsgi.py
 
 EXPOSE 8000
 
-CMD mkdir -p ${RAILWAY_VOLUME_MOUNT_PATH:-/tmp}/media && python manage.py migrate --noinput --settings=config.settings.production && python manage.py create_superuser_if_none --settings=config.settings.production && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120
+CMD python manage.py migrate --noinput --settings=config.settings.production && python manage.py create_superuser_if_none --settings=config.settings.production && python manage.py seed_site --settings=config.settings.production && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120
