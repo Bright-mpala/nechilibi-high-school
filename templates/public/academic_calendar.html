@@ -1,0 +1,289 @@
+{% extends 'public/base.html' %}
+{% block title %}Academic Calendar {{ selected_year }} — Nechilibi High School{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── Page header ── */
+  .cal-header { background: linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .cal-header h1 { color:#fff; }
+  .cal-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .cal-header .breadcrumb-item a { color:#c9a227; }
+  .cal-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+
+  /* ── Year switcher ── */
+  .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .year-tabs a {
+    padding:.35rem 1.1rem;
+    border-radius:20px;
+    border:2px solid #4a0080;
+    color:#4a0080;
+    font-weight:700;
+    font-size:.88rem;
+    text-decoration:none;
+    transition:background .15s,color .15s;
+  }
+  .year-tabs a.active, .year-tabs a:hover { background:#4a0080; color:#fff; }
+
+  /* ── Term cards ── */
+  .term-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.25rem; margin-bottom:2.5rem; }
+  .term-card {
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 12px rgba(74,0,128,.1);
+    border:1px solid #e8e0f5;
+  }
+  .term-card-header {
+    padding:.85rem 1.1rem;
+    color:#fff;
+    font-weight:800;
+    font-size:1rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .term-1 .term-card-header { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .term-2 .term-card-header { background:linear-gradient(90deg,#800020,#a0203a); }
+  .term-3 .term-card-header { background:linear-gradient(90deg,#1a5276,#217dbb); }
+  .term-card-body { padding:1rem 1.1rem; background:#fff; }
+  .term-card-body .date-row { display:flex; justify-content:space-between; margin-bottom:.5rem; font-size:.88rem; }
+  .term-card-body .date-label { color:#888; }
+  .term-card-body .date-val { font-weight:700; color:#222; }
+  .term-card-body .weeks-badge {
+    display:inline-block;
+    background:#f4f1f8;
+    color:#4a0080;
+    border-radius:20px;
+    padding:.2rem .75rem;
+    font-size:.78rem;
+    font-weight:700;
+    margin-top:.4rem;
+  }
+  .current-badge {
+    background:#c9a227;
+    color:#1a0030;
+    font-size:.7rem;
+    font-weight:800;
+    border-radius:20px;
+    padding:.15rem .55rem;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .term-card-body .term-note { font-size:.8rem; color:#666; margin-top:.6rem; border-top:1px solid #f0eaf8; padding-top:.6rem; }
+
+  /* ── Events table ── */
+  .events-section { margin-bottom:2.5rem; }
+  .events-section h4 {
+    font-size:1rem;
+    font-weight:800;
+    color:#fff;
+    margin:0;
+    padding:.6rem 1rem;
+    border-radius:6px 6px 0 0;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+  }
+  .ev-holiday h4  { background:#800020; }
+  .ev-exam h4     { background:#1a5276; }
+  .ev-event h4    { background:#4a0080; }
+  .ev-other h4    { background:#555; }
+
+  .events-table { width:100%; border-collapse:collapse; background:#fff; border-radius:0 0 6px 6px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .events-table th { background:#f4f1f8; color:#4a0080; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; padding:.6rem 1rem; text-align:left; }
+  .events-table td { padding:.65rem 1rem; font-size:.88rem; border-bottom:1px solid #f0eaf8; vertical-align:top; }
+  .events-table tr:last-child td { border-bottom:none; }
+  .events-table tr:hover td { background:#faf8fd; }
+  .multiday-badge { font-size:.72rem; background:#e8e0f5; color:#4a0080; border-radius:3px; padding:.1rem .4rem; margin-left:.4rem; }
+
+  /* ── Print button ── */
+  .print-btn { cursor:pointer; }
+  @media print {
+    .cal-header, nav, footer, .year-tabs, .print-btn, .top-bar { display:none !important; }
+    .term-cards { grid-template-columns:repeat(3,1fr); }
+    .term-card-header { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    h4 { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+
+  /* ── Empty state ── */
+  .cal-empty { text-align:center; padding:4rem 1rem; }
+  .cal-empty i { font-size:3rem; color:#d0c8e8; margin-bottom:1rem; display:block; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page header -->
+<div class="cal-header">
+  <div class="container">
+    <h1><i class="fas fa-calendar-alt mr-2"></i>Academic Calendar</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Academic Calendar</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    <!-- Top controls: year tabs + print -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+      <div>
+        {% if years %}
+        <div class="year-tabs">
+          {% for yr in years %}
+          <a href="?year={{ yr }}" class="{% if yr == selected_year %}active{% endif %}">{{ yr }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <button class="btn btn-outline-secondary btn-sm print-btn" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print / Save PDF
+      </button>
+    </div>
+
+    {% if terms %}
+
+      <!-- ── TERM DATE CARDS ── -->
+      <h5 class="font-weight-bold mb-3" style="color:#4a0080;">
+        <i class="fas fa-calendar-check mr-1"></i>{{ selected_year }} Term Dates
+      </h5>
+      <div class="term-cards">
+        {% for term in terms %}
+        <div class="term-card term-{{ term.term }}">
+          <div class="term-card-header">
+            <span>Term {{ term.term }}</span>
+            {% if term.is_current %}<span class="current-badge">Current</span>{% endif %}
+          </div>
+          <div class="term-card-body">
+            <div class="date-row">
+              <span class="date-label"><i class="fas fa-play-circle mr-1" style="color:#4a0080;"></i>Opens</span>
+              <span class="date-val">{{ term.start_date|date:"l, j F Y" }}</span>
+            </div>
+            <div class="date-row">
+              <span class="date-label"><i class="fas fa-stop-circle mr-1" style="color:#800020;"></i>Closes</span>
+              <span class="date-val">{{ term.end_date|date:"l, j F Y" }}</span>
+            </div>
+            <span class="weeks-badge"><i class="fas fa-clock mr-1"></i>{{ term.duration_weeks }} weeks</span>
+            {% if term.notes %}
+            <p class="term-note"><i class="fas fa-info-circle mr-1"></i>{{ term.notes }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- ── EVENTS TABLES ── -->
+      {% if exams %}
+      <div class="events-section ev-exam mb-4">
+        <h4><i class="fas fa-pencil-alt"></i>Examinations</h4>
+        <table class="events-table">
+          <thead><tr><th>Examination</th><th>Date(s)</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for ev in exams %}
+            <tr>
+              <td><strong>{{ ev.title }}</strong></td>
+              <td>
+                {{ ev.date_from|date:"j F Y" }}
+                {% if ev.is_multiday %}
+                  — {{ ev.date_to|date:"j F Y" }}
+                  <span class="multiday-badge">{{ ev.date_from|timesince:ev.date_to }} span</span>
+                {% endif %}
+              </td>
+              <td class="text-muted">{{ ev.notes|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      {% if holidays %}
+      <div class="events-section ev-holiday mb-4">
+        <h4><i class="fas fa-umbrella-beach"></i>School Holidays</h4>
+        <table class="events-table">
+          <thead><tr><th>Holiday</th><th>Date(s)</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for ev in holidays %}
+            <tr>
+              <td><strong>{{ ev.title }}</strong></td>
+              <td>
+                {{ ev.date_from|date:"j F Y" }}
+                {% if ev.is_multiday %} — {{ ev.date_to|date:"j F Y" }}{% endif %}
+              </td>
+              <td class="text-muted">{{ ev.notes|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      {% if sch_events %}
+      <div class="events-section ev-event mb-4">
+        <h4><i class="fas fa-star"></i>Key School Events</h4>
+        <table class="events-table">
+          <thead><tr><th>Event</th><th>Date(s)</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for ev in sch_events %}
+            <tr>
+              <td><strong>{{ ev.title }}</strong></td>
+              <td>
+                {{ ev.date_from|date:"j F Y" }}
+                {% if ev.is_multiday %} — {{ ev.date_to|date:"j F Y" }}{% endif %}
+              </td>
+              <td class="text-muted">{{ ev.notes|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      {% if other %}
+      <div class="events-section ev-other mb-4">
+        <h4><i class="fas fa-calendar-day"></i>Other Important Dates</h4>
+        <table class="events-table">
+          <thead><tr><th>Item</th><th>Date(s)</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for ev in other %}
+            <tr>
+              <td><strong>{{ ev.title }}</strong></td>
+              <td>
+                {{ ev.date_from|date:"j F Y" }}
+                {% if ev.is_multiday %} — {{ ev.date_to|date:"j F Y" }}{% endif %}
+              </td>
+              <td class="text-muted">{{ ev.notes|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      {% if not exams and not holidays and not sch_events and not other %}
+      <p class="text-muted"><i class="fas fa-info-circle mr-1"></i>No individual dates have been added for {{ selected_year }} yet. Check back soon.</p>
+      {% endif %}
+
+    {% else %}
+      <!-- Empty state -->
+      <div class="cal-empty">
+        <i class="fas fa-calendar-times"></i>
+        <h4 class="text-muted">No calendar data for {{ selected_year }}</h4>
+        <p class="text-muted">Term dates for this year haven't been published yet.<br>Please check back soon or contact the school office.</p>
+        <a href="/contact/" class="btn btn-primary-custom mt-2">Contact Us</a>
+      </div>
+    {% endif %}
+
+    <!-- Footer note -->
+    <div class="alert mt-4" style="background:#f4f1f8;border-left:4px solid #4a0080;border-radius:4px;">
+      <i class="fas fa-info-circle mr-2" style="color:#4a0080;"></i>
+      <strong>Note:</strong> All dates are subject to change. Parents will be notified of any updates via the school notice board and this website.
+      <a href="/school-notices/" class="ml-2">View current notices &rarr;</a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

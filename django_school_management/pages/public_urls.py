@@ -13,4 +13,5 @@ urlpatterns = [
     path('events/', public_views.events_page, name='events'),
     path('contact/', public_views.contact, name='contact'),
     path('school-notices/', public_views.notices_page, name='notices'),
+    path('academic-calendar/', public_views.academic_calendar, name='academic_calendar'),
 ]

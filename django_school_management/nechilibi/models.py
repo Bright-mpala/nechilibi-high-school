@@ -82,3 +82,54 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TermDate(models.Model):
+    TERM_CHOICES = [(1, 'Term 1'), (2, 'Term 2'), (3, 'Term 3')]
+
+    academic_year = models.CharField(max_length=9, help_text='e.g. 2026')
+    term = models.IntegerField(choices=TERM_CHOICES)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_current = models.BooleanField(default=False, help_text='Mark the running term')
+    notes = models.TextField(blank=True, help_text='Optional note e.g. "Includes Prize Giving Day"')
+
+    class Meta:
+        ordering = ['academic_year', 'term']
+        unique_together = ['academic_year', 'term']
+        verbose_name = 'Term Date'
+        verbose_name_plural = 'Term Dates'
+
+    def __str__(self):
+        return f'{self.academic_year} – Term {self.term}'
+
+    @property
+    def duration_weeks(self):
+        return round((self.end_date - self.start_date).days / 7)
+
+
+class CalendarEvent(models.Model):
+    TYPE_CHOICES = [
+        ('holiday', 'School Holiday'),
+        ('exam',    'Examinations'),
+        ('event',   'School Event'),
+        ('other',   'Other'),
+    ]
+    title        = models.CharField(max_length=200)
+    event_type   = models.CharField(max_length=20, choices=TYPE_CHOICES, default='event')
+    date_from    = models.DateField()
+    date_to      = models.DateField(blank=True, null=True, help_text='Leave blank for single-day entry')
+    academic_year = models.CharField(max_length=9, help_text='e.g. 2026')
+    notes        = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['date_from']
+        verbose_name = 'Calendar Event'
+        verbose_name_plural = 'Calendar Events'
+
+    def __str__(self):
+        return f'{self.title} ({self.date_from})'
+
+    @property
+    def is_multiday(self):
+        return bool(self.date_to and self.date_to != self.date_from)

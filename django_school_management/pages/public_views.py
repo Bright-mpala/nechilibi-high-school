@@ -5,7 +5,7 @@ from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -156,3 +156,33 @@ def notices_page(request):
     today = timezone.now().date()
     notices = Notice.objects.filter(expires_at__gte=today).order_by('-created')
     return render(request, 'public/notices.html', {'notices': notices})
+
+
+def academic_calendar(request):
+    today = timezone.now().date()
+    current_year = str(today.year)
+
+    # Get all years that have term data, sorted descending
+    years = TermDate.objects.values_list('academic_year', flat=True).distinct().order_by('-academic_year')
+    selected_year = request.GET.get('year', current_year if current_year in list(years) else (years[0] if years else current_year))
+
+    terms = TermDate.objects.filter(academic_year=selected_year).order_by('term')
+    events = CalendarEvent.objects.filter(academic_year=selected_year).order_by('date_from')
+
+    # Group events by type for display
+    holidays  = events.filter(event_type='holiday')
+    exams     = events.filter(event_type='exam')
+    sch_events = events.filter(event_type='event')
+    other     = events.filter(event_type='other')
+
+    return render(request, 'public/academic_calendar.html', {
+        'terms': terms,
+        'all_events': events,
+        'holidays': holidays,
+        'exams': exams,
+        'sch_events': sch_events,
+        'other': other,
+        'years': years,
+        'selected_year': selected_year,
+        'today': today,
+    })
