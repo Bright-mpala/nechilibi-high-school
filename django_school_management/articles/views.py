@@ -100,10 +100,7 @@ class CategoryArticles(ListView):
 
 class ArticleDetail(DetailView):
     model = Article
-    # Legacy theme
-    # template_name = 'articles/detail.html'
-    # Tailwind+UX Abu Ahmad's Theme
-    template_name = 'articles/tailwind-theme/detail_tw.html'
+    template_name = 'articles/detail.html'
 
     def get_object(self, qs=None):
         obj = super().get_object(queryset=qs)
