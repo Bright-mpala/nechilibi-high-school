@@ -5,7 +5,7 @@ from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -156,6 +156,30 @@ def notices_page(request):
     today = timezone.now().date()
     notices = Notice.objects.filter(expires_at__gte=today).order_by('-created')
     return render(request, 'public/notices.html', {'notices': notices})
+
+
+def fee_structure(request):
+    structures = FeeStructure.objects.filter(is_published=True)
+    years = structures.values_list('academic_year', flat=True).order_by('-academic_year')
+    selected_year = request.GET.get('year', years[0] if years else None)
+
+    structure = None
+    groups = {}
+    if selected_year:
+        structure = structures.filter(academic_year=selected_year).first()
+        if structure:
+            for item in structure.items.all():
+                groups.setdefault(item.form_group, []).append(item)
+
+    GROUP_ORDER = ['form1_2', 'form3_4', 'form5_6', 'all']
+    ordered_groups = {k: groups[k] for k in GROUP_ORDER if k in groups}
+
+    return render(request, 'public/fee_structure.html', {
+        'structure': structure,
+        'years': years,
+        'selected_year': selected_year,
+        'groups': ordered_groups,
+    })
 
 
 def zimsec_results(request):

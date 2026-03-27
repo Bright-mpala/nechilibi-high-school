@@ -1,0 +1,287 @@
+{% extends 'public/base.html' %}
+{% block title %}School Fee Structure {{ selected_year }} — Nechilibi High School{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Header */
+  .fees-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
+  .fees-header h1 { color:#fff; }
+  .fees-header .breadcrumb { background:transparent; padding:0; margin:0; }
+  .fees-header .breadcrumb-item a { color:#c9a227; }
+  .fees-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+
+  /* Year tabs */
+  .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .year-tabs a { padding:.35rem 1.1rem; border-radius:20px; border:2px solid #4a0080; color:#4a0080; font-weight:700; font-size:.88rem; text-decoration:none; transition:background .15s,color .15s; }
+  .year-tabs a.active, .year-tabs a:hover { background:#4a0080; color:#fff; }
+
+  /* Summary bar */
+  .fee-summary {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1rem; margin-bottom:2.5rem;
+  }
+  .fee-summary-card {
+    background:#fff; border-radius:10px; padding:1.1rem 1.2rem;
+    box-shadow:0 2px 10px rgba(74,0,128,.08);
+    border-left:4px solid #4a0080;
+  }
+  .fee-summary-card.boarding { border-color:#800020; }
+  .fee-summary-card.levy     { border-color:#c9a227; }
+  .fee-summary-card.exam     { border-color:#1a5276; }
+  .fee-summary-card .card-label { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:#888; font-weight:700; margin-bottom:.3rem; }
+  .fee-summary-card .card-amount { font-size:1.6rem; font-weight:900; color:#4a0080; }
+  .fee-summary-card.boarding .card-amount { color:#800020; }
+  .fee-summary-card.levy .card-amount     { color:#b8860b; }
+  .fee-summary-card.exam .card-amount     { color:#1a5276; }
+  .fee-summary-card .card-sub { font-size:.78rem; color:#999; margin-top:.15rem; }
+
+  /* Section */
+  .form-section { margin-bottom:2.5rem; }
+  .form-section-head {
+    display:flex; align-items:center; gap:.75rem;
+    padding:.85rem 1.2rem;
+    border-radius:8px 8px 0 0;
+    color:#fff; font-weight:800; font-size:1rem;
+    margin-bottom:0;
+  }
+  .form-section-head.form1_2 { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .form-section-head.form3_4 { background:linear-gradient(90deg,#800020,#a0203a); }
+  .form-section-head.form5_6 { background:linear-gradient(90deg,#1a5276,#217dbb); }
+  .form-section-head.all     { background:linear-gradient(90deg,#2e7d32,#388e3c); }
+
+  /* Fee table */
+  .fee-table-wrap { border:1px solid #e0d9ec; border-top:none; border-radius:0 0 8px 8px; overflow:hidden; }
+  .fee-table { width:100%; border-collapse:collapse; background:#fff; }
+  .fee-table th { background:#f4f1f8; color:#4a0080; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; padding:.65rem 1rem; text-align:left; }
+  .fee-table th:last-child, .fee-table td:last-child { text-align:right; }
+  .fee-table td { padding:.65rem 1rem; font-size:.88rem; border-bottom:1px solid #f0eaf8; vertical-align:middle; }
+  .fee-table tr:last-child td { border-bottom:none; }
+  .fee-table tr:hover td { background:#faf8fd; }
+  .fee-table .total-row td { background:#f4f1f8; font-weight:800; color:#4a0080; border-top:2px solid #e0d9ec; }
+  .fee-table .total-row td:last-child { color:#800020; font-size:1.05rem; }
+  .cat-badge {
+    display:inline-block; border-radius:4px; font-size:.7rem; font-weight:700;
+    padding:.15rem .5rem; margin-right:.3rem; text-transform:uppercase; letter-spacing:.03em;
+  }
+  .cat-tuition     { background:#ede7f6; color:#4a0080; }
+  .cat-boarding    { background:#fce4ec; color:#800020; }
+  .cat-development { background:#fff8e1; color:#b8860b; }
+  .cat-zimsec      { background:#e3f2fd; color:#1a5276; }
+  .cat-sports      { background:#e8f5e9; color:#2e7d32; }
+  .cat-library     { background:#fff3e0; color:#e65100; }
+  .cat-other       { background:#f5f5f5; color:#555; }
+  .freq-badge { font-size:.7rem; color:#999; margin-left:.3rem; }
+  .note-text { font-size:.75rem; color:#999; display:block; }
+  .amount-col { font-weight:700; font-size:.95rem; }
+
+  /* Notes box */
+  .fee-notes { background:#f4f1f8; border-left:4px solid #4a0080; border-radius:4px; padding:1rem 1.2rem; font-size:.88rem; margin-top:1.5rem; }
+
+  /* Print */
+  .print-btn { cursor:pointer; }
+  @media print {
+    .fees-header, nav, footer, .year-tabs, .print-btn, .top-bar { display:none !important; }
+    .form-section-head { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .fee-summary-card { box-shadow:none; border:1px solid #ccc; }
+    body { font-size:12px; }
+  }
+
+  /* Empty */
+  .fees-empty { text-align:center; padding:4rem 1rem; }
+  .fees-empty i { font-size:3rem; color:#d0c8e8; display:block; margin-bottom:1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fees-header">
+  <div class="container">
+    <h1><i class="fas fa-money-bill-wave mr-2"></i>School Fee Structure</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Fee Structure</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+
+    {% if years %}
+    <div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+      <div class="year-tabs">
+        {% for yr in years %}
+          <a href="?year={{ yr }}" class="{% if yr == selected_year %}active{% endif %}">{{ yr }}</a>
+        {% endfor %}
+      </div>
+      <button class="btn btn-outline-secondary btn-sm print-btn" onclick="window.print()">
+        <i class="fas fa-print mr-1"></i>Print / Save PDF
+      </button>
+    </div>
+    {% endif %}
+
+    {% if structure %}
+
+      <!-- Currency & effective date notice -->
+      <div class="alert mb-4" style="background:#ede7f6;border-left:4px solid #4a0080;border-radius:4px;font-size:.88rem;">
+        <i class="fas fa-info-circle mr-2" style="color:#4a0080;"></i>
+        All fees are quoted in <strong>{{ structure.currency }}</strong> and are effective from
+        <strong>{{ structure.effective_from|date:"j F Y" }}</strong>.
+        Fees are payable at the <strong>beginning of each term</strong> unless stated otherwise.
+      </div>
+
+      {% if groups %}
+
+        <!-- Summary cards (totals per category across all forms) -->
+        {% with items=structure.items.all %}
+        <div class="fee-summary mb-4">
+          {% regroup items by category as by_cat %}
+          {% for cat_group in by_cat %}
+            {% if cat_group.grouper != 'zimsec' %}
+            <div class="fee-summary-card {{ cat_group.grouper }}">
+              <div class="card-label">{{ cat_group.list.0.get_category_display }}</div>
+              <div class="card-amount">
+                {{ structure.currency }}
+                {% with total=0 %}
+                  {{ cat_group.list.0.amount|floatformat:2 }}
+                {% endwith %}
+              </div>
+              <div class="card-sub">{{ cat_group.list.0.get_frequency_display }}</div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endwith %}
+
+        <!-- Per form-group tables -->
+        {% for group_key, items in groups.items %}
+        <div class="form-section">
+          <h4 class="form-section-head {{ group_key }}">
+            <i class="fas fa-users"></i>
+            {% if group_key == 'form1_2' %}Form 1 &amp; 2
+            {% elif group_key == 'form3_4' %}Form 3 &amp; 4
+            {% elif group_key == 'form5_6' %}Form 5 &amp; 6 <span style="font-weight:400;font-size:.85rem;">(A-Level)</span>
+            {% else %}All Forms
+            {% endif %}
+          </h4>
+          <div class="fee-table-wrap">
+            <table class="fee-table">
+              <thead>
+                <tr>
+                  <th style="width:40%">Description</th>
+                  <th>Category</th>
+                  <th>Frequency</th>
+                  <th>Amount ({{ structure.currency }})</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% with term_total=0 annual_total=0 %}
+                {% for item in items %}
+                <tr>
+                  <td>
+                    <strong>{{ item.description }}</strong>
+                    {% if item.notes %}<span class="note-text">{{ item.notes }}</span>{% endif %}
+                  </td>
+                  <td>
+                    <span class="cat-badge cat-{{ item.category }}">{{ item.get_category_display }}</span>
+                  </td>
+                  <td>
+                    <span class="freq-badge">
+                      {% if item.frequency == 'per_term' %}
+                        <i class="fas fa-sync-alt mr-1"></i>Per Term
+                      {% else %}
+                        <i class="fas fa-calendar-check mr-1"></i>Once Off
+                      {% endif %}
+                    </span>
+                  </td>
+                  <td class="amount-col">{{ item.amount|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+                <!-- Totals row -->
+                <tr class="total-row">
+                  <td colspan="3">
+                    <i class="fas fa-calculator mr-1"></i>
+                    Total per Term &nbsp;|&nbsp;
+                    <small style="font-weight:400;">Annual Total (3 terms)</small>
+                  </td>
+                  <td id="total-{{ group_key }}">—</td>
+                </tr>
+                {% endwith %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+
+      {% else %}
+        <p class="text-muted">Fee items have not been entered yet for {{ selected_year }}.</p>
+      {% endif %}
+
+      {% if structure.notes %}
+      <div class="fee-notes">
+        <strong><i class="fas fa-sticky-note mr-1"></i>Important Notes</strong>
+        <p class="mt-2 mb-0">{{ structure.notes|linebreaksbr }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Standard footer note -->
+      <div class="alert mt-4" style="background:#f4f1f8;border-left:4px solid #800020;border-radius:4px;font-size:.85rem;">
+        <i class="fas fa-exclamation-triangle mr-2" style="color:#800020;"></i>
+        <strong>Payment Policy:</strong> All fees are due on the first day of each term. Students whose fees are not paid by the end of Week 2 may not be permitted to sit end-of-term examinations.
+        For payment plans or financial assistance, please <a href="/contact/">contact the school bursar</a>.
+      </div>
+
+    {% elif selected_year %}
+      <div class="fees-empty">
+        <i class="fas fa-money-bill-wave"></i>
+        <h4 class="text-muted">Fee structure for {{ selected_year }} not yet published</h4>
+        <p class="text-muted">Please contact the school office for fee information.</p>
+        <a href="/contact/" class="btn btn-primary-custom mt-2">Contact Us</a>
+      </div>
+    {% else %}
+      <div class="fees-empty">
+        <i class="fas fa-money-bill-wave"></i>
+        <h4 class="text-muted">Fee Structure Coming Soon</h4>
+        <p class="text-muted">The fee structure will be published here shortly.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Calculate per-group totals from table data
+document.querySelectorAll('.form-section').forEach(function(section) {
+  var rows = section.querySelectorAll('tbody tr:not(.total-row)');
+  var perTermTotal = 0;
+  var annualTotal  = 0;
+
+  rows.forEach(function(row) {
+    var amountCell = row.querySelector('.amount-col');
+    var freqCell   = row.querySelector('.freq-badge');
+    if (!amountCell) return;
+
+    var amount = parseFloat(amountCell.textContent.trim()) || 0;
+    var isPerTerm = freqCell && freqCell.textContent.includes('Per Term');
+
+    if (isPerTerm) {
+      perTermTotal += amount;
+      annualTotal  += amount * 3;
+    } else {
+      annualTotal  += amount;
+      // Once-off doesn't add to per-term total
+    }
+  });
+
+  var totalCell = section.querySelector('.total-row td:last-child');
+  if (totalCell) {
+    totalCell.innerHTML =
+      '<strong>' + perTermTotal.toFixed(2) + '</strong>' +
+      ' &nbsp;|&nbsp; <small>' + annualTotal.toFixed(2) + '</small>';
+  }
+});
+</script>
+{% endblock %}

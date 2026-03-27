@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import SchoolSettings, SchoolVideo, Download, Testimonial, TermDate, CalendarEvent, ZIMSECResult, SubjectResult
+from .models import (SchoolSettings, SchoolVideo, Download, Testimonial,
+                     TermDate, CalendarEvent, ZIMSECResult, SubjectResult,
+                     FeeStructure, FeeItem)
 
 
 @admin.register(SchoolSettings)
@@ -38,6 +40,20 @@ class CalendarEventAdmin(admin.ModelAdmin):
     list_display = ['title', 'event_type', 'date_from', 'date_to', 'academic_year']
     list_filter = ['event_type', 'academic_year']
     ordering = ['date_from']
+
+
+class FeeItemInline(admin.TabularInline):
+    model = FeeItem
+    extra = 1
+    fields = ['form_group', 'category', 'description', 'amount', 'frequency', 'notes', 'order']
+
+
+@admin.register(FeeStructure)
+class FeeStructureAdmin(admin.ModelAdmin):
+    list_display  = ['academic_year', 'currency', 'effective_from', 'is_published']
+    list_editable = ['is_published']
+    ordering      = ['-academic_year']
+    inlines       = [FeeItemInline]
 
 
 class SubjectResultInline(admin.TabularInline):

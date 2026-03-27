@@ -135,6 +135,69 @@ class CalendarEvent(models.Model):
         return bool(self.date_to and self.date_to != self.date_from)
 
 
+class FeeStructure(models.Model):
+    CURRENCY_CHOICES = [('USD', 'USD ($)'), ('ZIG', 'ZiG'), ('ZWL', 'ZWL')]
+
+    academic_year  = models.CharField(max_length=4, unique=True, help_text='e.g. 2026')
+    currency       = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default='USD')
+    is_published   = models.BooleanField(default=True)
+    effective_from = models.DateField(help_text='Date fees come into effect')
+    notes          = models.TextField(blank=True, help_text='General notes shown at the bottom of the page')
+
+    class Meta:
+        ordering = ['-academic_year']
+        verbose_name = 'Fee Structure'
+        verbose_name_plural = 'Fee Structures'
+
+    def __str__(self):
+        return f'{self.academic_year} Fee Structure ({self.currency})'
+
+
+class FeeItem(models.Model):
+    FORM_GROUP_CHOICES = [
+        ('form1_2', 'Form 1 & 2'),
+        ('form3_4', 'Form 3 & 4'),
+        ('form5_6', 'Form 5 & 6 (A-Level)'),
+        ('all',     'All Forms'),
+    ]
+    CATEGORY_CHOICES = [
+        ('tuition',     'Tuition Fees'),
+        ('boarding',    'Boarding Fees'),
+        ('development', 'Development Levy'),
+        ('zimsec',      'ZIMSEC / Exam Fees'),
+        ('sports',      'Sports Levy'),
+        ('library',     'Library & Resources'),
+        ('other',       'Other'),
+    ]
+    FREQUENCY_CHOICES = [
+        ('per_term',  'Per Term'),
+        ('once_off',  'Once Off (Annual)'),
+    ]
+
+    structure   = models.ForeignKey(FeeStructure, on_delete=models.CASCADE, related_name='items')
+    form_group  = models.CharField(max_length=20, choices=FORM_GROUP_CHOICES)
+    category    = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    description = models.CharField(max_length=200)
+    amount      = models.DecimalField(max_digits=10, decimal_places=2)
+    frequency   = models.CharField(max_length=20, choices=FREQUENCY_CHOICES, default='per_term')
+    notes       = models.CharField(max_length=200, blank=True, help_text='Small note e.g. "Form 4 only"')
+    order       = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['form_group', 'order', 'category']
+        verbose_name = 'Fee Item'
+        verbose_name_plural = 'Fee Items'
+
+    def __str__(self):
+        return f'{self.description} — {self.get_form_group_display()}'
+
+    @property
+    def annual_total(self):
+        if self.frequency == 'per_term':
+            return self.amount * 3
+        return self.amount
+
+
 class ZIMSECResult(models.Model):
     LEVEL_CHOICES = [
         ('o_level', 'O-Level'),
