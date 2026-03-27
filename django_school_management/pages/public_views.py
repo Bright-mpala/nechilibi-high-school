@@ -15,14 +15,28 @@ except Exception:
 
 def home(request):
     settings = SchoolSettings.get()
+
+    # Nechilibi-specific gallery/carousel images
+    carousel_images = []
+    gallery_images = []
+    try:
+        from django_school_management.nechilibi.models import GalleryImage as NechilibiGalleryImage
+        carousel_images = NechilibiGalleryImage.objects.filter(is_carousel=True, is_active=True).order_by('carousel_order')[:5]
+        gallery_images = NechilibiGalleryImage.objects.filter(is_active=True)[:6]
+    except Exception:
+        pass
+
     context = {
         'settings': settings,
+        'carousel_images': carousel_images,
+        'gallery_images': gallery_images,
         'featured_images': GalleryImage.objects.filter(is_featured=True)[:6],
         'upcoming_events': Event.objects.filter(
             is_published=True,
             start_date__gte=timezone.now().date()
         ).order_by('start_date')[:4],
         'latest_news': [],
+        'recent_articles': [],
         'videos': [],
     }
     # add videos
@@ -33,9 +47,11 @@ def home(request):
         pass
     if HAS_ARTICLES:
         try:
-            context['latest_news'] = Article.objects.filter(
+            articles = Article.objects.filter(
                 status='published'
             ).order_by('-created')[:3]
+            context['latest_news'] = articles
+            context['recent_articles'] = articles
         except Exception:
             pass
     return render(request, 'public/home.html', context)

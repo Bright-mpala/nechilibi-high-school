@@ -21,9 +21,12 @@ COPY . .
 
 RUN chmod +x pre-deploy.sh
 
+# Run collectstatic at build time (uses dummy values since DB/secrets not needed for static files)
+RUN SECRET_KEY=build-time-placeholder DATABASE_URL=sqlite:////tmp/build.db python manage.py collectstatic --noinput --settings=config.settings.production
+
 # Tell uWSGI where to find your wsgi file (change this):
 ENV UWSGI_WSGI_FILE=./config/wsgi.py
 
 EXPOSE 8000
 
-CMD gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120
+CMD python manage.py migrate --noinput --settings=config.settings.production && python manage.py create_superuser_if_none --settings=config.settings.production && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120

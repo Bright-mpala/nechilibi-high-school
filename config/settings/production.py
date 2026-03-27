@@ -4,18 +4,30 @@ import os
 
 DEBUG = False
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+SECRET_KEY = os.environ.get('SECRET_KEY', env('SECRET_KEY', default='change-me-in-production'))
 
-CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://nechilibi-web-production.up.railway.app').split(',')
 
 # Database — PostgreSQL on Railway
-DATABASES = {
-    'default': env.db('DATABASE_URL')
-}
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Static files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'

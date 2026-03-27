@@ -62,6 +62,7 @@ LOCAL_APPS = [
     'django_school_management.gallery.apps.GalleryConfig',
     'django_school_management.events.apps.EventsConfig',
     'django_school_management.downloads.apps.DownloadsConfig',
+    'django_school_management.nechilibi.apps.NechilibiConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -102,7 +103,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # allauth account middleware
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -123,6 +123,7 @@ TEMPLATES = [
                 "context_processors.attach_resources.attach_urls_for_common_templates",
                 "context_processors.attach_resources.attach_dashboard_menu_items",
                 "django_school_management.institute.context_processors.school_settings",
+                "django_school_management.nechilibi.context_processors.school_settings",
             ],
         },
     },
@@ -160,8 +161,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

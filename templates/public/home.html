@@ -1,272 +1,753 @@
-{% extends 'public/base.html' %}
-{% block title %}Nechilibi High School - Excellence in Education{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nechilibi High School - Excellence in Education</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --purple: #4a0080;
+            --maroon: #800020;
+            --light-purple: #7b2fbe;
+            --gold: #c9a227;
+            --white: #ffffff;
+            --light-grey: #f8f9fa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-{% block extra_css %}
-<style>
-.hero-section {
-  background: linear-gradient(135deg, #6B0000 0%, #4a0000 60%, #2d0000 100%);
-  min-height: 85vh;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.hero-content { position: relative; z-index: 2; }
-.hero-badge { background: rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.5); color: #FFD700; display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; }
-.hero-title { font-size: 3.5rem; color: #fff; font-weight: 900; line-height: 1.1; }
-.hero-title span { color: #FFD700; }
-.hero-subtitle { font-size: 1.15rem; color: rgba(255,255,255,0.85); max-width: 520px; margin: 20px 0 35px; }
-.hero-stats { display: flex; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
-.stat-box { text-align: center; }
-.stat-box .num { font-size: 2.2rem; font-weight: 900; color: #FFD700; font-family: 'Merriweather', serif; }
-.stat-box .label { font-size: 0.78rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
-.hero-image-col { display: flex; align-items: center; justify-content: center; }
-.hero-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 30px; color: #fff; }
-.hero-card .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; }
-.news-card { border: none; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-.news-card .card-img-top { height: 180px; object-fit: cover; background: #eee; }
-.news-date { font-size: 0.78rem; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
-.event-item { border-left: 4px solid #FFD700; padding-left: 16px; margin-bottom: 20px; }
-.event-date-badge { background: #6B0000; color: #fff; border-radius: 8px; padding: 8px 12px; text-align: center; min-width: 56px; }
-.event-date-badge .day { font-size: 1.4rem; font-weight: 900; line-height: 1; }
-.event-date-badge .mon { font-size: 0.7rem; text-transform: uppercase; }
-.gallery-thumb { height: 200px; object-fit: cover; width: 100%; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
-.gallery-thumb:hover { opacity: 0.85; }
-.section-bg-light { background: var(--bg-light); }
-.why-box { text-align: center; padding: 30px 20px; }
-.why-box .icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
-@media (max-width: 768px) {
-  .hero-title { font-size: 2.2rem; }
-  .hero-stats { gap: 20px; }
-}
-</style>
-{% endblock %}
+        /* TOP BAR */
+        .top-bar {
+            background: var(--purple);
+            color: white;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        .top-bar a { color: #ddd; text-decoration: none; margin-right: 15px; }
+        .top-bar a:hover { color: white; }
 
-{% block content %}
-<!-- HERO -->
-<section class="hero-section">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-7 hero-content py-5">
-        <div class="hero-badge"><i class="fas fa-star mr-2"></i>Est. in Zimbabwe's Matabeleland South</div>
-        <h1 class="hero-title">Shaping Tomorrow's<br><span>Leaders</span> Today</h1>
-        <p class="hero-subtitle">Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.</p>
-        <a href="/admissions/" class="btn btn-accent btn-lg mr-3">Apply Now <i class="fas fa-arrow-right ml-2"></i></a>
-        <a href="/about/" class="btn btn-outline-light btn-lg">Learn More</a>
-        <div class="hero-stats">
-          <div class="stat-box"><div class="num">500+</div><div class="label">Students</div></div>
-          <div class="stat-box"><div class="num">40+</div><div class="label">Teachers</div></div>
-          <div class="stat-box"><div class="num">Form 1-6</div><div class="label">Classes</div></div>
-          <div class="stat-box"><div class="num">ZIMSEC</div><div class="label">Accredited</div></div>
+        /* NAVBAR */
+        .main-navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0;
+        }
+        .navbar-brand img { height: 70px; }
+        .navbar-brand .school-title {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .navbar-brand .school-title h1 {
+            font-size: 20px;
+            color: var(--purple);
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .navbar-brand .school-title small {
+            color: var(--maroon);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .main-navbar .nav-link {
+            color: var(--purple) !important;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 20px 15px !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid transparent;
+        }
+        .main-navbar .nav-link:hover, .main-navbar .nav-link.active {
+            color: var(--maroon) !important;
+            border-bottom: 3px solid var(--maroon);
+        }
+        .main-navbar .nav-item.apply-btn .nav-link {
+            background: var(--maroon);
+            color: white !important;
+            border-radius: 4px;
+            margin: 13px 0;
+            padding: 8px 20px !important;
+            border-bottom: none;
+        }
+        .main-navbar .nav-item.apply-btn .nav-link:hover {
+            background: var(--purple);
+            border-bottom: none;
+        }
+
+        /* CAROUSEL */
+        .hero-carousel { position: relative; }
+        .hero-carousel .carousel-item { height: 580px; }
+        .hero-carousel .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.65);
+        }
+        .hero-carousel .carousel-caption {
+            bottom: 20%;
+            left: 10%;
+            right: 10%;
+            text-align: left;
+        }
+        .hero-carousel .carousel-caption h2 {
+            font-size: 42px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        .hero-carousel .carousel-caption p {
+            font-size: 18px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .hero-carousel .carousel-caption .btn-hero {
+            background: var(--maroon);
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .hero-carousel .carousel-caption .btn-hero-outline {
+            background: transparent;
+            color: white;
+            padding: 11px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 2px solid white;
+            display: inline-block;
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: var(--purple);
+            border-radius: 50%;
+            padding: 15px;
+        }
+
+        /* QUICK STATS */
+        .stats-bar {
+            background: var(--purple);
+            color: white;
+            padding: 25px 0;
+        }
+        .stats-bar .stat-item { text-align: center; border-right: 1px solid rgba(255,255,255,0.2); }
+        .stats-bar .stat-item:last-child { border-right: none; }
+        .stats-bar .stat-number { font-size: 36px; font-weight: 800; color: var(--gold); }
+        .stats-bar .stat-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+
+        /* SECTIONS */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--purple);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--maroon);
+        }
+        .section-title p { color: #666; font-size: 16px; margin-top: 10px; }
+
+        /* ABOUT SECTION */
+        .about-section { padding: 70px 0; background: white; }
+        .about-section .about-img {
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(74,0,128,0.2);
+            width: 100%;
+        }
+        .about-section h3 { color: var(--purple); font-size: 28px; font-weight: 700; }
+        .about-section p { color: #555; line-height: 1.8; }
+        .about-section .btn-about {
+            background: var(--purple);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        /* PROGRAMS */
+        .programs-section { padding: 70px 0; background: var(--light-grey); }
+        .program-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--purple);
+        }
+        .program-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(74,0,128,0.15); }
+        .program-card .icon { font-size: 40px; color: var(--purple); margin-bottom: 15px; }
+        .program-card h4 { color: var(--purple); font-weight: 700; margin-bottom: 10px; }
+        .program-card p { color: #666; font-size: 14px; }
+
+        /* NEWS */
+        .news-section { padding: 70px 0; background: white; }
+        .news-card {
+            border: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            transition: transform 0.3s;
+        }
+        .news-card:hover { transform: translateY(-5px); }
+        .news-card .card-img-top { height: 200px; object-fit: cover; }
+        .news-card .card-date { color: var(--maroon); font-size: 13px; font-weight: 600; }
+        .news-card .card-title a { color: var(--purple); text-decoration: none; font-weight: 700; }
+        .news-card .card-title a:hover { color: var(--maroon); }
+
+        /* GALLERY */
+        .gallery-section { padding: 70px 0; background: var(--light-grey); }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .gallery-item:hover img { transform: scale(1.08); }
+        .gallery-item .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(74,0,128,0.7);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        .gallery-item:hover .overlay { opacity: 1; }
+
+        /* CTA SECTION */
+        .cta-section {
+            background: linear-gradient(135deg, var(--purple), var(--maroon));
+            color: white;
+            padding: 70px 0;
+            text-align: center;
+        }
+        .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 15px; }
+        .cta-section p { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
+        .cta-section .btn-cta {
+            background: white;
+            color: var(--purple);
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 5px;
+            display: inline-block;
+        }
+        .cta-section .btn-cta-outline {
+            background: transparent;
+            color: white;
+            padding: 13px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 2px solid white;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        /* CONTACT */
+        .contact-section { padding: 70px 0; background: white; }
+        .contact-info-item { display: flex; align-items: flex-start; margin-bottom: 25px; }
+        .contact-info-item .icon {
+            width: 50px; height: 50px;
+            background: var(--purple);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+        .contact-info-item h5 { color: var(--purple); font-weight: 700; margin-bottom: 3px; }
+        .contact-info-item p { color: #666; margin: 0; }
+
+        /* FOOTER */
+        .main-footer {
+            background: #1a0030;
+            color: #ccc;
+            padding: 50px 0 20px;
+        }
+        .main-footer h5 { color: white; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--maroon); padding-bottom: 10px; }
+        .main-footer a { color: #ccc; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
+        .main-footer a:hover { color: white; padding-left: 5px; }
+        .main-footer .social-icons a {
+            display: inline-flex;
+            width: 38px; height: 38px;
+            background: var(--purple);
+            color: white;
+            border-radius: 50%;
+            align-items: center; justify-content: center;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .main-footer .social-icons a:hover { background: var(--maroon); padding-left: 0; }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 30px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-carousel .carousel-item { height: 350px; }
+            .hero-carousel .carousel-caption h2 { font-size: 24px; }
+            .hero-carousel .carousel-caption p { font-size: 14px; }
+            .stats-bar .stat-item { border-right: none; margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <i class="fas fa-phone mr-1"></i> +263 XXX XXX XXX &nbsp;|&nbsp;
+            <i class="fas fa-envelope mr-1"></i> info@nechilibi.ac.zw
         </div>
-      </div>
-      <div class="col-lg-5 d-none d-lg-block hero-image-col">
-        <div class="hero-card">
-          <div class="row">
-            <div class="col-6 mb-4">
-              <div class="icon-circle" style="background:rgba(255,215,0,0.2)"><i class="fas fa-book-open text-warning"></i></div>
-              <div style="font-size:0.9rem;font-weight:600;">Academic Excellence</div>
-              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">ZIMSEC &amp; Cambridge</div>
-            </div>
-            <div class="col-6 mb-4">
-              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-trophy text-warning"></i></div>
-              <div style="font-size:0.9rem;font-weight:600;">Sports &amp; Culture</div>
-              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Holistic development</div>
-            </div>
-            <div class="col-6">
-              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-users text-warning"></i></div>
-              <div style="font-size:0.9rem;font-weight:600;">Boarding &amp; Day</div>
-              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Flexible options</div>
-            </div>
-            <div class="col-6">
-              <div class="icon-circle" style="background:rgba(255,255,255,0.1)"><i class="fas fa-flask text-warning"></i></div>
-              <div style="font-size:0.9rem;font-weight:600;">Science Labs</div>
-              <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Modern facilities</div>
-            </div>
-          </div>
+        <div>
+            <a href="#"><i class="fab fa-facebook-f mr-1"></i></a>
+            <a href="#"><i class="fab fa-twitter mr-1"></i></a>
+            <a href="#"><i class="fab fa-youtube mr-1"></i></a>
+            <a href="/school-admin/" class="ml-3"><i class="fas fa-lock mr-1"></i>Staff Login</a>
         </div>
-      </div>
     </div>
-  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg main-navbar sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="/media/school/Nechilibi School Logo - 2.jpg" alt="Nechilibi Logo" onerror="this.style.display='none'">
+            <div class="school-title ml-2">
+                <h1>NECHILIBI HIGH SCHOOL</h1>
+                <small>Excellence in Education | Zimbabwe</small>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#academics">Academics</a></li>
+                <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
+                <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                <li class="nav-item apply-btn"><a class="nav-link" href="/admissions/">Apply Now</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO CAROUSEL -->
+<div id="heroCarousel" class="carousel slide hero-carousel" data-ride="carousel" data-interval="5000">
+    <ol class="carousel-indicators">
+        {% for img in carousel_images %}
+        <li data-target="#heroCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+        {% empty %}
+        <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for img in carousel_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ img.image.url }}" alt="{{ img.title }}">
+            <div class="carousel-caption">
+                <h2>{{ img.title }}</h2>
+                <p>{{ img.description|default:"Providing quality education in Zimbabwe" }}</p>
+                <a href="#about" class="btn-hero">Learn More</a>
+                <a href="/admissions/" class="btn-hero-outline">Apply Now</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="carousel-item active">
+            <img src="{% static 'img/hero-default.jpg' %}" alt="Nechilibi High School" onerror="this.src='https://via.placeholder.com/1200x580/4a0080/ffffff?text=Nechilibi+High+School'">
+            <div class="carousel-caption">
+                <h2>Welcome to Nechilibi High School</h2>
+                <p>Providing quality education in Zimbabwe since our founding.</p>
+                <a href="#about" class="btn-hero">Learn More</a>
+                <a href="/admissions/" class="btn-hero-outline">Apply Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">40+</div>
+                <div class="stat-label">Teachers</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">Years of Excellence</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Pass Rate</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                {% if gallery_images %}
+                <img src="{{ gallery_images.0.image.url }}" alt="Nechilibi High School" class="about-img">
+                {% else %}
+                <img src="https://via.placeholder.com/600x400/4a0080/ffffff?text=Nechilibi+High+School" alt="School" class="about-img">
+                {% endif %}
+            </div>
+            <div class="col-lg-6 pl-lg-5">
+                <div class="section-title text-left mb-3">
+                    <h2 style="text-align:left;">About Our School</h2>
+                </div>
+                <p>Nechilibi High School is a leading secondary school located in Matabeleland South, Zimbabwe. We are committed to providing quality education that prepares students for the challenges of the modern world.</p>
+                <p class="mt-3">Our school follows the <strong>ZIMSEC curriculum</strong>, offering O-Level (Forms 1-4) and A-Level (Forms 5-6) programmes. We pride ourselves on academic excellence, strong moral values, and holistic development of every student.</p>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success mr-2"></i>
+                            <span>ZIMSEC Curriculum</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success mr-2"></i>
+                            <span>Forms 1 - 6</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success mr-2"></i>
+                            <span>Sports &amp; Arts</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success mr-2"></i>
+                            <span>Science Labs</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="#contact" class="btn-about">Contact Us <i class="fas fa-arrow-right ml-2"></i></a>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- WHY NECHILIBI -->
-<section class="py-5 section-bg-light">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="section-title">Why Choose Nechilibi?</h2>
-      <p class="text-muted">A school built on values, excellence, and community</p>
+<!-- ACADEMICS/PROGRAMS -->
+<section class="programs-section" id="academics">
+    <div class="container">
+        <div class="section-title">
+            <h2>Academic Programmes</h2>
+            <p>We offer a comprehensive ZIMSEC curriculum from Form 1 to Form 6</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="program-card">
+                    <div class="icon"><i class="fas fa-book-open"></i></div>
+                    <h4>O-Level (Forms 1&ndash;4)</h4>
+                    <p>Comprehensive foundation education covering Sciences, Arts, and Commerce. Preparing students for ZIMSEC O-Level examinations.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="program-card">
+                    <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h4>A-Level (Forms 5&ndash;6)</h4>
+                    <p>Advanced level studies for university preparation. Specialized subjects in Sciences, Humanities, and Commercial streams.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="program-card">
+                    <div class="icon"><i class="fas fa-running"></i></div>
+                    <h4>Co-Curricular</h4>
+                    <p>Sports, music, drama, and clubs that develop well-rounded students with leadership skills and team spirit.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row">
-      <div class="col-md-3 col-6">
-        <div class="why-box">
-          <div class="icon"><i class="fas fa-graduation-cap"></i></div>
-          <h5>Academic Excellence</h5>
-          <p class="text-muted small">Consistently high pass rates in ZIMSEC O- and A-Level examinations.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="why-box">
-          <div class="icon"><i class="fas fa-futbol"></i></div>
-          <h5>Sports &amp; Arts</h5>
-          <p class="text-muted small">Football, netball, athletics, drama and music for every student.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="why-box">
-          <div class="icon"><i class="fas fa-home"></i></div>
-          <h5>Safe Environment</h5>
-          <p class="text-muted small">Secure boarding and day school facilities in a peaceful rural setting.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-6">
-        <div class="why-box">
-          <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
-          <h5>Qualified Staff</h5>
-          <p class="text-muted small">Experienced, dedicated teachers committed to student success.</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- NEWS -->
-<section class="py-5">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="section-title mb-0">Latest News</h2>
-      <a href="/news/" class="btn btn-sm btn-outline-secondary">View All <i class="fas fa-arrow-right ml-1"></i></a>
-    </div>
-    <div class="row">
-      {% if latest_news %}
-        {% for article in latest_news %}
-        <div class="col-md-4 mb-4">
-          <div class="card news-card card-hover h-100">
-            {% if article.featured_image %}
-              <img src="{{ article.featured_image.url }}" class="card-img-top" alt="{{ article.title }}">
-            {% else %}
-              <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px;background:linear-gradient(135deg,#6B0000,#4a0000)">
-                <i class="fas fa-newspaper fa-3x text-white" style="opacity:0.5"></i>
-              </div>
-            {% endif %}
-            <div class="card-body">
-              <p class="news-date"><i class="far fa-calendar-alt mr-1"></i>{{ article.created|date:"d M Y" }}</p>
-              <h6 class="font-weight-bold">{{ article.title }}</h6>
-              <p class="text-muted small">{{ article.content|striptags|truncatechars:100 }}</p>
-            </div>
-            <div class="card-footer bg-white border-0">
-              <a href="{{ article.get_absolute_url }}" class="text-primary-custom font-weight-bold small">Read More <i class="fas fa-arrow-right ml-1"></i></a>
-            </div>
-          </div>
+<section class="news-section" id="news">
+    <div class="container">
+        <div class="section-title">
+            <h2>Latest News &amp; Notices</h2>
+            <p>Stay updated with the latest happenings at Nechilibi High School</p>
         </div>
-        {% endfor %}
-      {% else %}
-        <div class="col-12 text-center py-4 text-muted">
-          <i class="fas fa-newspaper fa-2x mb-3 d-block"></i>
-          No news articles yet. Check back soon.
+        <div class="row">
+            {% for article in recent_articles %}
+            <div class="col-md-4">
+                <div class="card news-card">
+                    {% if article.featured_image %}
+                    <img src="{{ article.featured_image.url }}" class="card-img-top" alt="{{ article.title }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x200/4a0080/ffffff?text=Nechilibi+News" class="card-img-top" alt="News">
+                    {% endif %}
+                    <div class="card-body">
+                        <p class="card-date"><i class="far fa-calendar mr-1"></i>{{ article.created|date:"d M Y" }}</p>
+                        <h5 class="card-title"><a href="#">{{ article.title }}</a></h5>
+                        <p class="card-text text-muted" style="font-size:14px;">{{ article.content|striptags|truncatewords:20 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4">
+                <div class="card news-card">
+                    <img src="https://via.placeholder.com/400x200/4a0080/ffffff?text=School+News" class="card-img-top" alt="News">
+                    <div class="card-body">
+                        <p class="card-date"><i class="far fa-calendar mr-1"></i>March 2026</p>
+                        <h5 class="card-title"><a href="#">New Academic Term Begins</a></h5>
+                        <p class="card-text text-muted" style="font-size:14px;">Welcome back to all students. The new academic term has officially begun with exciting programs planned.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card news-card">
+                    <img src="https://via.placeholder.com/400x200/800020/ffffff?text=School+Events" class="card-img-top" alt="Events">
+                    <div class="card-body">
+                        <p class="card-date"><i class="far fa-calendar mr-1"></i>February 2026</p>
+                        <h5 class="card-title"><a href="#">ZIMSEC Results Announcement</a></h5>
+                        <p class="card-text text-muted" style="font-size:14px;">Our students achieved outstanding results in the 2025 ZIMSEC examinations with a 95% pass rate.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card news-card">
+                    <img src="https://via.placeholder.com/400x200/4a0080/ffffff?text=Admissions" class="card-img-top" alt="Admissions">
+                    <div class="card-body">
+                        <p class="card-date"><i class="far fa-calendar mr-1"></i>January 2026</p>
+                        <h5 class="card-title"><a href="/admissions/">2026 Admissions Open</a></h5>
+                        <p class="card-text text-muted" style="font-size:14px;">Applications are now open for the 2026 academic year. Apply online or visit the school.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-      {% endif %}
+        <div class="text-center mt-4">
+            <a href="/blog/" class="btn btn-outline-primary" style="border-color: var(--purple); color: var(--purple);">View All News <i class="fas fa-arrow-right ml-1"></i></a>
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- EVENTS + QUICK LINKS -->
-<section class="py-5 section-bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-7">
-        <h2 class="section-title">Upcoming Events</h2>
-        {% if upcoming_events %}
-          {% for event in upcoming_events %}
-          <div class="d-flex align-items-start event-item">
-            <div class="event-date-badge mr-3 flex-shrink-0">
-              <div class="day">{{ event.start_date|date:"d" }}</div>
-              <div class="mon">{{ event.start_date|date:"M" }}</div>
-            </div>
-            <div>
-              <h6 class="font-weight-bold mb-1">{{ event.title }}</h6>
-              {% if event.location %}<p class="text-muted small mb-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</p>{% endif %}
-              <p class="text-muted small mb-0">{{ event.description|truncatechars:100 }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        {% else %}
-          <p class="text-muted">No upcoming events. Check back soon.</p>
-        {% endif %}
-        <a href="/events/" class="btn btn-primary-custom mt-3">All Events <i class="fas fa-arrow-right ml-2"></i></a>
-      </div>
-      <div class="col-lg-5 mt-4 mt-lg-0">
-        <h2 class="section-title">Quick Links</h2>
-        <div class="list-group">
-          <a href="/admissions/" class="list-group-item list-group-item-action"><i class="fas fa-file-alt mr-2 text-primary-custom"></i>Admission Requirements</a>
-          <a href="/downloads/" class="list-group-item list-group-item-action"><i class="fas fa-download mr-2 text-primary-custom"></i>Application Forms</a>
-          <a href="/gallery/" class="list-group-item list-group-item-action"><i class="fas fa-images mr-2 text-primary-custom"></i>Photo Gallery</a>
-          <a href="/contact/" class="list-group-item list-group-item-action"><i class="fas fa-envelope mr-2 text-primary-custom"></i>Contact Us</a>
-          <a href="/school-admin/" class="list-group-item list-group-item-action"><i class="fas fa-lock mr-2 text-primary-custom"></i>Staff Portal</a>
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+    <div class="container">
+        <div class="section-title">
+            <h2>Photo Gallery</h2>
+            <p>Glimpses of life at Nechilibi High School</p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- GALLERY PREVIEW -->
-{% if featured_images %}
-<section class="py-5">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="section-title mb-0">Photo Gallery</h2>
-      <a href="/gallery/" class="btn btn-sm btn-outline-secondary">View All</a>
-    </div>
-    <div class="row">
-      {% for img in featured_images %}
-      <div class="col-md-4 col-6 mb-3">
-        <img src="{{ img.image.url }}" class="gallery-thumb" alt="{{ img.title }}">
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- VIDEOS -->
-{% if videos %}
-<section class="py-5 section-bg-light">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="section-title mb-0">School Videos</h2>
-    </div>
-    <div class="row">
-      {% for video in videos %}
-      <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm card-hover h-100">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
-          </div>
-          <div class="card-body">
-            <h6 class="font-weight-bold">{{ video.title }}</h6>
-            {% if video.description %}<p class="text-muted small">{{ video.description|truncatechars:100 }}</p>{% endif %}
-          </div>
+        <div class="row">
+            {% for img in gallery_images %}
+            <div class="col-md-4 col-sm-6">
+                <div class="gallery-item">
+                    <img src="{{ img.image.url }}" alt="{{ img.title }}">
+                    <div class="overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted py-4">
+                <i class="fas fa-images fa-3x mb-3" style="color: var(--purple);"></i>
+                <p>Gallery images will appear here once added by admin.</p>
+            </div>
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
     </div>
-  </div>
 </section>
-{% endif %}
 
-<!-- CTA BANNER -->
-<section class="py-5 bg-primary-custom text-white text-center">
-  <div class="container">
-    <h2 class="text-white mb-3">Ready to Join Nechilibi High School?</h2>
-    <p class="mb-4" style="opacity:0.85;">Applications for the 2026 academic year are now open for Forms 1 and 2.</p>
-    <a href="/admissions/" class="btn btn-accent btn-lg mr-3">Apply Now</a>
-    <a href="/contact/" class="btn btn-outline-light btn-lg">Contact Us</a>
-  </div>
+<!-- CTA -->
+<div class="cta-section">
+    <div class="container">
+        <h2>Ready to Join Nechilibi High School?</h2>
+        <p>Applications are open for the 2026 academic year. Secure your child's future today.</p>
+        <a href="/admissions/" class="btn-cta">Apply for Admission</a>
+        <a href="#contact" class="btn-cta-outline">Contact Us</a>
+    </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+    <div class="container">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+            <p>Get in touch with Nechilibi High School</p>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="contact-info-item">
+                    <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h5>Address</h5>
+                        <p>Nechilibi, Matabeleland South, Zimbabwe</p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="icon"><i class="fas fa-phone"></i></div>
+                    <div>
+                        <h5>Phone</h5>
+                        <p>+263 XXX XXX XXX</p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="icon"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <h5>Email</h5>
+                        <p>info@nechilibi.ac.zw</p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="icon"><i class="fab fa-whatsapp"></i></div>
+                    <div>
+                        <h5>WhatsApp</h5>
+                        <p>+263 XXX XXX XXX</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" placeholder="Your Name" style="border-color: var(--purple);">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email" style="border-color: var(--purple);">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Subject" style="border-color: var(--purple);">
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="5" placeholder="Your Message" style="border-color: var(--purple);"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-block" style="background: var(--purple); color: white; padding: 12px; font-weight: 600;">
+                        Send Message <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
-{% endblock %}
+
+<!-- FOOTER -->
+<footer class="main-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5>Nechilibi High School</h5>
+                <p style="font-size:14px; line-height:1.8;">Providing quality education in Zimbabwe. Committed to academic excellence, moral values, and holistic student development.</p>
+                <div class="social-icons mt-3">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h5>Quick Links</h5>
+                <a href="/">Home</a>
+                <a href="#about">About</a>
+                <a href="#academics">Academics</a>
+                <a href="#news">News</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h5>Academics</h5>
+                <a href="#">O-Level (Forms 1-4)</a>
+                <a href="#">A-Level (Forms 5-6)</a>
+                <a href="#">ZIMSEC Results</a>
+                <a href="#">Timetables</a>
+                <a href="#">Downloads</a>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h5>Contact Info</h5>
+                <p style="font-size:14px;"><i class="fas fa-map-marker-alt mr-2"></i>Nechilibi, Matabeleland South, Zimbabwe</p>
+                <p style="font-size:14px;"><i class="fas fa-envelope mr-2"></i>info@nechilibi.ac.zw</p>
+                <p style="font-size:14px;"><i class="fas fa-phone mr-2"></i>+263 XXX XXX XXX</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Nechilibi High School. All Rights Reserved. | Designed for Excellence</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Smooth scroll
+    $('a[href^="#"]').on('click', function(e) {
+        e.preventDefault();
+        var target = $(this.hash);
+        if (target.length) {
+            $('html, body').animate({ scrollTop: target.offset().top - 80 }, 600);
+        }
+    });
+    // Sticky navbar shadow on scroll
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 50) {
+            $('.main-navbar').addClass('shadow');
+        } else {
+            $('.main-navbar').removeClass('shadow');
+        }
+    });
+</script>
+</body>
+</html>
