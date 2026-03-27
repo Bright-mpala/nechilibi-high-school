@@ -385,11 +385,13 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
 
     def _seed_events(self):
-        from django_school_management.pages.models import Event
+        from django.utils.text import slugify
+        from django_school_management.events.models import Event
 
         events = [
             {
                 'title': 'Prize Giving Day 2026',
+                'slug': 'prize-giving-day-2026',
                 'description': (
                     'The annual Prize Giving Day ceremony celebrates the academic, sporting and '
                     'cultural achievements of Nechilibi High School students. All parents and '
@@ -400,6 +402,7 @@ class Command(BaseCommand):
             },
             {
                 'title': 'Form 1 Orientation Day',
+                'slug': 'form-1-orientation-day-2026',
                 'description': (
                     'Orientation day for all new Form 1 students joining Nechilibi High School '
                     'in 2026. Students and parents are expected to attend for school tour, '
@@ -410,6 +413,7 @@ class Command(BaseCommand):
             },
             {
                 'title': 'Sports Day 2026',
+                'slug': 'sports-day-2026',
                 'description': (
                     'The annual inter-house Sports Day featuring track and field events, '
                     'team sports and cultural performances. Students compete for the coveted '
@@ -420,6 +424,7 @@ class Command(BaseCommand):
             },
             {
                 'title': 'Parents & Teachers Meeting',
+                'slug': 'parents-teachers-meeting-2026',
                 'description': (
                     'A formal meeting between parents/guardians and class teachers to discuss '
                     'student progress, Term 1 results and the academic roadmap for 2026. '
@@ -432,8 +437,9 @@ class Command(BaseCommand):
 
         for data in events:
             obj, created = Event.objects.update_or_create(
-                title=data['title'],
+                slug=data['slug'],
                 defaults={
+                    'title': data['title'],
                     'description': data['description'],
                     'start_date': data['start_date'],
                     'location': data['location'],
