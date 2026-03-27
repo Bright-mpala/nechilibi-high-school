@@ -1,152 +1,219 @@
-{% extends 'articles/base.html' %}
+{% extends 'website/partials/website_base.html' %}
 {% load static %}
-{% load social_share %}
 
-{% block meta_tags %}
-  <meta property="og:title" content="{{ obj.title }}" />
-  <meta property="og:description" content="{{ object.get_short_description }}" />
+{% block page_title %}{{ object.title }} | {{ request_institute.name }}{% endblock %}
+{% block meta_description %}{{ object.get_short_description }}{% endblock %}
+{% block nav_news %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ---- Article hero ---- */
+  .article-hero {
+    position: relative;
+    min-height: 380px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+  }
+  .article-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.72) 100%);
+  }
+  .article-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2.5rem 0;
+  }
+  .article-hero h1 {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: .75rem;
+  }
+  .article-meta {
+    color: rgba(255,255,255,.8);
+    font-size: .9rem;
+  }
+  .article-meta a { color: #fff; text-decoration: underline; }
+
+  /* breadcrumb bar */
+  .article-breadcrumb {
+    background: #f8f9fa;
+    padding: .6rem 0;
+    border-bottom: 1px solid #e9ecef;
+    font-size: .85rem;
+  }
+  .article-breadcrumb a { color: var(--primary, #8B0000); }
+
+  /* Article body */
+  .article-body {
+    padding: 2.5rem 0;
+  }
+  .article-body-content {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #333;
+    word-break: break-word;
+  }
+  .article-body-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 1rem 0;
+  }
+  .article-body-content p { margin-bottom: 1.2rem; }
+
+  /* share row */
+  .share-row {
+    border-top: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    padding: .75rem 0;
+    margin: 1.5rem 0;
+  }
+  .share-row a {
+    display: inline-flex;
+    align-items: center;
+    margin-right: .6rem;
+    padding: .35rem .8rem;
+    border-radius: 4px;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+  }
+  .share-row a i { margin-right: .4rem; }
+  .share-fb  { background: #1877f2; }
+  .share-tw  { background: #1da1f2; }
+  .share-wa  { background: #25d366; }
+  .share-row a:hover { opacity: .88; color: #fff; }
+
+  /* Related articles */
+  .related-section { background: #f8f9fa; padding: 2.5rem 0; }
+  .related-section h4 { font-weight: 700; margin-bottom: 1.5rem; }
+  .related-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); height: 100%; }
+  .related-card img { width: 100%; height: 160px; object-fit: cover; }
+  .related-card-body { padding: 1rem; }
+  .related-card-body a { color: #222; font-weight: 600; font-size: .92rem; text-decoration: none; }
+  .related-card-body a:hover { color: var(--primary, #8B0000); }
+  .related-card-body small { color: #888; }
+  .related-card-placeholder { height: 160px; background: linear-gradient(135deg, #8B0000, #b22222); }
+</style>
+{% endblock %}
+
+{% block main_content %}
+
+<!-- Breadcrumb -->
+<div class="article-breadcrumb">
+  <div class="container">
+    <a href="{% url 'pages:landing' %}">Home</a>
+    <span class="mx-1 text-muted">/</span>
+    <a href="{% url 'articles:home' %}">News &amp; Blog</a>
+    <span class="mx-1 text-muted">/</span>
+    <span class="text-muted">{{ object.title|truncatechars:60 }}</span>
+  </div>
+</div>
+
+<!-- Hero banner -->
+<div class="article-hero"
   {% if object.featured_image %}
-  <meta property="og:image" content="{{ object.featured_image.url }}" />
-  {% endif %}
-{% endblock meta_tags %}
-
-{% block content %}
-
-  <!-- Page Header -->
-  <header class="masthead"
-    {% if object.featured_image %}
-      style="background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('{{ object.featured_image.url }}')"
-    {% else %}
-      style="background: linear-gradient(135deg, #4a1a6b 0%, #7b2d8b 50%, #9b59b6 100%)"
-    {% endif %}>
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-heading">
-            <h1>{{ object.title }}</h1>
-            <span class="meta">
-              Posted by
-              <strong>
-                {% if object.author.name %}{{ object.author.name }}
-                {% else %}{{ object.author.username }}{% endif %}
-              </strong>
-              &nbsp;·&nbsp; {{ object.created|date:"F j, Y" }}
-            </span>
-          </div>
-        </div>
+    style="background-image: url('{{ object.featured_image.url }}')"
+  {% else %}
+    style="background: linear-gradient(135deg, #8B0000 0%, #b22222 100%)"
+  {% endif %}>
+  <div class="article-hero-overlay"></div>
+  <div class="container article-hero-content">
+    <div class="row">
+      <div class="col-lg-9">
+        {% if object.categories.all %}
+          {% for cat in object.categories.all %}
+            <a href="{{ cat.get_absolute_url }}"
+               class="badge badge-light mb-2 mr-1"
+               style="font-size:.78rem;padding:.35rem .65rem;">{{ cat.name }}</a>
+          {% endfor %}
+        {% endif %}
+        <h1>{{ object.title }}</h1>
+        <p class="article-meta">
+          <i class="fas fa-user-edit mr-1"></i>
+          {% if object.author.get_full_name %}{{ object.author.get_full_name }}
+          {% else %}{{ object.author.username }}{% endif %}
+          &nbsp;&nbsp;
+          <i class="fas fa-calendar-alt mr-1"></i>{{ object.created|date:"F j, Y" }}
+        </p>
       </div>
     </div>
-  </header>
+  </div>
+</div>
 
-  <!-- Article Body -->
-  <article class="article-detail">
-    <div class="container">
-      <div class="row">
-
-        <!-- Share sidebar -->
-        <div class="col-lg-1 col-md-2 d-flex flex-column align-items-center pt-4">
-          <small class="text-muted mb-2" style="font-size:11px;writing-mode:vertical-rl;">SHARE</small>
-          <div class="social-share d-flex flex-column">
-            <div class="share badge border p-2 mb-1">
-              {% post_to_facebook object "share" "" %}
-            </div>
-            <div class="share badge border p-2 mb-1">
-              {% post_to_twitter "{{ object.title }}" object "" "" %}
-            </div>
-            <div class="share badge border p-2 mb-1">
-              {% post_to_whatsapp object.get_absolute_url "" %}
-            </div>
-          </div>
-
-          <!-- Like button -->
-          <form id="like_form" action="{% url 'articles:like' object.slug %}" method="POST" class="mt-3 text-center">
-            {% csrf_token %}
-            <i class="fa fa-heart text-danger" id="like-btn" style="cursor:pointer;font-size:1.4rem;"></i>
-          </form>
-          <span class="font-weight-bold mt-1" id="display-like-count">{{ likes.count }}</span>
-          <small class="text-muted" style="font-size:10px;">liked</small>
-        </div>
+<!-- Article body -->
+<section class="article-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9 col-md-10">
 
         <!-- Article content -->
-        <div class="col-lg-10 col-md-10 mx-auto" style="word-wrap:break-word;">
-          <div class="article-body mt-4">
-            {{ object.content|safe }}
-          </div>
-
-          <!-- Tags / categories -->
-          {% if object.categories.all %}
-          <div class="mt-4 pt-3 border-top">
-            <small class="text-muted">Filed under: </small>
-            {% for cat in object.categories.all %}
-              <a href="{{ cat.get_absolute_url }}" class="badge badge-secondary mr-1">{{ cat.name }}</a>
-            {% endfor %}
-          </div>
-          {% endif %}
-
-          <!-- Back link -->
-          <div class="mt-4">
-            <a href="{% url 'articles:home' %}" class="btn btn-outline-secondary btn-sm">
-              <i class="fas fa-arrow-left mr-1"></i> Back to News
-            </a>
-            <a href="/" class="btn btn-outline-primary btn-sm ml-2">
-              <i class="fas fa-home mr-1"></i> School Home
-            </a>
-          </div>
+        <div class="article-body-content">
+          {{ object.content|safe }}
         </div>
-      </div><!-- /row -->
 
-      <!-- Related Articles -->
-      {% with related=object.get_related_articles %}
-      {% if related %}
-      <div class="row mt-5 pt-4 border-top">
-        <div class="col-12 mb-3">
-          <h5 class="font-weight-bold">You may also read</h5>
-        </div>
-        {% for article in related %}
-        <div class="col-sm-6 col-md-3 mb-4">
-          <a href="{{ article.get_absolute_url }}" class="text-decoration-none">
-            <div class="card h-100 shadow-sm border-0">
-              {% if article.featured_image %}
-              <img src="{{ article.featured_image.url }}"
-                   class="card-img-top" alt="{{ article.title }}"
-                   style="height:140px;object-fit:cover;">
-              {% else %}
-              <div style="height:140px;background:linear-gradient(135deg,#4a1a6b,#7b2d8b);"></div>
-              {% endif %}
-              <div class="card-body p-2">
-                <p class="card-text small font-weight-bold text-dark mb-1">{{ article.title|truncatechars:60 }}</p>
-                <small class="text-muted">{{ article.created|date:"M j, Y" }}</small>
-              </div>
-            </div>
+        <!-- Share buttons -->
+        <div class="share-row">
+          <span class="text-muted mr-3" style="font-size:.85rem;font-weight:600;">Share:</span>
+          <a class="share-fb"
+             href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+             target="_blank" rel="noopener">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </a>
+          <a class="share-tw"
+             href="https://twitter.com/intent/tweet?text={{ object.title|urlencode }}&url={{ request.build_absolute_uri }}"
+             target="_blank" rel="noopener">
+            <i class="fab fa-twitter"></i> Twitter
+          </a>
+          <a class="share-wa"
+             href="https://wa.me/?text={{ object.title|urlencode }}%20{{ request.build_absolute_uri }}"
+             target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> WhatsApp
           </a>
         </div>
-        {% endfor %}
+
+        <!-- Back link -->
+        <a href="{% url 'articles:home' %}" class="btn btn-outline-secondary btn-sm">
+          <i class="fas fa-arrow-left mr-1"></i> Back to News
+        </a>
+
       </div>
-      {% endif %}
-      {% endwith %}
+    </div>
+  </div>
+</section>
 
-    </div><!-- /container -->
-  </article>
+<!-- Related Articles -->
+{% with related=object.get_related_articles %}
+{% if related %}
+<section class="related-section">
+  <div class="container">
+    <h4>You may also like</h4>
+    <div class="row">
+      {% for article in related %}
+      <div class="col-sm-6 col-md-3 mb-4">
+        <div class="related-card">
+          {% if article.featured_image %}
+            <img src="{{ article.featured_image.url }}" alt="{{ article.title }}">
+          {% else %}
+            <div class="related-card-placeholder"></div>
+          {% endif %}
+          <div class="related-card-body">
+            <a href="{{ article.get_absolute_url }}">{{ article.title|truncatechars:65 }}</a>
+            <br><small>{{ article.created|date:"M j, Y" }}</small>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
 
-  <hr class="mt-5">
-  {% include 'articles/inc/_footer.html' %}
-
-{% endblock content %}
-
-{% block extra_js %}
-<script>
-  $("#like-btn").click(function(){
-    $.ajax({
-      type: "POST",
-      url: "{% url 'articles:like' object.slug %}",
-      data: {'slug': '{{ object.slug }}', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
-      success: function() {
-        var count = parseInt($("#display-like-count").text());
-        $("#display-like-count").text(count + 1);
-        $("#like-btn").css("color","#e74c3c");
-      }
-    });
-  });
-</script>
-{% endblock extra_js %}
+{% endblock main_content %}
