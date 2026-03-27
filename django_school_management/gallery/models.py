@@ -14,8 +14,8 @@ class GalleryCategory(models.Model):
 
 
 class GalleryImage(models.Model):
-    category = models.ForeignKey(GalleryCategory, on_delete=models.CASCADE, related_name='images')
-    title = models.CharField(max_length=200)
+    category = models.ForeignKey(GalleryCategory, on_delete=models.SET_NULL, related_name='images', null=True, blank=True)
+    title = models.CharField(max_length=200, blank=True)
     image = models.ImageField(upload_to='gallery/')
     caption = models.TextField(blank=True)
     is_featured = models.BooleanField(default=False)

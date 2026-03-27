@@ -74,8 +74,15 @@ def admissions(request):
 
 
 def gallery(request):
+    from django_school_management.gallery.models import GalleryImage as GalleryImg
     categories = GalleryCategory.objects.prefetch_related('images').all()
-    return render(request, 'public/gallery.html', {'categories': categories})
+    uncategorised = GalleryImg.objects.filter(category__isnull=True).order_by('order', '-uploaded_at')
+    all_images = GalleryImg.objects.all().order_by('order', '-uploaded_at')
+    return render(request, 'public/gallery.html', {
+        'categories': categories,
+        'uncategorised': uncategorised,
+        'all_images': all_images,
+    })
 
 
 def news_list(request):
