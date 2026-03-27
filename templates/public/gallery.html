@@ -38,6 +38,7 @@
         <h3 class="section-title mb-4">{{ category.name }}</h3>
         <div class="row mb-5">
           {% for image in category.images.all %}
+          {% if image.is_active %}
           <div class="col-md-3 col-6 mb-4">
             <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}')">
               <img src="{{ image.image.url }}" class="gallery-img" alt="{{ image.title }}"
@@ -45,6 +46,7 @@
             </div>
             {% if image.title %}<p class="text-muted small mt-1 text-center">{{ image.title }}</p>{% endif %}
           </div>
+          {% endif %}
           {% endfor %}
         </div>
         {% endif %}

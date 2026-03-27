@@ -19,6 +19,7 @@ class GalleryImage(models.Model):
     image = models.ImageField(upload_to='gallery/')
     caption = models.TextField(blank=True)
     is_featured = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

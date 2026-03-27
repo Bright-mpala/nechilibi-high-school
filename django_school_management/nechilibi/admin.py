@@ -1,17 +1,10 @@
 from django.contrib import admin
-from .models import SchoolSettings, GalleryImage, SchoolVideo, SchoolEvent, Download, Testimonial
+from .models import SchoolSettings, SchoolVideo, SchoolEvent, Download, Testimonial
 
 
 @admin.register(SchoolSettings)
 class SchoolSettingsAdmin(admin.ModelAdmin):
     list_display = ['school_name', 'email', 'phone']
-
-
-@admin.register(GalleryImage)
-class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'is_carousel', 'carousel_order', 'is_active']
-    list_editable = ['is_carousel', 'carousel_order', 'is_active']
-    list_filter = ['category', 'is_carousel', 'is_active']
 
 
 @admin.register(SchoolVideo)

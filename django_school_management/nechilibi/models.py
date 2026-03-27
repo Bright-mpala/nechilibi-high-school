@@ -23,30 +23,6 @@ class SchoolSettings(models.Model):
         return self.school_name
 
 
-class GalleryImage(models.Model):
-    CATEGORY_CHOICES = [
-        ('general', 'General'),
-        ('sports', 'Sports'),
-        ('academics', 'Academics'),
-        ('events', 'Events'),
-        ('facilities', 'Facilities'),
-    ]
-    title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='gallery/')
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='general')
-    description = models.TextField(blank=True)
-    is_carousel = models.BooleanField(default=False, help_text='Show on homepage carousel')
-    carousel_order = models.IntegerField(default=0)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ['carousel_order', '-uploaded_at']
-
-    def __str__(self):
-        return self.title
-
-
 class SchoolVideo(models.Model):
     title = models.CharField(max_length=200)
     youtube_url = models.URLField(blank=True, help_text='YouTube embed URL')

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.utils import timezone
-from django_school_management.gallery.models import GalleryCategory, GalleryImage
+from django_school_management.gallery.models import GalleryCategory, GalleryImage, VideoGallery
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings
@@ -17,15 +17,9 @@ except Exception:
 def home(request):
     settings = SchoolSettings.get()
 
-    # Nechilibi-specific gallery/carousel images
-    carousel_images = []
-    gallery_images = []
-    try:
-        from django_school_management.nechilibi.models import GalleryImage as NechilibiGalleryImage
-        carousel_images = NechilibiGalleryImage.objects.filter(is_carousel=True, is_active=True).order_by('carousel_order')[:5]
-        gallery_images = NechilibiGalleryImage.objects.filter(is_active=True)[:6]
-    except Exception:
-        pass
+    # Gallery images for homepage (use gallery app's canonical model)
+    carousel_images = GalleryImage.objects.filter(is_featured=True, is_active=True).order_by('order')[:5]
+    gallery_images = GalleryImage.objects.filter(is_active=True).order_by('order', '-uploaded_at')[:6]
 
     context = {
         'settings': settings,
@@ -76,12 +70,14 @@ def admissions(request):
 def gallery(request):
     from django_school_management.gallery.models import GalleryImage as GalleryImg
     categories = GalleryCategory.objects.prefetch_related('images').all()
-    uncategorised = GalleryImg.objects.filter(category__isnull=True).order_by('order', '-uploaded_at')
-    all_images = GalleryImg.objects.all().order_by('order', '-uploaded_at')
+    uncategorised = GalleryImg.objects.filter(category__isnull=True, is_active=True).order_by('order', '-uploaded_at')
+    all_images = GalleryImg.objects.filter(is_active=True).order_by('order', '-uploaded_at')
+    videos = VideoGallery.objects.filter(is_published=True).order_by('order')
     return render(request, 'public/gallery.html', {
         'categories': categories,
         'uncategorised': uncategorised,
         'all_images': all_images,
+        'videos': videos,
     })
 
 

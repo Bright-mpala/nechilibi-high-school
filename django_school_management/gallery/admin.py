@@ -4,8 +4,8 @@ from .models import GalleryCategory, GalleryImage, VideoGallery
 
 class GalleryImageInline(admin.TabularInline):
     model = GalleryImage
-    extra = 1
-    fields = ['image', 'title', 'caption', 'is_featured', 'order']
+    extra = 3
+    fields = ['image', 'title', 'is_featured', 'is_active', 'order']
 
 
 @admin.register(GalleryCategory)
@@ -17,9 +17,9 @@ class GalleryCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(GalleryImage)
 class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'is_featured', 'order', 'uploaded_at']
-    list_filter = ['category', 'is_featured']
-    list_editable = ['is_featured', 'order']
+    list_display = ['title', 'category', 'is_featured', 'is_active', 'order', 'uploaded_at']
+    list_filter = ['category', 'is_featured', 'is_active']
+    list_editable = ['is_featured', 'is_active', 'order']
     search_fields = ['title', 'caption']
 
 
