@@ -5,7 +5,7 @@ from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
-from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure
+from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered
 from django_school_management.notices.models import Notice
 
 # Articles app — field names: status, created (TimeStampedModel), featured_image, content, title
@@ -179,6 +179,29 @@ def fee_structure(request):
         'years': years,
         'selected_year': selected_year,
         'groups': ordered_groups,
+    })
+
+
+def subjects_offered(request):
+    subjects = SubjectOffered.objects.filter(is_active=True)
+
+    # Group by department for display
+    departments = {}
+    DEPT_ORDER = ['languages', 'mathematics', 'sciences', 'humanities', 'commercial', 'technical', 'arts', 'other']
+    for subj in subjects:
+        departments.setdefault(subj.department, []).append(subj)
+    ordered_depts = {k: departments[k] for k in DEPT_ORDER if k in departments}
+
+    # Counts for filter tabs
+    o_level_count = subjects.filter(level__in=['o_level', 'both']).count()
+    a_level_count = subjects.filter(level__in=['a_level', 'both']).count()
+
+    return render(request, 'public/subjects_offered.html', {
+        'departments': ordered_depts,
+        'all_subjects': subjects,
+        'o_level_count': o_level_count,
+        'a_level_count': a_level_count,
+        'total_count': subjects.count(),
     })
 
 

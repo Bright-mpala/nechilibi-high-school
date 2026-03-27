@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (SchoolSettings, SchoolVideo, Download, Testimonial,
                      TermDate, CalendarEvent, ZIMSECResult, SubjectResult,
-                     FeeStructure, FeeItem)
+                     FeeStructure, FeeItem, SubjectOffered)
 
 
 @admin.register(SchoolSettings)
@@ -54,6 +54,14 @@ class FeeStructureAdmin(admin.ModelAdmin):
     list_editable = ['is_published']
     ordering      = ['-academic_year']
     inlines       = [FeeItemInline]
+
+
+@admin.register(SubjectOffered)
+class SubjectOfferedAdmin(admin.ModelAdmin):
+    list_display  = ['name', 'department', 'level', 'is_active', 'order']
+    list_editable = ['is_active', 'order']
+    list_filter   = ['level', 'department']
+    ordering      = ['department', 'order', 'name']
 
 
 class SubjectResultInline(admin.TabularInline):

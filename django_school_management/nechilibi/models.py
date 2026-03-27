@@ -198,6 +198,41 @@ class FeeItem(models.Model):
         return self.amount
 
 
+class SubjectOffered(models.Model):
+    LEVEL_CHOICES = [
+        ('o_level', 'O-Level (Form 1–4)'),
+        ('a_level', 'A-Level (Form 5–6)'),
+        ('both',    'O-Level & A-Level'),
+    ]
+    DEPT_CHOICES = [
+        ('languages',   'Languages'),
+        ('sciences',    'Sciences'),
+        ('mathematics', 'Mathematics'),
+        ('humanities',  'Humanities'),
+        ('commercial',  'Commercial & Business'),
+        ('technical',   'Technical & Practical'),
+        ('arts',        'Arts & Creative'),
+        ('other',       'Other'),
+    ]
+
+    name        = models.CharField(max_length=100)
+    level       = models.CharField(max_length=10, choices=LEVEL_CHOICES, default='o_level')
+    department  = models.CharField(max_length=20, choices=DEPT_CHOICES, default='other')
+    description = models.TextField(blank=True, help_text='Brief description shown on the page')
+    icon        = models.CharField(max_length=60, blank=True, default='fas fa-book',
+                                   help_text='FontAwesome class e.g. fas fa-flask')
+    is_active   = models.BooleanField(default=True)
+    order       = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['department', 'order', 'name']
+        verbose_name = 'Subject Offered'
+        verbose_name_plural = 'Subjects Offered'
+
+    def __str__(self):
+        return f'{self.name} ({self.get_level_display()})'
+
+
 class ZIMSECResult(models.Model):
     LEVEL_CHOICES = [
         ('o_level', 'O-Level'),

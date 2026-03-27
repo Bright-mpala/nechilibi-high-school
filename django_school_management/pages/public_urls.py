@@ -16,4 +16,5 @@ urlpatterns = [
     path('academic-calendar/', public_views.academic_calendar, name='academic_calendar'),
     path('results/', public_views.zimsec_results, name='zimsec_results'),
     path('fees/', public_views.fee_structure, name='fee_structure'),
+    path('subjects/', public_views.subjects_offered, name='subjects_offered'),
 ]
