@@ -44,6 +44,8 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
 
     # allauth required
     'django.contrib.sites',
@@ -179,6 +181,27 @@ STATICFILES_DIRS = [
     str(BASE_DIR / 'static')
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ========================= CLOUDINARY MEDIA STORAGE =========================
+# When CLOUDINARY_URL env var is set, all uploaded media goes to Cloudinary.
+# Locally (no CLOUDINARY_URL) media is served from the local filesystem.
+_CLOUDINARY_URL = env('CLOUDINARY_URL', default='')
+if _CLOUDINARY_URL:
+    import cloudinary
+    _parts = _CLOUDINARY_URL.replace('cloudinary://', '').split('@')
+    _creds, _cloud = _parts[0], _parts[1]
+    _api_key, _api_secret = _creds.split(':')
+    cloudinary.config(
+        cloud_name=_cloud,
+        api_key=_api_key,
+        api_secret=_api_secret,
+        secure=True,
+    )
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    MEDIA_URL = '/media/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
