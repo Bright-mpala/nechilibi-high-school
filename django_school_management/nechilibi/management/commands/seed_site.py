@@ -62,9 +62,9 @@ class Command(BaseCommand):
             defaults={
                 'school_name': 'Nechilibi High School',
                 'tagline': 'Shaping Tomorrow\'s Leaders',
-                'address': 'Nechilibi, Gwanda District, Matabeleland South, Zimbabwe',
-                'phone': '+263 XX XXX XXXX',
-                'email': 'nechilibi.highschool@gmail.com',
+                'address': 'P.O. Box 123, Nechilibi, Matabeleland South, Zimbabwe',
+                'phone': '0780808201',
+                'email': 'info@nechilibi.ac.zw',
                 'hero_text': 'Welcome to Nechilibi High School',
                 'hero_subtext': (
                     'Nechilibi High School is a premier secondary school in Matabeleland South, '

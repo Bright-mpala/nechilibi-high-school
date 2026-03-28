@@ -34,13 +34,16 @@
     padding:.8rem 1.2rem; border-radius:8px 8px 0 0;
     color:#fff; font-weight:800; font-size:.95rem;
   }
+  .dept-science     { background:linear-gradient(90deg,#1a5276,#217dbb); }
+  .dept-arts        { background:linear-gradient(90deg,#4a0080,#6a20a0); }
+  .dept-commercial  { background:linear-gradient(90deg,#7d4e00,#c9a227); }
+  .dept-practicals  { background:linear-gradient(90deg,#1a6b2a,#2e7d32); }
+  /* legacy dept colours kept for any old records */
   .dept-languages   { background:linear-gradient(90deg,#4a0080,#6a20a0); }
   .dept-mathematics { background:linear-gradient(90deg,#1a5276,#217dbb); }
   .dept-sciences    { background:linear-gradient(90deg,#1a6b2a,#2e7d32); }
   .dept-humanities  { background:linear-gradient(90deg,#800020,#a0203a); }
-  .dept-commercial  { background:linear-gradient(90deg,#7d4e00,#c9a227); }
   .dept-technical   { background:linear-gradient(90deg,#424242,#616161); }
-  .dept-arts        { background:linear-gradient(90deg,#ad1457,#e91e63); }
   .dept-other       { background:linear-gradient(90deg,#4a4a4a,#6e6e6e); }
 
   /* Subject cards grid */
@@ -145,13 +148,15 @@
     {% for dept_key, subjects in departments.items %}
     <div class="dept-section" data-dept="{{ dept_key }}">
       <div class="dept-heading dept-{{ dept_key }}">
-        {% if dept_key == 'languages' %}<i class="fas fa-language"></i> Languages
+        {% if dept_key == 'science' %}<i class="fas fa-flask"></i> Science &amp; Mathematics
+        {% elif dept_key == 'arts' %}<i class="fas fa-palette"></i> Arts &amp; Humanities
+        {% elif dept_key == 'commercial' %}<i class="fas fa-chart-line"></i> Commercial &amp; Business
+        {% elif dept_key == 'practicals' %}<i class="fas fa-tools"></i> Practicals &amp; Technical
+        {% elif dept_key == 'languages' %}<i class="fas fa-language"></i> Languages
         {% elif dept_key == 'mathematics' %}<i class="fas fa-calculator"></i> Mathematics
         {% elif dept_key == 'sciences' %}<i class="fas fa-flask"></i> Sciences
         {% elif dept_key == 'humanities' %}<i class="fas fa-globe-africa"></i> Humanities
-        {% elif dept_key == 'commercial' %}<i class="fas fa-chart-line"></i> Commercial &amp; Business
         {% elif dept_key == 'technical' %}<i class="fas fa-tools"></i> Technical &amp; Practical
-        {% elif dept_key == 'arts' %}<i class="fas fa-palette"></i> Arts &amp; Creative
         {% else %}<i class="fas fa-book"></i> Other
         {% endif %}
       </div>

@@ -7,6 +7,7 @@ from django_school_management.downloads.models import DownloadCategory, Download
 from django_school_management.institute.models import SchoolSettings, EducationBoard, InstituteProfile
 from django_school_management.teachers.models import Teacher, LEADERSHIP_ROLES
 from django_school_management.nechilibi.models import Testimonial, SchoolVideo, TermDate, CalendarEvent, ZIMSECResult, FeeStructure, SubjectOffered, NewsletterSubscriber, SportClub
+from collections import defaultdict
 from django_school_management.notices.models import Notice
 from django_school_management.downloads.models import Download
 from django_school_management.notices.models import Notice
@@ -67,6 +68,31 @@ def home(request):
             context['recent_articles'] = articles
         except Exception:
             pass
+    # Subject departments for homepage — 4 faculty cards
+    _DEPT_META = {
+        'science':    {'label': 'Science & Mathematics', 'icon': 'fas fa-flask',      'color': '#1a5276'},
+        'arts':       {'label': 'Arts & Humanities',      'icon': 'fas fa-palette',    'color': '#4a0080'},
+        'commercial': {'label': 'Commercial & Business',  'icon': 'fas fa-chart-line', 'color': '#7d4e00'},
+        'practicals': {'label': 'Practicals & Technical', 'icon': 'fas fa-tools',      'color': '#1a6b2a'},
+    }
+    _subjects_qs = SubjectOffered.objects.filter(is_active=True).only('name', 'department')
+    _dept_groups = defaultdict(list)
+    for s in _subjects_qs:
+        _dept_groups[s.department].append(s.name)
+    homepage_depts = []
+    for key in ['science', 'arts', 'commercial', 'practicals']:
+        names = _dept_groups.get(key, [])
+        meta = _DEPT_META[key]
+        homepage_depts.append({
+            'key':    key,
+            'label':  meta['label'],
+            'icon':   meta['icon'],
+            'color':  meta['color'],
+            'count':  len(names),
+            'sample': names[:4],
+        })
+    context['homepage_depts'] = homepage_depts
+
     # Leadership teachers for homepage — show 3, headmaster first
     context['leadership_teachers'] = Teacher.objects.filter(
         is_active=True,
@@ -278,7 +304,7 @@ def subjects_offered(request):
 
     # Group by department for display
     departments = {}
-    DEPT_ORDER = ['languages', 'mathematics', 'sciences', 'humanities', 'commercial', 'technical', 'arts', 'other']
+    DEPT_ORDER = ['science', 'arts', 'commercial', 'practicals']
     for subj in subjects:
         departments.setdefault(subj.department, []).append(subj)
     ordered_depts = {k: departments[k] for k in DEPT_ORDER if k in departments}

@@ -245,13 +245,16 @@ class SubjectOffered(models.Model):
         ('both',    'O-Level & A-Level'),
     ]
     DEPT_CHOICES = [
+        ('science',     'Science & Mathematics'),
+        ('arts',        'Arts & Humanities'),
+        ('commercial',  'Commercial & Business'),
+        ('practicals',  'Practicals & Technical'),
+        # legacy keys kept for backwards compatibility
         ('languages',   'Languages'),
         ('sciences',    'Sciences'),
         ('mathematics', 'Mathematics'),
         ('humanities',  'Humanities'),
-        ('commercial',  'Commercial & Business'),
         ('technical',   'Technical & Practical'),
-        ('arts',        'Arts & Creative'),
         ('other',       'Other'),
     ]
 

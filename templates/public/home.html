@@ -5,198 +5,537 @@
 
 {% block extra_css %}
 <style>
-  /* ═══════════════════════════════
-     HERO / CAROUSEL
-  ═══════════════════════════════ */
-  .hero-section {
-    position: relative;
-    height: 100vh;
-    min-height: 600px;
-    max-height: 860px;
-    overflow: hidden;
-  }
-  .hero-bg-carousel {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  .hero-bg-carousel .carousel-inner,
-  .hero-bg-carousel .carousel-item { height: 100%; }
-  .hero-bg-carousel .carousel-item img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center;
-    filter: brightness(0.45);
-  }
-  .hero-bg-carousel::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(to right,
-      rgba(30,0,60,.78) 0%,
-      rgba(30,0,60,.48) 55%,
-      rgba(0,0,0,.12) 100%);
-    z-index: 1; pointer-events: none;
-  }
-  .hero-bg-carousel .carousel-indicators { justify-content: flex-end; padding-right: 30px; margin-bottom: 20px; }
-  .hero-bg-carousel .carousel-indicators li { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.45); border: none; }
-  .hero-bg-carousel .carousel-indicators .active { background: var(--accent); width: 24px; border-radius: 4px; }
-  .carousel-control-prev-icon, .carousel-control-next-icon {
-    background-color: rgba(74,0,128,.7);
-    border-radius: 50%; padding: 15px;
-  }
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero-section {
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  max-height: 900px;
+  overflow: hidden;
+}
+.hero-bg-carousel { position: absolute; inset: 0; z-index: 0; }
+.hero-bg-carousel .carousel-inner,
+.hero-bg-carousel .carousel-item { height: 100%; }
+.hero-bg-carousel .carousel-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  filter: brightness(.38);
+}
+.hero-bg-carousel::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg,
+    rgba(20,0,45,.85) 0%,
+    rgba(74,0,128,.55) 50%,
+    rgba(128,0,32,.3) 100%);
+  z-index: 1; pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  height: 100%;
+  display: flex; align-items: center;
+  padding: 90px 0 60px;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,162,39,.18);
+  border: 1px solid rgba(201,162,39,.45);
+  color: var(--accent); font-size: .78rem; font-weight: 700;
+  padding: 6px 16px; border-radius: 50px; margin-bottom: 22px;
+  letter-spacing: .08em; text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+.hero-eyebrow .dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.hero-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 900; color: #fff; line-height: 1.08;
+  margin-bottom: 20px;
+  text-shadow: 0 3px 20px rgba(0,0,0,.5);
+}
+.hero-heading .accent-word { color: var(--accent); }
+.hero-sub {
+  font-size: clamp(14px,1.5vw,17px); color: rgba(255,255,255,.82);
+  max-width: 520px; line-height: 1.8; margin-bottom: 32px; font-weight: 300;
+}
+.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.hero-pill {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
+  color: #fff; padding: 7px 15px; border-radius: 8px;
+  font-size: .8rem; font-weight: 500; backdrop-filter: blur(4px);
+}
+.hero-pill i { color: var(--accent); font-size: .85rem; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-hero-primary {
+  background: var(--secondary); color: #fff;
+  padding: 14px 34px; font-size: .9rem; font-weight: 700;
+  border-radius: 8px; text-decoration: none;
+  box-shadow: 0 6px 24px rgba(128,0,32,.5); transition: all .25s;
+}
+.btn-hero-primary:hover { background: #5c0016; color: #fff; transform: translateY(-2px); text-decoration: none; }
+.btn-hero-outline {
+  background: transparent; color: #fff;
+  padding: 13px 34px; font-size: .9rem; font-weight: 600;
+  border-radius: 8px; text-decoration: none;
+  border: 2px solid rgba(255,255,255,.6); transition: all .25s;
+}
+.btn-hero-outline:hover { background: rgba(255,255,255,.15); color: #fff; text-decoration: none; }
+.hero-side-card {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(16px); border-radius: 16px; padding: 28px 24px; color: #fff;
+}
+.hero-side-card .hsc-label {
+  font-size: .65rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--accent); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.hero-side-stat {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.hero-side-stat:last-child { border-bottom: none; padding-bottom: 0; }
+.hss-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: rgba(201,162,39,.2); border: 1px solid rgba(201,162,39,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--accent); flex-shrink: 0;
+}
+.hss-num { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 900; line-height: 1; }
+.hss-lbl { font-size: .72rem; color: rgba(255,255,255,.65); margin-top: 2px; }
+.hero-bg-carousel .carousel-indicators { margin-bottom: 24px; }
+.hero-bg-carousel .carousel-indicators li { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.4); border: none; }
+.hero-bg-carousel .carousel-indicators .active { background: var(--accent); width: 28px; border-radius: 4px; }
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 3;
+  color: rgba(255,255,255,.5); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.scroll-hint .arrow { animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
-  /* Foreground text */
-  .hero-content {
-    position: relative; z-index: 2;
-    height: 100%; display: flex; align-items: center;
-    padding: 80px 0 40px;
-  }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,.13);
-    border: 1px solid rgba(255,255,255,.32);
-    color: #fff; font-size: 13px; font-weight: 600;
-    padding: 6px 16px; border-radius: 50px; margin-bottom: 18px;
-    backdrop-filter: blur(4px);
-  }
-  .hero-badge .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
-  .hero-heading {
-    font-size: clamp(30px, 5vw, 56px);
-    font-weight: 900; color: #fff; line-height: 1.1;
-    margin-bottom: 16px; text-shadow: 0 2px 12px rgba(0,0,0,.4);
-  }
-  .hero-heading span { color: var(--accent); }
-  .hero-sub { font-size: 16px; color: rgba(255,255,255,.88); max-width: 540px; line-height: 1.75; margin-bottom: 26px; }
+/* ═══════════════════════════════════════════
+   UNIVERSITY LIFE BAND
+═══════════════════════════════════════════ */
+.unilife-band {
+  background: #fff;
+  padding: 70px 0;
+  border-bottom: 1px solid #ede8f4;
+}
+.unilife-card {
+  text-align: center; padding: 36px 24px;
+  border-radius: 16px; transition: transform .3s, box-shadow .3s;
+  border: 1.5px solid #ede8f4;
+  height: 100%;
+}
+.unilife-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(74,0,128,.1); border-color: var(--primary); }
+.unilife-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin: 0 auto 20px;
+}
+.unilife-icon.icon-grad     { background: linear-gradient(135deg,#4a0080,#7b1fa2); color:#fff; }
+.unilife-icon.icon-sport    { background: linear-gradient(135deg,#1a5276,#2980b9); color:#fff; }
+.unilife-icon.icon-social   { background: linear-gradient(135deg,#1a6b2a,#388e3c); color:#fff; }
+.unilife-card h4 { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; }
+.unilife-card p  { font-size: .88rem; color: #777; line-height: 1.7; margin: 0; }
 
-  .hero-stats { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
-  .hero-stat-pill {
-    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.27);
-    backdrop-filter: blur(6px); color: #fff;
-    border-radius: 50px; padding: 6px 16px;
-    display: flex; align-items: center; gap: 8px; font-size: 13px;
-  }
-  .hero-stat-pill strong { font-size: 16px; color: var(--accent); font-weight: 800; }
+/* ═══════════════════════════════════════════
+   SHARED
+═══════════════════════════════════════════ */
+.sec-label {
+  display: inline-block; background: #f0e8ff; color: var(--primary);
+  font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 10px;
+}
+.sec-title {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(24px, 3.5vw, 38px); font-weight: 900;
+  color: #1a1a2e; line-height: 1.2; margin-bottom: 12px;
+}
+.sec-title span { color: var(--primary); }
+.sec-sub { color: #777; font-size: .95rem; line-height: 1.7; }
 
-  .hero-features { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
-  .hero-feat-tag {
-    background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.24);
-    color: #fff; padding: 6px 13px; border-radius: 6px;
-    font-size: 12.5px; backdrop-filter: blur(4px);
-  }
-  .hero-feat-tag i { color: var(--accent); margin-right: 5px; }
-  .hero-feat-tag small { opacity: .75; display: block; font-size: 11px; }
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
+.about-section {
+  position: relative;
+  min-height: 580px;
+  display: flex; align-items: center;
+  overflow: hidden;
+  padding: 0;
+}
+.about-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.about-bg img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+}
+.about-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg,
+    rgba(10,0,30,.88) 0%,
+    rgba(30,0,60,.82) 45%,
+    rgba(74,0,128,.55) 75%,
+    rgba(128,0,32,.3) 100%);
+  z-index: 1;
+}
+.about-content {
+  position: relative; z-index: 2;
+  padding: 80px 0;
+}
+.about-check { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.about-check .check-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(201,162,39,.25); border: 1px solid rgba(201,162,39,.5);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center; font-size: .75rem; flex-shrink: 0;
+}
+.about-check span { font-size: .9rem; color: rgba(255,255,255,.88); font-weight: 500; }
+.about-years-badge {
+  display: inline-flex; flex-direction: column; align-items: center;
+  background: rgba(201,162,39,.2); border: 2px solid rgba(201,162,39,.5);
+  border-radius: 16px; padding: 18px 24px; text-align: center;
+  backdrop-filter: blur(8px);
+}
+.about-years-badge .ay-num {
+  font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 900;
+  color: var(--accent); line-height: 1;
+}
+.about-years-badge .ay-lbl { font-size: .72rem; color: rgba(255,255,255,.7); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
 
-  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-  .btn-hero {
-    background: var(--secondary); color: #fff;
-    padding: 13px 30px; font-size: 15px; font-weight: 700;
-    border-radius: 6px; text-decoration: none; display: inline-block;
-    box-shadow: 0 4px 16px rgba(128,0,32,.45); transition: background .25s, transform .2s;
-  }
-  .btn-hero:hover { background: #5c0016; color: #fff; transform: translateY(-2px); text-decoration: none; }
-  .btn-hero-outline {
-    background: transparent; color: #fff;
-    padding: 12px 30px; font-size: 15px; font-weight: 700;
-    border-radius: 6px; text-decoration: none;
-    border: 2px solid rgba(255,255,255,.7); display: inline-block; transition: all .25s;
-  }
-  .btn-hero-outline:hover { background: rgba(255,255,255,.15); color: #fff; text-decoration: none; }
+/* ═══════════════════════════════════════════
+   WHY CHOOSE US
+═══════════════════════════════════════════ */
+.whychoose-section { padding: 80px 0; background: #fff; }
+.wcu-wrap {
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 12px 50px rgba(74,0,128,.1);
+  border: 1.5px solid #ede8f4;
+}
+/* Tab buttons row */
+.wcu-tabs {
+  display: flex;
+  background: #f8f5ff;
+  border-bottom: 2px solid #ede8f4;
+}
+.wcu-tab {
+  flex: 1; padding: 18px 12px;
+  background: transparent; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: 'Inter', sans-serif; font-weight: 700; font-size: .8rem;
+  color: #888; letter-spacing: .02em;
+  transition: color .2s, background .2s;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  position: relative;
+}
+.wcu-tab:hover { color: var(--primary); background: #f0e8ff; }
+.wcu-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: #fff; }
+.wcu-tab-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  background: #ede8f4; color: #888;
+  transition: background .2s, color .2s;
+}
+.wcu-tab.active .wcu-tab-icon,
+.wcu-tab:hover .wcu-tab-icon { background: var(--primary); color: #fff; }
+.wcu-tab-label { white-space: nowrap; }
 
-  /* ═══════════════════════════════
-     STATS BAR
-  ═══════════════════════════════ */
-  .stats-bar { background: var(--primary); color: #fff; padding: 22px 0; }
-  .stats-bar .stat-item { text-align: center; border-right: 1px solid rgba(255,255,255,.2); }
-  .stats-bar .stat-item:last-child { border-right: none; }
-  .stats-bar .stat-number { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
-  .stats-bar .stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: .85; margin-top: 4px; }
+/* Panels */
+.wcu-panels { background: #fff; }
+.wcu-panel {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  min-height: 420px;
+}
+.wcu-panel.active { display: grid; }
+.wcu-panel-img { overflow: hidden; position: relative; }
+.wcu-panel-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s;
+}
+.wcu-panel:hover .wcu-panel-img img { transform: scale(1.04); }
+.wcu-panel-text {
+  padding: 48px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.wcu-panel-text h3 {
+  font-size: 1.5rem; font-weight: 900; color: #1a1a2e;
+  margin-bottom: 14px; line-height: 1.3;
+}
+.wcu-panel-text p { font-size: .9rem; color: #666; line-height: 1.8; margin-bottom: 20px; }
+.wcu-list { list-style: none; padding: 0; margin: 0 0 24px; }
+.wcu-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .88rem; color: #444; font-weight: 500;
+  padding: 6px 0; border-bottom: 1px solid #f4f1f8;
+}
+.wcu-list li:last-child { border-bottom: none; }
+.wcu-list li i { color: var(--primary); font-size: .9rem; flex-shrink: 0; }
+.wcu-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--primary); color: #fff;
+  padding: 12px 28px; border-radius: 8px;
+  font-weight: 700; font-size: .88rem; text-decoration: none;
+  transition: background .2s, transform .15s; align-self: flex-start;
+}
+.wcu-btn:hover { background: var(--primary-dark); color: #fff; transform: translateY(-2px); text-decoration: none; }
 
-  /* ═══════════════════════════════
-     ABOUT
-  ═══════════════════════════════ */
-  .about-section { padding: 70px 0; }
-  .about-section img { border-radius: 8px; box-shadow: 0 10px 30px rgba(74,0,128,.2); width: 100%; }
+@media (max-width: 768px) {
+  .wcu-panel.active { grid-template-columns: 1fr; }
+  .wcu-panel-img { height: 220px; }
+  .wcu-panel-text { padding: 28px 24px; }
+  .wcu-tabs { overflow-x: auto; }
+  .wcu-tab { min-width: 90px; }
+  .wcu-tab-label { font-size: .72rem; }
+}
 
-  /* ═══════════════════════════════
-     PROGRAMS
-  ═══════════════════════════════ */
-  .programs-section { padding: 70px 0; background: var(--bg-light); }
-  .program-card {
-    background: #fff; border-radius: 8px; padding: 28px 20px; text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,.07); margin-bottom: 24px;
-    transition: transform .3s, box-shadow .3s;
-    border-top: 4px solid var(--primary);
-  }
-  .program-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(74,0,128,.15); }
-  .program-card .icon { font-size: 38px; color: var(--primary); margin-bottom: 14px; }
-  .program-card h4 { color: var(--primary); font-weight: 700; margin-bottom: 8px; }
-  .program-card p { color: #666; font-size: 14px; }
+/* ═══════════════════════════════════════════
+   DEPARTMENTS
+═══════════════════════════════════════════ */
+.depts-section { padding: 80px 0; background: #f8f5ff; }
+.dept-card-new { border-radius: 16px; overflow: hidden; height: 100%; transition: transform .3s, box-shadow .3s; }
+.dept-card-new:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,.2); }
+.dept-card-inner {
+  padding: 36px 28px 32px; height: 100%;
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
+.dept-card-inner::after {
+  content: ''; position: absolute; bottom: -30px; right: -30px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,.07); pointer-events: none;
+}
+.dept-card-icon {
+  width: 60px; height: 60px; border-radius: 16px; background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: #fff; margin-bottom: 18px; flex-shrink: 0;
+}
+.dept-card-inner h4 { color: #fff; font-size: 1.05rem; font-weight: 900; margin-bottom: 4px; }
+.dept-count-badge {
+  display: inline-block; background: rgba(255,255,255,.2); color: #fff;
+  font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 18px; letter-spacing: .05em;
+}
+.dept-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.dept-tags span {
+  background: rgba(255,255,255,.18); color: #fff; font-size: .71rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,.25);
+}
+.dept-link {
+  margin-top: 20px; color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 700;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color .2s;
+}
+.dept-link:hover { color: #fff; text-decoration: none; }
+.dept-science    { background: linear-gradient(135deg, #1a5276, #2980b9); }
+.dept-arts       { background: linear-gradient(135deg, #4a0080, #7b1fa2); }
+.dept-commercial { background: linear-gradient(135deg, #7d4e00, #c9a227); }
+.dept-practicals { background: linear-gradient(135deg, #1a6b2a, #388e3c); }
 
-  /* ═══════════════════════════════
-     NEWS
-  ═══════════════════════════════ */
-  .news-section { padding: 70px 0; }
-  .news-card { border: none; box-shadow: 0 5px 20px rgba(0,0,0,.07); border-radius: 8px; overflow: hidden; margin-bottom: 24px; transition: transform .3s; }
-  .news-card:hover { transform: translateY(-5px); }
-  .news-card .card-img-top { height: 190px; object-fit: cover; }
-  .news-card .card-date { color: var(--secondary); font-size: 13px; font-weight: 600; }
-  .news-card .card-title a { color: var(--primary); text-decoration: none; font-weight: 700; }
-  .news-card .card-title a:hover { color: var(--secondary); }
+/* ═══════════════════════════════════════════
+   LEADERSHIP
+═══════════════════════════════════════════ */
+.leaders-section { padding: 80px 0; background: #fff; }
+.leader-card {
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  transition: transform .3s, box-shadow .3s; background: #fff;
+}
+.leader-card:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(74,0,128,.18); }
+.leader-img-wrap {
+  position: relative; overflow: hidden; height: 240px;
+  background: linear-gradient(135deg, #3a006b, #800020);
+  display: flex; align-items: center; justify-content: center;
+}
+.leader-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.leader-card:hover .leader-img-wrap img { transform: scale(1.06); }
+.leader-img-placeholder {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 3px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-size: 2.5rem; font-weight: 900; color: rgba(255,255,255,.8);
+}
+.leader-social-overlay {
+  position: absolute; inset: 0; background: rgba(74,0,128,.82);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  opacity: 0; transition: opacity .3s;
+}
+.leader-card:hover .leader-social-overlay { opacity: 1; }
+.leader-social-overlay a {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; text-decoration: none; transition: background .2s;
+}
+.leader-social-overlay a:hover { background: var(--accent); border-color: var(--accent); }
+.leader-role-ribbon {
+  position: absolute; top: 16px; left: 0;
+  background: var(--secondary); color: #fff;
+  font-size: .65rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  padding: 5px 14px 5px 12px; border-radius: 0 20px 20px 0;
+}
+.leader-body { padding: 20px 20px 22px; }
+.leader-body h5 { font-size: 1rem; font-weight: 900; color: #1a1a2e; margin-bottom: 3px; }
+.leader-body .desig { font-size: .78rem; color: #888; margin-bottom: 8px; }
+.leader-body .bio { font-size: .8rem; color: #666; line-height: 1.5; }
 
-  /* ═══════════════════════════════
-     GALLERY
-  ═══════════════════════════════ */
-  .gallery-section { padding: 70px 0; background: var(--bg-light); }
-  .gallery-item { overflow: hidden; border-radius: 8px; margin-bottom: 20px; position: relative; }
-  .gallery-item img { width: 100%; height: 210px; object-fit: cover; transition: transform .4s; }
-  .gallery-item:hover img { transform: scale(1.08); }
-  .gallery-item .overlay {
-    position: absolute; inset: 0;
-    background: rgba(74,0,128,.7);
-    opacity: 0; transition: opacity .3s;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 22px;
-  }
-  .gallery-item:hover .overlay { opacity: 1; }
+/* ═══════════════════════════════════════════
+   NEWS
+═══════════════════════════════════════════ */
+.news-section { padding: 80px 0; background: #f8f5ff; }
+.news-card-new {
+  border-radius: 14px; overflow: hidden; background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,.07);
+  transition: transform .3s, box-shadow .3s; height: 100%;
+}
+.news-card-new:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(74,0,128,.15); }
+.news-card-img {
+  position: relative; height: 200px; overflow: hidden;
+  background: linear-gradient(135deg, #3a006b, #800020);
+}
+.news-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.news-card-new:hover .news-card-img img { transform: scale(1.06); }
+.news-date-badge {
+  position: absolute; top: 14px; left: 14px;
+  background: var(--secondary); color: #fff;
+  border-radius: 10px; padding: 8px 12px; text-align: center; line-height: 1.1;
+  box-shadow: 0 4px 12px rgba(128,0,32,.4);
+}
+.news-date-badge .ndb-day { font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 900; }
+.news-date-badge .ndb-mon { font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.news-card-body { padding: 20px; }
+.news-cat-tag {
+  display: inline-block; background: #f0e8ff; color: var(--primary);
+  font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px; margin-bottom: 10px;
+}
+.news-card-body h5 { font-size: .95rem; font-weight: 900; color: #1a1a2e; margin-bottom: 8px; line-height: 1.4; }
+.news-card-body h5 a { color: inherit; text-decoration: none; }
+.news-card-body h5 a:hover { color: var(--primary); }
+.news-card-body p { font-size: .8rem; color: #888; line-height: 1.6; margin: 0; }
+.news-read-more {
+  display: inline-flex; align-items: center; gap: 5px;
+  color: var(--primary); font-size: .8rem; font-weight: 700;
+  text-decoration: none; margin-top: 14px; transition: gap .2s;
+}
+.news-read-more:hover { gap: 9px; color: var(--secondary); text-decoration: none; }
 
-  /* ═══════════════════════════════
-     CTA
-  ═══════════════════════════════ */
-  .cta-section {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #fff; padding: 70px 0; text-align: center;
-  }
-  .cta-section h2 { font-size: 34px; font-weight: 800; margin-bottom: 12px; }
-  .cta-section p { font-size: 17px; opacity: .9; margin-bottom: 28px; }
-  .btn-cta { background: #fff; color: var(--primary); padding: 13px 36px; font-size: 15px; font-weight: 700; border-radius: 6px; text-decoration: none; margin: 5px; display: inline-block; }
-  .btn-cta:hover { background: var(--accent); color: var(--primary); text-decoration: none; }
-  .btn-cta-outline { background: transparent; color: #fff; padding: 12px 36px; font-size: 15px; font-weight: 700; border-radius: 6px; text-decoration: none; border: 2px solid #fff; margin: 5px; display: inline-block; }
-  .btn-cta-outline:hover { background: rgba(255,255,255,.15); color: #fff; text-decoration: none; }
+/* ═══════════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════════ */
+.gallery-section { padding: 80px 0; background: #fff; }
+.gallery-grid { display: grid; gap: 12px; }
+.gallery-grid.layout-main {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 220px 220px;
+}
+.gallery-grid .g-item { border-radius: 12px; overflow: hidden; position: relative; }
+.gallery-grid .g-item.g-main { grid-row: span 2; }
+.gallery-grid .g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.gallery-grid .g-item:hover img { transform: scale(1.06); }
+.g-overlay {
+  position: absolute; inset: 0; background: rgba(74,0,128,.65);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s; color: #fff; font-size: 1.6rem;
+}
+.g-item:hover .g-overlay { opacity: 1; }
 
-  /* ═══════════════════════════════
-     CONTACT
-  ═══════════════════════════════ */
-  .contact-section { padding: 70px 0; }
-  .contact-icon-box { width: 50px; height: 50px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; margin-right: 15px; }
-  .contact-section .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 .2rem rgba(74,0,128,.2); }
-  .btn-submit { background: var(--primary); color: #fff; padding: 12px; font-weight: 600; border: none; width: 100%; border-radius: 6px; font-size: 15px; }
-  .btn-submit:hover { background: var(--primary-dark); }
+/* ═══════════════════════════════════════════
+   NOTICES TICKER
+═══════════════════════════════════════════ */
+.notices-ticker { background: linear-gradient(90deg, var(--secondary), #a0203a); padding: 12px 0; }
+.notices-ticker .nt-label {
+  background: rgba(0,0,0,.2); color: #fff; font-size: .65rem; font-weight: 900;
+  letter-spacing: .12em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px;
+  flex-shrink: 0; margin-right: 16px;
+}
+.notices-ticker .nt-scroll { flex: 1; overflow: hidden; }
+.notices-ticker .nt-scroll a { color: rgba(255,255,255,.9); font-size: .82rem; font-weight: 500; text-decoration: none; margin-right: 40px; }
+.notices-ticker .nt-scroll a:hover { color: #fff; text-decoration: underline; }
 
-  /* ═══════════════════════════════
-     SHARED SECTION HEADING
-  ═══════════════════════════════ */
-  .sec-heading { text-align: center; margin-bottom: 40px; }
-  .sec-heading h2 { font-size: 30px; font-weight: 800; color: var(--primary); display: inline-block; position: relative; padding-bottom: 14px; }
-  .sec-heading h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 55px; height: 4px; background: var(--secondary); }
-  .sec-heading p { color: #666; font-size: 15px; margin-top: 10px; }
+/* ═══════════════════════════════════════════
+   CTA BAND
+═══════════════════════════════════════════ */
+.cta-band {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #1a0030 0%, #4a0080 45%, #800020 100%);
+  position: relative; overflow: hidden; text-align: center;
+}
+.cta-band::before {
+  content: ''; position: absolute; top: -40%; left: -5%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,162,39,.12) 0%, transparent 65%);
+  border-radius: 50%; pointer-events: none;
+}
+.cta-band h2 { color: #fff; font-size: clamp(26px,4vw,42px); font-weight: 900; margin-bottom: 14px; position: relative; z-index: 1; }
+.cta-band p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 32px; position: relative; z-index: 1; }
+.btn-cta-solid {
+  background: var(--accent); color: #1a1a2e; padding: 14px 36px; border-radius: 8px;
+  font-weight: 800; font-size: .95rem; text-decoration: none; display: inline-block;
+  margin: 5px; box-shadow: 0 6px 24px rgba(201,162,39,.35); transition: all .2s; position: relative; z-index: 1;
+}
+.btn-cta-solid:hover { background: #e8b800; transform: translateY(-2px); text-decoration: none; color: #1a1a2e; }
+.btn-cta-outline-w {
+  background: transparent; color: #fff; padding: 13px 36px; border-radius: 8px;
+  font-weight: 700; font-size: .95rem; border: 2px solid rgba(255,255,255,.55);
+  text-decoration: none; display: inline-block; margin: 5px; transition: all .2s; position: relative; z-index: 1;
+}
+.btn-cta-outline-w:hover { background: rgba(255,255,255,.12); color: #fff; text-decoration: none; }
 
-  /* ═══════════════════════════════
-     RESPONSIVE
-  ═══════════════════════════════ */
-  @media (max-width: 768px) {
-    .hero-section { height: auto; min-height: 100vh; max-height: none; }
-    .hero-content { padding: 100px 0 50px; }
-    .stats-bar .stat-item { border-right: none; margin-bottom: 12px; }
-  }
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+.contact-section { padding: 80px 0; background: #f8f5ff; }
+.contact-card {
+  background: #fff; border-radius: 14px; padding: 28px 24px; text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.07); transition: transform .3s, box-shadow .3s; height: 100%;
+}
+.contact-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(74,0,128,.12); }
+.contact-card .cc-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff; font-size: 1.3rem;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+}
+.contact-card h6 { font-size: .85rem; font-weight: 800; color: #1a1a2e; margin-bottom: 6px; }
+.contact-card a, .contact-card p { font-size: .83rem; color: #666; margin: 0; text-decoration: none; }
+.contact-card a:hover { color: var(--primary); }
+.contact-form-wrap {
+  background: #fff; border-radius: 16px; padding: 36px 32px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+.contact-form-wrap .form-control {
+  border-radius: 8px; border: 1.5px solid #e0d9f0; padding: 12px 16px; font-size: .88rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.contact-form-wrap .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,0,128,.1); }
+.btn-send {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff; padding: 13px 32px; border: none; border-radius: 8px;
+  font-weight: 700; font-size: .92rem; width: 100%; cursor: pointer; transition: opacity .2s, transform .15s;
+}
+.btn-send:hover { opacity: .9; transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 992px) {
+  .hero-section { height: auto; min-height: 100vh; max-height: none; }
+  .hero-content { padding: 110px 0 60px; }
+  .hero-side-card { margin-top: 32px; }
+  .gallery-grid.layout-main { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; }
+  .gallery-grid .g-item.g-main { grid-row: span 1; }
+}
+@media (max-width: 576px) {
+  .gallery-grid.layout-main { grid-template-columns: 1fr 1fr; grid-template-rows: 150px 150px; }
+  .achieve-divider { display: none; }
+}
 </style>
 {% endblock %}
 
@@ -204,9 +543,7 @@
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="hero-section">
-
-  <!-- Sliding background images 1–5 -->
-  <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-ride="carousel" data-interval="5000" data-pause="false">
+  <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-ride="carousel" data-interval="5500" data-pause="false">
     <ol class="carousel-indicators">
       <li data-target="#heroBgCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#heroBgCarousel" data-slide-to="1"></li>
@@ -221,345 +558,458 @@
       <div class="carousel-item"><img src="{% static 'img/hero/4.jpg' %}" alt="Nechilibi High School"></div>
       <div class="carousel-item"><img src="{% static 'img/hero/5.jpg' %}" alt="Nechilibi High School"></div>
     </div>
-    <a class="carousel-control-prev" href="#heroBgCarousel" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span></a>
-    <a class="carousel-control-next" href="#heroBgCarousel" role="button" data-slide="next"><span class="carousel-control-next-icon"></span></a>
   </div>
 
-  <!-- Foreground content -->
-  <div class="hero-content">
+  <div class="hero-content center">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-xl-7">
-          <div class="hero-badge"><span class="dot"></span>Est. in Zimbabwe's Matabeleland South</div>
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <div class="hero-eyebrow"><span class="dot"></span>Matabeleland North, Zimbabwe</div>
           <h1 class="hero-heading">
-            {% if settings.hero_heading %}{{ settings.hero_heading }}{% else %}Shaping Tomorrow's<br><span>Leaders</span> Today{% endif %}
+            Where Every<br>Student <span class="accent-word">Excels</span><br>&amp; Leads.
           </h1>
-          <p class="hero-sub">{% if settings.hero_subheading %}{{ settings.hero_subheading }}{% else %}Nechilibi High School provides quality secondary education from Form 1 to Form 6, nurturing academic excellence, character, and lifelong values.{% endif %}</p>
-
-          <div class="hero-btns">
-            <a href="/admissions/" class="btn-hero">Apply Now &nbsp;<i class="fas fa-arrow-right"></i></a>
-            <a href="#about" class="btn-hero-outline"><i class="fas fa-play-circle mr-1"></i>Learn More</a>
+          <p class="hero-sub">Nechilibi High School delivers a world-class ZIMSEC education from Form 1 to Form 6 — nurturing confident, capable leaders for Zimbabwe and beyond.</p>
+          
+      
+        </div>
+        <div class="col-lg-4 offset-lg-1 d-none d-lg-block">
+          <div class="hero-side-card">
+            <div class="hsc-label"><i class="fas fa-star"></i>School at a Glance</div>
+            <div class="hero-side-stat">
+              <div class="hss-icon"><i class="fas fa-user-graduate"></i></div>
+              <div><div class="hss-num">500+</div><div class="hss-lbl">Enrolled Students</div></div>
+            </div>
+            <div class="hero-side-stat">
+              <div class="hss-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+              <div><div class="hss-num">20+</div><div class="hss-lbl">Qualified Teachers</div></div>
+            </div>
+        
           </div>
         </div>
       </div>
     </div>
   </div>
 
-</section>
-
-<!-- ═══════════ STATS BAR ═══════════ -->
-<div class="stats-bar">
-  <div class="container">
-    <div class="row">
-      <div class="col-6 col-md-3 stat-item">
-        <div class="stat-number">{% if settings.total_students %}{{ settings.total_students }}+{% else %}500+{% endif %}</div>
-        <div class="stat-label">Students</div>
-      </div>
-      <div class="col-6 col-md-3 stat-item">
-        <div class="stat-number">{% if settings.total_teachers %}{{ settings.total_teachers }}+{% else %}40+{% endif %}</div>
-        <div class="stat-label">Teachers</div>
-      </div>
-      <div class="col-6 col-md-3 stat-item"><div class="stat-number">Form 1–6</div><div class="stat-label">Classes</div></div>
-      <div class="col-6 col-md-3 stat-item"><div class="stat-number">ZIMSEC</div><div class="stat-label">Accredited</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ ABOUT ═══════════ -->
-<section class="about-section" id="about">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        {% if gallery_images %}
-        <img src="{{ gallery_images.0.image.url }}" alt="Nechilibi High School">
-        {% else %}
-        <img src="{% static 'img/hero/2.jpg' %}" alt="Nechilibi High School">
-        {% endif %}
-      </div>
-      <div class="col-lg-6 pl-lg-5">
-        <h2 class="section-title">About Our School</h2>
-        <p>Nechilibi High School is a leading secondary school located in Matabeleland South, Zimbabwe. We are committed to providing quality education that prepares students for the challenges of the modern world.</p>
-        <p class="mt-3">Our school follows the <strong>ZIMSEC curriculum</strong>, offering O-Level (Forms 1–4) and A-Level (Forms 5–6) programmes. We pride ourselves on academic excellence, strong moral values, and holistic development of every student.</p>
-        <div class="row mt-3">
-          <div class="col-6">
-            <p><i class="fas fa-check-circle text-success mr-2"></i>ZIMSEC Curriculum</p>
-            <p><i class="fas fa-check-circle text-success mr-2"></i>Forms 1 – 6</p>
-          </div>
-          <div class="col-6">
-            <p><i class="fas fa-check-circle text-success mr-2"></i>Sports &amp; Arts</p>
-            <p><i class="fas fa-check-circle text-success mr-2"></i>Science Labs</p>
-          </div>
-        </div>
-        <a href="/about/" class="btn btn-primary-custom mt-2">Read More <i class="fas fa-arrow-right ml-1"></i></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ PROGRAMMES ═══════════ -->
-<section class="programs-section" id="academics">
-  <div class="container">
-    <div class="sec-heading">
-      <h2>Academic Programmes</h2>
-      <p>Comprehensive ZIMSEC curriculum from Form 1 to Form 6</p>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="program-card">
-          <div class="icon"><i class="fas fa-book-open"></i></div>
-          <h4>O-Level (Forms 1–4)</h4>
-          <p>Foundation education covering Sciences, Arts, and Commerce. Preparing students for ZIMSEC O-Level examinations.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="program-card">
-          <div class="icon"><i class="fas fa-graduation-cap"></i></div>
-          <h4>A-Level (Forms 5–6)</h4>
-          <p>Advanced studies for university preparation. Specialised subjects in Sciences, Humanities, and Commercial streams.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="program-card">
-          <div class="icon"><i class="fas fa-running"></i></div>
-          <h4>Co-Curricular</h4>
-          <p>Sports, music, drama, and clubs that develop well-rounded students with leadership skills and team spirit.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LEADERSHIP SECTION -->
-<section class="py-5" style="background:#fff">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="section-title">School Leadership</h2>
-      <p class="text-muted">Meet the dedicated team leading Nechilibi High School.</p>
-    </div>
-    {% if leadership_teachers %}
-    <div class="row justify-content-center">
-      {% for teacher in leadership_teachers %}
-      <div class="col-md-4 col-sm-6 mb-4">
-        <div class="card border-0 shadow-sm h-100 text-center p-4">
-          {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}" class="rounded-circle mx-auto mb-3" style="width:110px;height:110px;object-fit:cover;border:4px solid #6B0000" alt="{{ teacher.name }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          {% else %}
-          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:110px;height:110px;background:#6B0000;color:#FFD700;font-size:2.5rem;font-weight:700">{{ teacher.name|first }}</div>
-          {% endif %}
-          <h5 class="font-weight-bold mb-0">{{ teacher.name }}</h5>
-          <span class="badge badge-pill mt-1 mb-2" style="background:#6B0000;color:#FFD700;font-size:0.8rem">{{ teacher.get_role_display }}</span><br><small class="text-muted">{{ teacher.designation }}</small>
-          {% if teacher.bio %}<p class="text-muted small">{{ teacher.bio }}</p>{% endif %}
-          {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
-          <div class="mt-2">
-            {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="mx-1" style="color:#6B0000" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
-            {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank" class="mx-1" style="color:#3b5998"><i class="fab fa-facebook"></i></a>{% endif %}
-            {% if teacher.twitter %}<a href="{{ teacher.twitter }}" target="_blank" class="mx-1" style="color:#1da1f2"><i class="fab fa-twitter"></i></a>{% endif %}
-            {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank" class="mx-1" style="color:#0077b5"><i class="fab fa-linkedin"></i></a>{% endif %}
-            {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank" class="mx-1" style="color:#25d366"><i class="fab fa-whatsapp"></i></a>{% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="text-center mt-3">
-      <a href="/about/" class="btn btn-outline-primary">Meet All Our Staff &rarr;</a>
-    </div>
-    {% endif %}
-  </div>
-</section>
-
-<!-- ═══════════ NEWS ═══════════ -->
-<section class="news-section" id="news">
-  <div class="container">
-    <div class="sec-heading">
-      <h2>Latest News &amp; Notices</h2>
-      <p>Stay updated with the latest happenings at Nechilibi High School</p>
-    </div>
-    <div class="row">
-      {% for article in recent_articles %}
-      <div class="col-md-4">
-        <div class="card news-card">
-          {% if article.featured_image %}<img src="{{ article.featured_image.url }}" class="card-img-top" alt="{{ article.title }}">
-          {% else %}<img src="{% static 'img/hero/1.jpg' %}" class="card-img-top" alt="News">{% endif %}
-          <div class="card-body">
-            <p class="card-date"><i class="far fa-calendar mr-1"></i>{{ article.created_at|date:"d M Y" }}</p>
-            <h5 class="card-title"><a href="#">{{ article.title }}</a></h5>
-            <p class="text-muted small">{{ article.content|striptags|truncatewords:20 }}</p>
-          </div>
-        </div>
-      </div>
-      {% empty %}
-      <div class="col-md-4">
-        <div class="card news-card">
-          <img src="{% static 'img/hero/3.jpg' %}" class="card-img-top" alt="News">
-          <div class="card-body">
-            <p class="card-date"><i class="far fa-calendar mr-1"></i>March 2026</p>
-            <h5 class="card-title"><a href="#">New Academic Term Begins</a></h5>
-            <p class="text-muted small">Welcome back students. The new academic term has officially begun with exciting programmes planned for all forms.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card news-card">
-          <img src="{% static 'img/hero/4.jpg' %}" class="card-img-top" alt="News">
-          <div class="card-body">
-            <p class="card-date"><i class="far fa-calendar mr-1"></i>February 2026</p>
-            <h5 class="card-title"><a href="#">ZIMSEC Results 2025</a></h5>
-            <p class="text-muted small">Our students achieved outstanding results in the 2025 ZIMSEC examinations with a 95% pass rate.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card news-card">
-          <img src="{% static 'img/hero/5.jpg' %}" class="card-img-top" alt="News">
-          <div class="card-body">
-            <p class="card-date"><i class="far fa-calendar mr-1"></i>January 2026</p>
-            <h5 class="card-title"><a href="/admissions/">2026 Admissions Open</a></h5>
-            <p class="text-muted small">Applications are now open for the 2026 academic year. Apply online or visit the school office.</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="text-center mt-3">
-      <a href="/news/" class="btn btn-primary-custom">View All News <i class="fas fa-arrow-right ml-1"></i></a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ GALLERY ═══════════ -->
-<section class="gallery-section" id="gallery">
-  <div class="container">
-    <div class="sec-heading">
-      <h2>Photo Gallery</h2>
-      <p>Glimpses of life at Nechilibi High School</p>
-    </div>
-    <div class="row">
-      {% for img in gallery_images %}
-      <div class="col-md-4 col-sm-6">
-        <div class="gallery-item">
-          <img src="{{ img.image.url }}" alt="{{ img.title }}">
-          <div class="overlay"><i class="fas fa-search-plus"></i></div>
-        </div>
-      </div>
-      {% empty %}
-      <div class="col-md-4 col-sm-6"><div class="gallery-item"><img src="{% static 'img/hero/1.jpg' %}" alt="Gallery"><div class="overlay"><i class="fas fa-search-plus"></i></div></div></div>
-      <div class="col-md-4 col-sm-6"><div class="gallery-item"><img src="{% static 'img/hero/2.jpg' %}" alt="Gallery"><div class="overlay"><i class="fas fa-search-plus"></i></div></div></div>
-      <div class="col-md-4 col-sm-6"><div class="gallery-item"><img src="{% static 'img/hero/3.jpg' %}" alt="Gallery"><div class="overlay"><i class="fas fa-search-plus"></i></div></div></div>
-      {% endfor %}
-    </div>
-    <div class="text-center mt-3">
-      <a href="/gallery/" class="btn btn-primary-custom">View Full Gallery <i class="fas fa-arrow-right ml-1"></i></a>
-    </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <i class="fas fa-chevron-down arrow"></i>
   </div>
 </section>
 
 <!-- ═══════════ NOTICES TICKER ═══════════ -->
 {% if recent_notices %}
-<div style="background:#fff8e1; border-top:2px solid var(--accent); border-bottom:2px solid var(--accent); padding:10px 0;">
+<div class="notices-ticker">
   <div class="container d-flex align-items-center">
-    <span class="badge mr-3 px-3 py-2 flex-shrink-0" style="background:var(--secondary);color:#fff;font-size:0.8rem;letter-spacing:1px;">NOTICES</span>
-    <div style="overflow:hidden;flex:1;">
-      <ul class="list-unstyled mb-0">
-        {% for notice in recent_notices %}
-        <li class="d-inline mr-5 small">
-          <i class="fas fa-bell mr-1" style="color:var(--secondary);"></i>
-          <a href="/notices/{{ notice.pk }}/" style="color:var(--text-dark);">{{ notice.title }}</a>
-          <span class="text-muted ml-2" style="font-size:0.75rem;">{{ notice.created|date:"d M Y" }}</span>
-        </li>
-        {% endfor %}
-      </ul>
+    <span class="nt-label"><i class="fas fa-bell mr-1"></i>Notices</span>
+    <div class="nt-scroll">
+      {% for notice in recent_notices %}
+      <a href="/notices/"><i class="fas fa-circle" style="font-size:.4rem;vertical-align:middle;margin-right:4px;"></i>{{ notice.title }}</a>
+      {% endfor %}
     </div>
-    <a href="/notices/" class="btn btn-sm ml-3 flex-shrink-0" style="background:var(--primary);color:#fff;white-space:nowrap;">View All</a>
+    <a href="/notices/" class="btn btn-sm ml-3 flex-shrink-0" style="background:rgba(0,0,0,.2);color:#fff;border:1px solid rgba(255,255,255,.3);white-space:nowrap;border-radius:6px;">View All</a>
   </div>
 </div>
 {% endif %}
 
-
-<!-- ═══════════ SCHOOL VIDEOS ═══════════ -->
-{% if school_videos %}
-<section class="py-5" style="background:var(--bg-light);">
+<!-- ═══════════ UNIVERSITY LIFE ═══════════ -->
+<div class="unilife-band">
   <div class="container">
-    <div class="sec-heading">
-      <h2>School Videos</h2>
-      <p>See Nechilibi High School in action</p>
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label">School Life</div>
+      <h2 class="sec-title">University <span>Life</span></h2>
+      <p class="sec-sub mx-auto" style="max-width:500px;">Life at Nechilibi goes beyond the classroom — we develop the whole student.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="unilife-card">
+          <div class="unilife-icon icon-grad mx-auto"><i class="fas fa-graduation-cap"></i></div>
+          <h4>Graduation</h4>
+          <p>Getting Diploma — We celebrate every milestone as our students complete their O-Level and A-Level programmes with distinction.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="unilife-card">
+          <div class="unilife-icon icon-sport mx-auto"><i class="fas fa-running"></i></div>
+          <h4>Athletics</h4>
+          <p>Sport Clubs — From football and athletics to netball and swimming, our sports programme builds teamwork, discipline and leadership.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="unilife-card">
+          <div class="unilife-icon icon-social mx-auto"><i class="fas fa-users"></i></div>
+          <h4>Social</h4>
+          <p>Overall in here — Cultural events, drama, debate clubs and community service shape well-rounded, confident young leaders.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section class="about-section">
+  <!-- Background image -->
+  <div class="about-bg">
+    {% if gallery_images %}
+    <img src="{{ gallery_images.0.image.url }}" alt="Nechilibi High School">
+    {% else %}
+    <img src="{% static 'img/hero/2.jpg' %}" alt="Nechilibi High School">
+    {% endif %}
+  </div>
+  <!-- Content overlaid on top -->
+  <div class="about-content w-100">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="sec-label" style="background:rgba(201,162,39,.2);color:var(--accent);border:1px solid rgba(201,162,39,.4);">About Us</div>
+          <h2 class="sec-title" style="color:#fff;">A School Built on<br><span style="color:var(--accent);">Excellence &amp; Values</span></h2>
+          <p class="sec-sub mb-4" style="color:rgba(255,255,255,.82);">Nechilibi High School is a leading secondary institution in Matabeleland North, Zimbabwe. We follow the <strong style="color:#fff;">ZIMSEC curriculum</strong>, offering O-Level and A-Level programmes designed to produce well-rounded, confident graduates ready for university and beyond.</p>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div><span>ZIMSEC O-Level &amp; A-Level Curriculum</span></div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div><span>Science Laboratories &amp; Computer Lab</span></div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div><span>Sports, Arts, Clubs &amp; Co-curricular Activities</span></div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div><span>Boarding &amp; Day Student Options</span></div>
+          <div class="mt-4">
+            <a href="/about/" class="btn-hero-primary mr-3" style="display:inline-block;">Learn More <i class="fas fa-arrow-right ml-2"></i></a>
+            <a href="/admissions/" class="btn-hero-outline" style="display:inline-block;">Admissions</a>
+          </div>
+        </div>
+        <div class="col-lg-3 offset-lg-2 d-none d-lg-flex justify-content-center" data-aos="fade-up" data-aos-delay="150">
+          <div class="about-years-badge">
+            <div class="ay-num">40+</div>
+            <div class="ay-lbl">Years of<br>Excellence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHY CHOOSE US ═══════════ -->
+<section class="whychoose-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label">Why Nechilibi</div>
+      <h2 class="sec-title">Why <span>Choose Us</span></h2>
+      <p class="sec-sub mx-auto" style="max-width:520px;">Discover what makes Nechilibi High School the right choice for your child's future.</p>
+    </div>
+    <div class="wcu-wrap" data-aos="fade-up">
+      <!-- Tab buttons -->
+      <div class="wcu-tabs">
+        <button class="wcu-tab active" data-tab="benefits">
+          <span class="wcu-tab-icon"><i class="fas fa-star"></i></span>
+          <span class="wcu-tab-label">Benefits</span>
+        </button>
+        <button class="wcu-tab" data-tab="selfdev">
+          <span class="wcu-tab-icon"><i class="fas fa-brain"></i></span>
+          <span class="wcu-tab-label">Self Development</span>
+        </button>
+        <button class="wcu-tab" data-tab="spirituality">
+          <span class="wcu-tab-icon"><i class="fas fa-praying-hands"></i></span>
+          <span class="wcu-tab-label">Spirituality</span>
+        </button>
+        <button class="wcu-tab" data-tab="alumni">
+          <span class="wcu-tab-icon"><i class="fas fa-user-friends"></i></span>
+          <span class="wcu-tab-label">Alumni</span>
+        </button>
+      </div>
+
+      <!-- Tab panels -->
+      <div class="wcu-panels">
+
+        <!-- Benefits -->
+        <div class="wcu-panel active" id="tab-benefits">
+          <div class="wcu-panel-img">
+            <img src="{% static 'img/hero/1.jpg' %}" alt="Benefits">
+          </div>
+          <div class="wcu-panel-text">
+            <div class="sec-label">Why Us</div>
+            <h3>Academic &amp; Life Benefits</h3>
+            <p>Choosing Nechilibi means choosing a proven pathway to success. Our students consistently achieve top ZIMSEC results and go on to excel at universities across Zimbabwe and beyond.</p>
+            <ul class="wcu-list">
+              <li><i class="fas fa-check-circle"></i> 95% ZIMSEC O-Level Pass Rate</li>
+              <li><i class="fas fa-check-circle"></i> Fully equipped Science &amp; Computer Labs</li>
+              <li><i class="fas fa-check-circle"></i> Experienced and qualified teaching staff</li>
+              <li><i class="fas fa-check-circle"></i> Comprehensive boarding facilities</li>
+              <li><i class="fas fa-check-circle"></i> Strong university placement record</li>
+            </ul>
+            <a href="/admissions/" class="wcu-btn">Apply Now <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+
+        <!-- Self Development -->
+        <div class="wcu-panel" id="tab-selfdev">
+          <div class="wcu-panel-img">
+            <img src="{% static 'img/hero/2.jpg' %}" alt="Self Development">
+          </div>
+          <div class="wcu-panel-text">
+            <div class="sec-label">Growth</div>
+            <h3>Self Development</h3>
+            <p>We believe education is more than passing exams. At Nechilibi, every student is encouraged to discover their talents, build confidence and develop skills that last a lifetime.</p>
+            <ul class="wcu-list">
+              <li><i class="fas fa-check-circle"></i> Leadership &amp; public speaking programmes</li>
+              <li><i class="fas fa-check-circle"></i> Debate, drama &amp; arts clubs</li>
+              <li><i class="fas fa-check-circle"></i> Career guidance &amp; mentorship</li>
+              <li><i class="fas fa-check-circle"></i> Community service &amp; social responsibility</li>
+              <li><i class="fas fa-check-circle"></i> Life skills integrated into daily school life</li>
+            </ul>
+            <a href="/about/" class="wcu-btn">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+
+        <!-- Spirituality -->
+        <div class="wcu-panel" id="tab-spirituality">
+          <div class="wcu-panel-img">
+            <img src="{% static 'img/hero/3.jpg' %}" alt="Spirituality">
+          </div>
+          <div class="wcu-panel-text">
+            <div class="sec-label">Faith &amp; Values</div>
+            <h3>Spirituality &amp; Character</h3>
+            <p>Strong moral values and spiritual grounding are at the heart of Nechilibi. We nurture students who are not only academically capable but also people of integrity and character.</p>
+            <ul class="wcu-list">
+              <li><i class="fas fa-check-circle"></i> Daily devotions &amp; school assemblies</li>
+              <li><i class="fas fa-check-circle"></i> Religious Studies in the curriculum</li>
+              <li><i class="fas fa-check-circle"></i> Inter-faith respect and inclusivity</li>
+              <li><i class="fas fa-check-circle"></i> Character-building pastoral programmes</li>
+              <li><i class="fas fa-check-circle"></i> Strong discipline rooted in values</li>
+            </ul>
+            <a href="/about/" class="wcu-btn">Our Values <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+
+        <!-- Alumni -->
+        <div class="wcu-panel" id="tab-alumni">
+          <div class="wcu-panel-img">
+            <img src="{% static 'img/hero/4.jpg' %}" alt="Alumni">
+          </div>
+          <div class="wcu-panel-text">
+            <div class="sec-label">Our Community</div>
+            <h3>A Proud Alumni Network</h3>
+            <p>Nechilibi alumni are making their mark across Zimbabwe and the world — in medicine, engineering, education, business and public service. Join a community that lasts beyond graduation.</p>
+            <ul class="wcu-list">
+              <li><i class="fas fa-check-circle"></i> Graduates in leading universities nationwide</li>
+              <li><i class="fas fa-check-circle"></i> Alumni giving back through mentorship</li>
+              <li><i class="fas fa-check-circle"></i> Annual alumni reunions &amp; prize giving</li>
+              <li><i class="fas fa-check-circle"></i> Alumni association supporting school development</li>
+              <li><i class="fas fa-check-circle"></i> A lifelong network of successful professionals</li>
+            </ul>
+            
+          </div>
+        </div>
+
+      </div><!-- /wcu-panels -->
+    </div><!-- /wcu-wrap -->
+  </div>
+</section>
+
+<!-- ═══════════ DEPARTMENTS ═══════════ -->
+<section class="depts-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label">Academics</div>
+      <h2 class="sec-title">Subject <span>Departments</span></h2>
+      <p class="sec-sub mx-auto" style="max-width:520px;">Four faculties covering the full ZIMSEC curriculum — from Form 1 foundations to Form 6 university preparation.</p>
     </div>
     <div class="row">
-      {% for video in school_videos %}
-      <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-          {% if video.youtube_url %}
-          {% with embed_id=video.youtube_url %}
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item"
-              src="{% with url=video.youtube_url %}{% if 'watch?v=' in url %}https://www.youtube.com/embed/{{ url|slice:'32:' }}{% elif 'youtu.be/' in url %}https://www.youtube.com/embed/{{ url|slice:'17:' }}{% else %}{{ url }}{% endif %}{% endwith %}"
-              allowfullscreen title="{{ video.title }}"></iframe>
+      {% if homepage_depts %}
+        {% for dept in homepage_depts %}
+        <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+          <div class="dept-card-new">
+            <div class="dept-card-inner dept-{{ dept.key }}">
+              <div class="dept-card-icon"><i class="{{ dept.icon }}"></i></div>
+              <h4>{{ dept.label }}</h4>
+              <span class="dept-count-badge">{{ dept.count }} Subject{{ dept.count|pluralize }}</span>
+              <div class="dept-tags">
+                {% for name in dept.sample %}<span>{{ name }}</span>{% endfor %}
+                {% if dept.count > 4 %}<span>+{{ dept.count|add:"-4" }} more</span>{% endif %}
+              </div>
+              <a href="/subjects/" class="dept-link">Explore <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
-          {% endwith %}
-          {% elif video.thumbnail %}
-          <img src="{{ video.thumbnail.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ video.title }}">
-          {% endif %}
-          <div class="card-body">
-            <h6 class="font-weight-bold">{{ video.title }}</h6>
-            {% if video.description %}<p class="text-muted small mb-0">{{ video.description|truncatechars:100 }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-md-6 col-lg-3 mb-4"><div class="dept-card-new"><div class="dept-card-inner dept-science"><div class="dept-card-icon"><i class="fas fa-flask"></i></div><h4>Science &amp; Mathematics</h4></div></div></div>
+        <div class="col-md-6 col-lg-3 mb-4"><div class="dept-card-new"><div class="dept-card-inner dept-arts"><div class="dept-card-icon"><i class="fas fa-palette"></i></div><h4>Arts &amp; Humanities</h4></div></div></div>
+        <div class="col-md-6 col-lg-3 mb-4"><div class="dept-card-new"><div class="dept-card-inner dept-commercial"><div class="dept-card-icon"><i class="fas fa-chart-line"></i></div><h4>Commercial &amp; Business</h4></div></div></div>
+        <div class="col-md-6 col-lg-3 mb-4"><div class="dept-card-new"><div class="dept-card-inner dept-practicals"><div class="dept-card-icon"><i class="fas fa-tools"></i></div><h4>Practicals &amp; Technical</h4></div></div></div>
+      {% endif %}
+    </div>
+    <div class="text-center mt-2" data-aos="fade-up">
+      <a href="/subjects/" class="btn btn-primary-custom px-5 py-2" style="border-radius:8px;">View All Subjects <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LEADERSHIP ═══════════ -->
+{% if leadership_teachers %}
+<section class="leaders-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label">Our People</div>
+      <h2 class="sec-title">School <span>Leadership</span></h2>
+      <p class="sec-sub mx-auto" style="max-width:480px;">Meet the dedicated team guiding Nechilibi High School towards excellence.</p>
+    </div>
+    <div class="row justify-content-center">
+      {% for teacher in leadership_teachers %}
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+        <div class="leader-card">
+          <div class="leader-img-wrap">
+            {% if teacher.photo %}
+            <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
+            {% else %}
+            <div class="leader-img-placeholder">{{ teacher.name|first }}</div>
+            {% endif %}
+            <div class="leader-social-overlay">
+              {% if teacher.email %}<a href="mailto:{{ teacher.email }}" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
+              {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank"><i class="fab fa-whatsapp"></i></a>{% endif %}
+              {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+            </div>
+            <div class="leader-role-ribbon">{{ teacher.get_role_display }}</div>
+          </div>
+          <div class="leader-body">
+            <h5>{{ teacher.name }}</h5>
+            <div class="desig">{{ teacher.designation }}</div>
+            {% if teacher.bio %}<p class="bio">{{ teacher.bio|truncatewords:18 }}</p>{% endif %}
           </div>
         </div>
       </div>
       {% endfor %}
     </div>
-    <div class="text-center mt-2">
-      <a href="/gallery/" class="btn btn-primary-custom">View Full Gallery <i class="fas fa-arrow-right ml-1"></i></a>
+    <div class="text-center mt-2" data-aos="fade-up">
+      <a href="/staff/" class="btn btn-outline-primary px-5 py-2" style="border-radius:8px;color:var(--primary);border-color:var(--primary);">Meet All Staff <i class="fas fa-arrow-right ml-2"></i></a>
     </div>
   </div>
 </section>
 {% endif %}
 
-<!-- ═══════════ CTA ═══════════ -->
-<div class="cta-section">
+<!-- ═══════════ NEWS ═══════════ -->
+<section class="news-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-5 flex-wrap" data-aos="fade-up">
+      <div>
+        <div class="sec-label">Latest</div>
+        <h2 class="sec-title mb-0">News &amp; <span>Articles</span></h2>
+      </div>
+      <a href="/news/" class="btn btn-outline-primary mt-3" style="border-radius:8px;color:var(--primary);border-color:var(--primary);">All News <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="row">
+      {% for article in recent_articles %}
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+        <div class="news-card-new">
+          <div class="news-card-img">
+            {% if article.featured_image %}<img src="{{ article.featured_image.url }}" alt="{{ article.title }}">{% else %}<img src="{% static 'img/hero/1.jpg' %}" alt="{{ article.title }}">{% endif %}
+            <div class="news-date-badge">
+              <div class="ndb-day">{{ article.created|date:"d" }}</div>
+              <div class="ndb-mon">{{ article.created|date:"M" }}</div>
+            </div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-cat-tag">School News</span>
+            <h5><a href="#">{{ article.title }}</a></h5>
+            <p>{{ article.content|striptags|truncatewords:18 }}</p>
+            <a href="#" class="news-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-md-4 mb-4" data-aos="fade-up"><div class="news-card-new"><div class="news-card-img"><img src="{% static 'img/hero/1.jpg' %}" alt="News"><div class="news-date-badge"><div class="ndb-day">28</div><div class="ndb-mon">Mar</div></div></div><div class="news-card-body"><span class="news-cat-tag">School News</span><h5><a href="/news/">Prize Giving Day 2026</a></h5><p>The Annual Prize Giving Day celebrates the academic and sporting achievements of our students.</p><a href="/news/" class="news-read-more">Read More <i class="fas fa-arrow-right"></i></a></div></div></div>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100"><div class="news-card-new"><div class="news-card-img"><img src="{% static 'img/hero/3.jpg' %}" alt="News"><div class="news-date-badge"><div class="ndb-day">15</div><div class="ndb-mon">Mar</div></div></div><div class="news-card-body"><span class="news-cat-tag">Academics</span><h5><a href="/news/">ZIMSEC 2025 Results Released</a></h5><p>Nechilibi students achieve outstanding results in the 2025 ZIMSEC O-Level examinations.</p><a href="/news/" class="news-read-more">Read More <i class="fas fa-arrow-right"></i></a></div></div></div>
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200"><div class="news-card-new"><div class="news-card-img"><img src="{% static 'img/hero/5.jpg' %}" alt="News"><div class="news-date-badge"><div class="ndb-day">01</div><div class="ndb-mon">Mar</div></div></div><div class="news-card-body"><span class="news-cat-tag">Admissions</span><h5><a href="/admissions/">2026 Form 1 Intake Open</a></h5><p>Applications for Form 1 entry 2026 are now open. Visit the school office for details.</p><a href="/admissions/" class="news-read-more">Read More <i class="fas fa-arrow-right"></i></a></div></div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ GALLERY ═══════════ -->
+<section class="gallery-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-5 flex-wrap" data-aos="fade-up">
+      <div>
+        <div class="sec-label">Life at Nechilibi</div>
+        <h2 class="sec-title mb-0">Photo <span>Gallery</span></h2>
+      </div>
+      <a href="/gallery/" class="btn btn-outline-primary mt-3" style="border-radius:8px;color:var(--primary);border-color:var(--primary);">Full Gallery <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="gallery-grid layout-main" data-aos="fade-up">
+      {% if gallery_images %}
+        {% for img in gallery_images %}
+        <div class="g-item{% if forloop.first %} g-main{% endif %}">
+          <img src="{{ img.image.url }}" alt="{{ img.title }}">
+          <div class="g-overlay"><i class="fas fa-search-plus"></i></div>
+        </div>
+        {% endfor %}
+        {% with remaining=5|add:"-"|add:gallery_images|length %}{% endwith %}
+      {% else %}
+        <div class="g-item g-main"><img src="{% static 'img/hero/1.jpg' %}" alt="Gallery"><div class="g-overlay"><i class="fas fa-search-plus"></i></div></div>
+        <div class="g-item"><img src="{% static 'img/hero/2.jpg' %}" alt="Gallery"><div class="g-overlay"><i class="fas fa-search-plus"></i></div></div>
+        <div class="g-item"><img src="{% static 'img/hero/3.jpg' %}" alt="Gallery"><div class="g-overlay"><i class="fas fa-search-plus"></i></div></div>
+        <div class="g-item"><img src="{% static 'img/hero/4.jpg' %}" alt="Gallery"><div class="g-overlay"><i class="fas fa-search-plus"></i></div></div>
+        <div class="g-item"><img src="{% static 'img/hero/5.jpg' %}" alt="Gallery"><div class="g-overlay"><i class="fas fa-search-plus"></i></div></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA BAND ═══════════ -->
+<div class="cta-band" data-aos="fade-up">
   <div class="container">
     <h2>Ready to Join Nechilibi High School?</h2>
-    <p>Applications are open for the 2026 academic year. Secure your child's future today.</p>
-    <a href="/admissions/" class="btn-cta">Apply for Admission</a>
-    <a href="#contact" class="btn-cta-outline">Contact Us</a>
+    <p>Applications are open for the 2026 academic year.<br>Give your child the foundation for a successful future.</p>
+    <a href="/admissions/" class="btn-cta-solid"><i class="fas fa-user-graduate mr-2"></i>Apply for Admission</a>
+    <a href="/contact/" class="btn-cta-outline-w"><i class="fas fa-phone mr-2"></i>Contact Us</a>
   </div>
 </div>
 
 <!-- ═══════════ CONTACT ═══════════ -->
-<section class="contact-section" id="contact">
+<section class="contact-section">
   <div class="container">
-    <div class="sec-heading">
-      <h2>Contact Us</h2>
-      <p>Get in touch with Nechilibi High School</p>
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label">Get in Touch</div>
+      <h2 class="sec-title">Contact <span>Us</span></h2>
     </div>
-    <div class="row">
-      <div class="col-md-5 mb-4">
-        <div class="d-flex align-items-start mb-4">
-          <div class="contact-icon-box"><i class="fas fa-map-marker-alt"></i></div>
-          <div><h6 class="text-primary-custom font-weight-bold mb-1">Address</h6><p class="text-muted mb-0">Nechilibi, Matabeleland South, Zimbabwe</p></div>
-        </div>
-        <div class="d-flex align-items-start mb-4">
-          <div class="contact-icon-box"><i class="fas fa-phone"></i></div>
-          <div><h6 class="text-primary-custom font-weight-bold mb-1">Phone</h6><p class="text-muted mb-0">+263 XXX XXX XXX</p></div>
-        </div>
-        <div class="d-flex align-items-start mb-4">
-          <div class="contact-icon-box"><i class="fas fa-envelope"></i></div>
-          <div><h6 class="text-primary-custom font-weight-bold mb-1">Email</h6><p class="text-muted mb-0">info@nechilibi.ac.zw</p></div>
-        </div>
-        <div class="d-flex align-items-start">
-          <div class="contact-icon-box"><i class="fab fa-whatsapp"></i></div>
-          <div><h6 class="text-primary-custom font-weight-bold mb-1">WhatsApp</h6><p class="text-muted mb-0">+263 XXX XXX XXX</p></div>
+    <div class="row mb-5">
+      <div class="col-md-3 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <h6>Address</h6>
+          <p>{% if school_settings.address %}{{ school_settings.address }}{% else %}P.O. Box 123, Nechilibi, Matabeleland South{% endif %}</p>
         </div>
       </div>
-      <div class="col-md-7">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-6"><input type="text" class="form-control" placeholder="Your Name"></div>
-            <div class="form-group col-md-6"><input type="email" class="form-control" placeholder="Your Email"></div>
-          </div>
-          <div class="form-group"><input type="text" class="form-control" placeholder="Subject"></div>
-          <div class="form-group"><textarea class="form-control" rows="5" placeholder="Your Message"></textarea></div>
-          <button type="submit" class="btn-submit">Send Message <i class="fas fa-paper-plane ml-2"></i></button>
-        </form>
+      <div class="col-md-3 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-phone-alt"></i></div>
+          <h6>Phone</h6>
+          <a href="tel:{% if school_settings.phone %}{{ school_settings.phone }}{% else %}0780808201{% endif %}">{% if school_settings.phone %}{{ school_settings.phone }}{% else %}0780808201{% endif %}</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-envelope"></i></div>
+          <h6>Email</h6>
+          <a href="mailto:{% if school_settings.email %}{{ school_settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}">{% if school_settings.email %}{{ school_settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-clock"></i></div>
+          <h6>Office Hours</h6>
+          <p>Mon – Fri<br>7:30am – 4:30pm</p>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center" data-aos="fade-up">
+      <div class="col-lg-8">
+        <div class="contact-form-wrap">
+          <h4 class="text-center mb-4" style="color:#1a1a2e;">Send Us a Message</h4>
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6"><input type="text" class="form-control" placeholder="Your Name"></div>
+              <div class="form-group col-md-6"><input type="email" class="form-control" placeholder="Your Email"></div>
+            </div>
+            <div class="form-group"><input type="text" class="form-control" placeholder="Subject"></div>
+            <div class="form-group"><textarea class="form-control" rows="5" placeholder="Your Message"></textarea></div>
+            <button type="submit" class="btn-send">Send Message <i class="fas fa-paper-plane ml-2"></i></button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -569,10 +1019,22 @@
 
 {% block extra_js %}
 <script>
-  // Smooth scroll for anchor links
-  $('a[href^="#"]').on('click', function(e) {
-    var target = $(this.hash);
-    if (target.length) { e.preventDefault(); $('html,body').animate({ scrollTop: target.offset().top - 75 }, 600); }
+// Smooth scroll
+$('a[href^="#"]').on('click', function(e) {
+  var target = $(this.hash);
+  if (target.length) { e.preventDefault(); $('html,body').animate({ scrollTop: target.offset().top - 75 }, 600); }
+});
+
+// Why Choose Us tabs
+document.querySelectorAll('.wcu-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    // Deactivate all tabs and panels
+    document.querySelectorAll('.wcu-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.wcu-panel').forEach(function(p) { p.classList.remove('active'); });
+    // Activate clicked tab and its panel
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
   });
+});
 </script>
 {% endblock %}

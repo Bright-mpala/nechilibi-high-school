@@ -1,179 +1,553 @@
 {% extends 'public/base.html' %}
+{% load static %}
 {% block title %}About Us — Nechilibi High School{% endblock %}
-{% block meta_description %}Learn about Nechilibi High School — our history, mission, values, leadership team, and dedicated teaching staff in Matabeleland South, Zimbabwe.{% endblock %}
+{% block meta_description %}Learn about Nechilibi High School — our history, mission, values, leadership team and dedicated teaching staff in Matabeleland South, Zimbabwe.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Page Hero ── */
+.about-page-hero {
+  position: relative; min-height: 420px;
+  display: flex; align-items: center; overflow: hidden;
+  background: linear-gradient(120deg, #1a0030 0%, #4a0080 55%, #800020 100%);
+}
+.about-page-hero::before {
+  content: ''; position: absolute; top: -40%; right: -5%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,162,39,.15) 0%, transparent 65%);
+  border-radius: 50%; pointer-events: none;
+}
+.aph-content { position: relative; z-index: 2; padding: 90px 0 60px; width: 100%; }
+.aph-content h1 {
+  font-size: clamp(32px, 5vw, 58px); font-weight: 900;
+  color: #fff; line-height: 1.1; margin-bottom: 16px;
+}
+.aph-content h1 span { color: var(--accent); }
+.aph-content p { color: rgba(255,255,255,.75); font-size: 1rem; max-width: 540px; line-height: 1.8; }
+.aph-breadcrumb { margin-top: 20px; }
+.aph-breadcrumb a { color: var(--accent); text-decoration: none; font-size: .85rem; }
+.aph-breadcrumb span { color: rgba(255,255,255,.5); font-size: .85rem; margin: 0 8px; }
+.aph-breadcrumb .current { color: rgba(255,255,255,.65); font-size: .85rem; }
+.aph-wave { position: absolute; bottom: -1px; left: 0; width: 100%; line-height: 0; pointer-events: none; }
+.aph-wave svg { display: block; width: 100%; height: 56px; }
+
+/* ── Shared ── */
+.sec-label-about {
+  display: inline-block; background: #f0e8ff; color: var(--primary);
+  font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 10px;
+}
+.sec-title-about {
+  font-size: clamp(22px, 3vw, 34px); font-weight: 900;
+  color: #1a1a2e; line-height: 1.2; margin-bottom: 12px;
+}
+.sec-title-about span { color: var(--primary); }
+
+/* ── Story Section ── */
+.story-section { padding: 80px 0; background: #fff; }
+.story-img-wrap { position: relative; }
+.story-img-wrap img { width: 100%; border-radius: 16px; box-shadow: 0 20px 60px rgba(74,0,128,.18); position: relative; z-index: 1; }
+.story-img-wrap::before {
+  content: ''; position: absolute; top: -14px; left: -14px; right: 14px; bottom: 14px;
+  border: 3px solid var(--accent); border-radius: 16px; z-index: 0; opacity: .45;
+}
+.story-founded-badge {
+  position: absolute; bottom: -18px; right: -10px; z-index: 2;
+  background: var(--secondary); color: #fff; border-radius: 14px;
+  padding: 14px 20px; text-align: center; box-shadow: 0 8px 24px rgba(128,0,32,.35);
+}
+.story-founded-badge .sfb-year { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 900; line-height: 1; }
+.story-founded-badge .sfb-lbl { font-size: .68rem; opacity: .85; letter-spacing: .05em; }
+
+/* ── Stats Band ── */
+.about-stats-band {
+  background: linear-gradient(135deg, #1a0030 0%, #2d004d 50%, #1a1a2e 100%);
+  padding: 52px 0; position: relative; overflow: hidden;
+}
+.about-stats-band::before {
+  content: ''; position: absolute; top: -60%; right: -5%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(201,162,39,.12) 0%, transparent 65%);
+  border-radius: 50%; pointer-events: none;
+}
+.asb-item { text-align: center; padding: 0 16px; }
+.asb-icon {
+  width: 52px; height: 52px; border-radius: 13px;
+  background: rgba(201,162,39,.15); border: 1px solid rgba(201,162,39,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--accent); margin: 0 auto 10px;
+}
+.asb-num {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(26px, 3.5vw, 40px); font-weight: 900; color: var(--accent); line-height: 1;
+}
+.asb-lbl { font-size: .75rem; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .08em; margin-top: 5px; font-weight: 600; }
+.asb-divider { width: 1px; background: rgba(255,255,255,.1); align-self: stretch; }
+
+/* ── Vision & Mission ── */
+.vm-section { padding: 80px 0; background: #f8f5ff; }
+.vm-card {
+  border-radius: 16px; padding: 36px 32px; height: 100%;
+  transition: transform .3s, box-shadow .3s;
+}
+.vm-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(74,0,128,.15); }
+.vm-card.vision { background: linear-gradient(135deg, #4a0080, #7b1fa2); color: #fff; }
+.vm-card.mission { background: linear-gradient(135deg, #800020, #a0203a); color: #fff; }
+.vm-card .vm-icon {
+  width: 60px; height: 60px; border-radius: 16px;
+  background: rgba(255,255,255,.2); display: flex; align-items: center;
+  justify-content: center; font-size: 1.5rem; color: #fff; margin-bottom: 20px;
+}
+.vm-card h4 { font-size: 1.2rem; font-weight: 900; color: #fff; margin-bottom: 12px; }
+.vm-card p { color: rgba(255,255,255,.85); font-size: .92rem; line-height: 1.8; margin: 0; }
+
+/* ── Core Values ── */
+.values-section { padding: 80px 0; background: #fff; }
+.value-card {
+  background: #fff; border-radius: 14px; padding: 28px 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06); height: 100%;
+  border: 1.5px solid #ede8f4;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+.value-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(74,0,128,.12); border-color: var(--primary); }
+.value-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: #fff; margin-bottom: 16px;
+}
+.value-card h6 { font-size: .95rem; font-weight: 900; color: #1a1a2e; margin-bottom: 6px; }
+.value-card p { font-size: .82rem; color: #777; line-height: 1.6; margin: 0; }
+
+/* ── Programmes ── */
+.prog-section { padding: 80px 0; background: #f8f5ff; }
+.prog-card {
+  border-radius: 16px; overflow: hidden; height: 100%;
+  transition: transform .3s, box-shadow .3s;
+}
+.prog-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.18); }
+.prog-card-inner { padding: 40px 32px; height: 100%; display: flex; flex-direction: column; }
+.prog-card.olevel .prog-card-inner { background: linear-gradient(135deg, #1a5276, #2980b9); }
+.prog-card.alevel .prog-card-inner { background: linear-gradient(135deg, #4a0080, #7b1fa2); }
+.prog-icon {
+  width: 64px; height: 64px; border-radius: 18px; background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; color: #fff; margin-bottom: 20px;
+}
+.prog-card h4 { color: #fff; font-size: 1.15rem; font-weight: 900; margin-bottom: 10px; }
+.prog-card p { color: rgba(255,255,255,.82); font-size: .88rem; line-height: 1.7; margin-bottom: 20px; flex: 1; }
+.prog-badge {
+  display: inline-block; background: rgba(255,255,255,.2); color: #fff;
+  font-size: .72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.3); margin-right: 6px; margin-bottom: 6px;
+}
+.prog-link {
+  margin-top: 20px; color: rgba(255,255,255,.8); font-size: .82rem; font-weight: 700;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color .2s;
+}
+.prog-link:hover { color: #fff; text-decoration: none; }
+
+/* ── Staff Section ── */
+.staff-section { padding: 80px 0; background: #fff; }
+.staff-card {
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,.07);
+  transition: transform .3s, box-shadow .3s; background: #fff;
+  height: 100%;
+}
+.staff-card:hover { transform: translateY(-6px); box-shadow: 0 14px 44px rgba(74,0,128,.15); }
+.staff-img-wrap {
+  position: relative; overflow: hidden; height: 200px;
+  background: linear-gradient(135deg, #3a006b, #800020);
+  display: flex; align-items: center; justify-content: center;
+}
+.staff-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.staff-card:hover .staff-img-wrap img { transform: scale(1.06); }
+.staff-placeholder {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 3px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 900; color: rgba(255,255,255,.8);
+}
+.staff-social-overlay {
+  position: absolute; inset: 0; background: rgba(74,0,128,.82);
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  opacity: 0; transition: opacity .3s;
+}
+.staff-card:hover .staff-social-overlay { opacity: 1; }
+.staff-social-overlay a {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; text-decoration: none; transition: background .2s;
+}
+.staff-social-overlay a:hover { background: var(--accent); border-color: var(--accent); }
+.staff-role-tag {
+  position: absolute; top: 14px; left: 0;
+  background: var(--secondary); color: #fff;
+  font-size: .62rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  padding: 4px 12px 4px 10px; border-radius: 0 20px 20px 0;
+}
+.staff-body { padding: 18px 18px 20px; }
+.staff-body h6 { font-size: .95rem; font-weight: 900; color: #1a1a2e; margin-bottom: 2px; }
+.staff-body .desig { font-size: .75rem; color: #888; margin-bottom: 6px; }
+.staff-body .subjects { font-size: .75rem; color: #666; }
+.staff-body .subjects i { color: var(--primary); }
+
+/* ── Quick Facts Sidebar ── */
+.fact-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid #f0eaf8;
+}
+.fact-item:last-child { border-bottom: none; }
+.fact-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #f0e8ff; color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0;
+}
+.fact-text strong { display: block; font-size: .82rem; color: #1a1a2e; font-weight: 700; }
+.fact-text span { font-size: .78rem; color: #888; }
+
+/* ── CTA Band ── */
+.about-cta {
+  padding: 70px 0; text-align: center;
+  background: linear-gradient(135deg, #1a0030 0%, #4a0080 45%, #800020 100%);
+  position: relative; overflow: hidden;
+}
+.about-cta::before {
+  content: ''; position: absolute; top: -40%; left: -5%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,162,39,.12) 0%, transparent 65%);
+  border-radius: 50%; pointer-events: none;
+}
+.about-cta h2 { color: #fff; font-size: clamp(24px, 3.5vw, 38px); font-weight: 900; margin-bottom: 12px; position: relative; z-index: 1; }
+.about-cta p  { color: rgba(255,255,255,.75); margin-bottom: 28px; position: relative; z-index: 1; }
+.btn-cta-gold {
+  background: var(--accent); color: #1a1a2e; padding: 13px 34px;
+  border-radius: 8px; font-weight: 800; font-size: .92rem;
+  text-decoration: none; display: inline-block; margin: 5px;
+  box-shadow: 0 6px 24px rgba(201,162,39,.35); transition: all .2s; position: relative; z-index: 1;
+}
+.btn-cta-gold:hover { background: #e8b800; transform: translateY(-2px); text-decoration: none; color: #1a1a2e; }
+.btn-cta-wht {
+  background: transparent; color: #fff; padding: 12px 34px;
+  border-radius: 8px; font-weight: 700; font-size: .92rem;
+  border: 2px solid rgba(255,255,255,.55);
+  text-decoration: none; display: inline-block; margin: 5px; transition: all .2s; position: relative; z-index: 1;
+}
+.btn-cta-wht:hover { background: rgba(255,255,255,.12); color: #fff; text-decoration: none; }
+
+@media (max-width: 768px) {
+  .aph-content { padding: 100px 0 50px; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="page-hero">
-  <i class="fas fa-school ph-bg-icon"></i>
-  <div class="container">
-    <h1><i class="fas fa-school mr-2" style="opacity:.8;"></i>About Nechilibi High School</h1>
-    <p class="ph-subtitle">Our history, mission, values &amp; staff</p>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item active">About</li>
-      </ol>
-    </nav>
+
+<!-- ═══════════ PAGE HERO ═══════════ -->
+<section class="about-page-hero">
+  <div class="aph-content">
+    <div class="container">
+      <div class="sec-label-about" style="background:rgba(201,162,39,.2);color:var(--accent);border:1px solid rgba(201,162,39,.4);">Est. 1985</div>
+      <h1>About <span>Nechilibi</span><br>High School</h1>
+      <p>Shaping tomorrow's leaders through quality education, strong values, and holistic development in the heart of Matabeleland South, Zimbabwe.</p>
+      <div class="aph-breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span class="current">About Us</span>
+      </div>
+    </div>
   </div>
-  <div class="ph-wave">
+  <div class="aph-wave">
     <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
     </svg>
   </div>
-</div>
+</section>
 
-<section class="py-5">
+<!-- ═══════════ OUR STORY ═══════════ -->
+<section class="story-section">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-8">
-        <h2 class="section-title">Our Story</h2>
-        <p>Nechilibi High School is a secondary school located in Matabeleland South, Zimbabwe. The school provides quality education to students from Form 1 through Form 6, preparing them for ZIMSEC O-Level and A-Level examinations.</p>
-        <p>Our institution is built on a foundation of academic excellence, strong moral values, and holistic development. We believe every student has the potential to succeed and our dedicated staff work tirelessly to bring out the best in each learner.</p>
-        <p>Situated in the heart of Matabeleland South, we serve students from the surrounding communities, offering both boarding and day school options to ensure access to quality education for all.</p>
+    <div class="row align-items-center">
 
-        <div class="row mt-5">
-          <div class="col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 p-4">
-              <div class="text-primary-custom mb-3"><i class="fas fa-eye fa-2x"></i></div>
-              <h5 class="font-weight-bold">Our Vision</h5>
-              <p class="text-muted">To be a centre of educational excellence that produces well-rounded, innovative, and morally upright citizens who contribute positively to Zimbabwe and the world.</p>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 p-4">
-              <div class="text-primary-custom mb-3"><i class="fas fa-bullseye fa-2x"></i></div>
-              <h5 class="font-weight-bold">Our Mission</h5>
-              <p class="text-muted">To provide quality, accessible secondary education that empowers students academically, socially, and spiritually, building a strong foundation for lifelong success.</p>
-            </div>
-          </div>
-        </div>
-
-        <h4 class="section-title mt-4">Our Core Values</h4>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Excellence</strong> — We strive for the highest academic and personal standards in everything we do.</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Integrity</strong> — Honesty and accountability are at the heart of our school culture.</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Respect</strong> — We uphold the dignity of every person in our community.</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Teamwork</strong> — We believe in collaboration among students, teachers, and parents.</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Innovation</strong> — We embrace new approaches to learning and teaching.</li>
-          <li class="mb-3"><i class="fas fa-check-circle text-primary-custom mr-2"></i><strong>Service</strong> — We instill a spirit of community service and civic responsibility.</li>
-        </ul>
-
-        <h4 class="section-title mt-4">Our Programmes</h4>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="card border-left border-primary h-100 p-3" style="border-left: 4px solid #6B0000 !important;">
-              <h6 class="font-weight-bold text-primary-custom"><i class="fas fa-book mr-2"></i>O-Level (Forms 1–4)</h6>
-              <p class="text-muted small mb-0">A broad curriculum leading to ZIMSEC O-Level examinations with 17+ subjects offered.</p>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <div class="card border-left border-primary h-100 p-3" style="border-left: 4px solid #FFD700 !important;">
-              <h6 class="font-weight-bold text-primary-custom"><i class="fas fa-graduation-cap mr-2"></i>A-Level (Forms 5–6)</h6>
-              <p class="text-muted small mb-0">Advanced level studies preparing students for university and professional careers.</p>
-            </div>
+      <!-- Image -->
+      <div class="col-lg-5 mb-5 mb-lg-0" data-aos="fade-right">
+        <div class="story-img-wrap">
+          {% if gallery_images %}
+          <img src="{{ gallery_images.0.image.url }}" alt="Nechilibi High School">
+          {% else %}
+          <img src="{% static 'img/hero/2.jpg' %}" alt="Nechilibi High School">
+          {% endif %}
+          <div class="story-founded-badge">
+            <div class="sfb-year">1985</div>
+            <div class="sfb-lbl">Founded</div>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-4 mt-4 mt-lg-0">
-        <div class="card border-0 shadow-sm p-4 mb-4 bg-light">
-          <h5 class="text-primary-custom font-weight-bold mb-3">Quick Facts</h5>
-          <ul class="list-unstyled mb-0">
-            <li class="mb-2"><i class="fas fa-map-marker-alt text-primary-custom mr-2"></i>
-              {% if settings.address %}{{ settings.address }}{% else %}Matabeleland South, Zimbabwe{% endif %}
-            </li>
-            {% if institute and institute.date_of_estashment %}
-            <li class="mb-2"><i class="fas fa-calendar-alt text-primary-custom mr-2"></i>Est. {{ institute.date_of_estashment|date:"Y" }}</li>
-            {% endif %}
-            <li class="mb-2"><i class="fas fa-graduation-cap text-primary-custom mr-2"></i>Form 1 – Form 6</li>
-            <li class="mb-2"><i class="fas fa-certificate text-primary-custom mr-2"></i>
-              {% if education_boards %}{% for board in education_boards %}{{ board.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% else %}ZIMSEC Accredited{% endif %}
-            </li>
-            <li class="mb-2"><i class="fas fa-users text-primary-custom mr-2"></i>Boarding &amp; Day School</li>
-            <li class="mb-2"><i class="fas fa-book text-primary-custom mr-2"></i>17+ Subjects Offered</li>
-            <li class="mb-2"><i class="fas fa-futbol text-primary-custom mr-2"></i>Active Sports Programme</li>
-            <li class="mb-2"><i class="fas fa-music text-primary-custom mr-2"></i>Arts &amp; Culture</li>
-          </ul>
+      <!-- Text -->
+      <div class="col-lg-6 offset-lg-1" data-aos="fade-left">
+        <div class="sec-label-about">Our Story</div>
+        <h2 class="sec-title-about">A Legacy of <span>Excellence</span><br>in Education</h2>
+        <p style="color:#555;line-height:1.85;font-size:.95rem;" class="mb-3">
+          Nechilibi High School has been a cornerstone of secondary education in Matabeleland South since 1985. Situated in the heart of Nechilibi, we serve students from Form 1 through Form 6, providing a nurturing environment where every learner can discover their potential.
+        </p>
+        <p style="color:#555;line-height:1.85;font-size:.95rem;" class="mb-4">
+          Our institution follows the <strong>ZIMSEC curriculum</strong>, offering both O-Level and A-Level programmes. With over four decades of experience, we have built a reputation for academic discipline, strong moral values, and producing graduates who excel at universities and in professional life across Zimbabwe and beyond.
+        </p>
+        <!-- Quick facts row -->
+        <div class="row">
+          <div class="col-6 mb-3">
+            <div class="fact-item">
+              <div class="fact-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="fact-text"><strong>Location</strong><span>{% if settings.address %}{{ settings.address|truncatechars:40 }}{% else %}Matabeleland South, Zimbabwe{% endif %}</span></div>
+            </div>
+          </div>
+          <div class="col-6 mb-3">
+            <div class="fact-item">
+              <div class="fact-icon"><i class="fas fa-graduation-cap"></i></div>
+              <div class="fact-text"><strong>Classes</strong><span>Form 1 – Form 6</span></div>
+            </div>
+          </div>
+          <div class="col-6 mb-3">
+            <div class="fact-item">
+              <div class="fact-icon"><i class="fas fa-certificate"></i></div>
+              <div class="fact-text"><strong>Accreditation</strong><span>ZIMSEC</span></div>
+            </div>
+          </div>
+          <div class="col-6 mb-3">
+            <div class="fact-item">
+              <div class="fact-icon"><i class="fas fa-home"></i></div>
+              <div class="fact-text"><strong>School Type</strong><span>Boarding &amp; Day</span></div>
+            </div>
+          </div>
         </div>
+        <a href="/admissions/" class="btn btn-primary-custom px-4 py-2 mr-3 mt-2" style="border-radius:8px;">Apply Now <i class="fas fa-arrow-right ml-2"></i></a>
+        <a href="/contact/" class="btn mt-2 px-4 py-2" style="border-radius:8px;border:2px solid var(--primary);color:var(--primary);">Contact Us</a>
+      </div>
 
-        {% if education_boards %}
-        <div class="card border-0 shadow-sm p-4 mb-4">
-          <h5 class="text-primary-custom font-weight-bold mb-3">Examination Boards</h5>
-          <ul class="list-unstyled mb-0">
-            {% for board in education_boards %}
-            <li class="mb-2">
-              <i class="fas fa-award text-primary-custom mr-2"></i>
-              <strong>{{ board.name }}</strong>{% if board.code %} <span class="badge badge-secondary ml-1">{{ board.code }}</span>{% endif %}
-              {% if board.country %}<small class="text-muted d-block ml-4">{{ board.country.name }}</small>{% endif %}
-            </li>
-            {% endfor %}
-          </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STATS BAND ═══════════ -->
+<div class="about-stats-band">
+  <div class="container">
+    <div class="row justify-content-center align-items-center text-center">
+      <div class="col-6 col-md-3 asb-item" data-aos="fade-up" data-aos-delay="0">
+        <div class="asb-icon mx-auto"><i class="fas fa-user-graduate"></i></div>
+        <div class="asb-num"><span class="counter">500</span>+</div>
+        <div class="asb-lbl">Students</div>
+      </div>
+      <div class="asb-divider d-none d-md-flex"></div>
+      <div class="col-6 col-md-3 asb-item" data-aos="fade-up" data-aos-delay="100">
+        <div class="asb-icon mx-auto"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="asb-num"><span class="counter">40</span>+</div>
+        <div class="asb-lbl">Teachers</div>
+      </div>
+      <div class="asb-divider d-none d-md-flex"></div>
+      <div class="col-6 col-md-3 asb-item" data-aos="fade-up" data-aos-delay="200">
+        <div class="asb-icon mx-auto"><i class="fas fa-trophy"></i></div>
+        <div class="asb-num"><span class="counter">95</span>%</div>
+        <div class="asb-lbl">ZIMSEC Pass Rate</div>
+      </div>
+      <div class="asb-divider d-none d-md-flex"></div>
+      <div class="col-6 col-md-3 asb-item" data-aos="fade-up" data-aos-delay="300">
+        <div class="asb-icon mx-auto"><i class="fas fa-book-open"></i></div>
+        <div class="asb-num"><span class="counter">30</span>+</div>
+        <div class="asb-lbl">Subjects Offered</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ VISION & MISSION ═══════════ -->
+<section class="vm-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label-about">Our Purpose</div>
+      <h2 class="sec-title-about">Vision &amp; <span>Mission</span></h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-5 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="vm-card vision">
+          <div class="vm-icon"><i class="fas fa-eye"></i></div>
+          <h4>Our Vision</h4>
+          <p>To be a centre of educational excellence that produces well-rounded, innovative, and morally upright citizens who contribute positively to Zimbabwe and the world.</p>
         </div>
-        {% endif %}
-
-        <div class="card border-0 bg-primary-custom text-white p-4 mb-4">
-          <h5 class="text-warning font-weight-bold">Contact Us</h5>
-          <p class="small mb-1"><i class="fas fa-phone mr-2"></i>{% if settings.phone %}{{ settings.phone }}{% else %}+263 XXX XXX XXX{% endif %}</p>
-          <p class="small mb-1"><i class="fas fa-envelope mr-2"></i>{% if settings.email %}{{ settings.email }}{% else %}info@nechilibi.ac.zw{% endif %}</p>
-          <p class="small mb-2"><i class="fas fa-map-marker-alt mr-2"></i>{% if settings.address %}{{ settings.address|truncatechars:60 }}{% else %}Matabeleland South, Zimbabwe{% endif %}</p>
-          <a href="/contact/" class="btn btn-accent btn-sm mt-1">Get in Touch</a>
-        </div>
-
-        <div class="card border-0 shadow-sm p-4">
-          <h5 class="text-primary-custom font-weight-bold mb-3">Explore More</h5>
-          <a href="/admissions/" class="btn btn-outline-secondary btn-block mb-2"><i class="fas fa-file-alt mr-2"></i>Admissions</a>
-          <a href="/gallery/" class="btn btn-outline-secondary btn-block mb-2"><i class="fas fa-images mr-2"></i>Photo Gallery</a>
-          <a href="/downloads/" class="btn btn-outline-secondary btn-block"><i class="fas fa-download mr-2"></i>Downloads</a>
+      </div>
+      <div class="col-md-5 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="vm-card mission">
+          <div class="vm-icon"><i class="fas fa-bullseye"></i></div>
+          <h4>Our Mission</h4>
+          <p>To provide quality, accessible secondary education that empowers students academically, socially, and spiritually — building a strong foundation for lifelong success.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STAFF / TEACHERS SECTION -->
-<section class="py-5 section-tinted">
+<!-- ═══════════ CORE VALUES ═══════════ -->
+<section class="values-section">
   <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="section-title">Our Teaching Staff</h2>
-      <p class="text-muted">Dedicated educators shaping the future of our students.</p>
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label-about">What We Stand For</div>
+      <h2 class="sec-title-about">Our Core <span>Values</span></h2>
+      <p style="color:#777;max-width:500px;margin:0 auto;font-size:.95rem;">The principles that guide everything we do at Nechilibi High School.</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-star"></i></div>
+          <h6>Excellence</h6>
+          <p>We strive for the highest academic and personal standards in everything we do, pushing every student to reach their full potential.</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
+          <h6>Integrity</h6>
+          <p>Honesty and accountability are at the heart of our school culture. We build young people of strong character and moral uprightness.</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-hands"></i></div>
+          <h6>Respect</h6>
+          <p>We uphold the dignity of every person in our community — students, teachers, parents, and the broader society.</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-users"></i></div>
+          <h6>Teamwork</h6>
+          <p>We believe in collaboration among students, teachers, and parents. Together we create an environment where everyone thrives.</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
+          <h6>Innovation</h6>
+          <p>We embrace new and creative approaches to learning and teaching, preparing students for an ever-changing world.</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-heart"></i></div>
+          <h6>Service</h6>
+          <p>We instill a spirit of community service and civic responsibility, producing graduates who give back to their communities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROGRAMMES ═══════════ -->
+<section class="prog-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label-about">What We Offer</div>
+      <h2 class="sec-title-about">Academic <span>Programmes</span></h2>
+      <p style="color:#777;max-width:500px;margin:0 auto;font-size:.95rem;">Two structured academic pathways under the ZIMSEC curriculum.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-5 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="prog-card olevel">
+          <div class="prog-card-inner">
+            <div class="prog-icon"><i class="fas fa-book-open"></i></div>
+            <h4>O-Level (Forms 1–4)</h4>
+            <p>A broad, well-rounded curriculum preparing students for ZIMSEC O-Level examinations. Students study core and elective subjects across Science, Arts, Commercial and Technical streams.</p>
+            <div>
+              <span class="prog-badge">Mathematics</span>
+              <span class="prog-badge">Sciences</span>
+              <span class="prog-badge">Languages</span>
+              <span class="prog-badge">Commerce</span>
+              <span class="prog-badge">Humanities</span>
+              <span class="prog-badge">Practicals</span>
+            </div>
+            <a href="/subjects/" class="prog-link">View Subjects <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="prog-card alevel">
+          <div class="prog-card-inner">
+            <div class="prog-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h4>A-Level (Forms 5–6)</h4>
+            <p>Advanced level studies preparing students for university entrance. Students specialise in subject combinations across Sciences, Humanities, and Commercial streams under ZIMSEC.</p>
+            <div>
+              <span class="prog-badge">Pure Mathematics</span>
+              <span class="prog-badge">Biology</span>
+              <span class="prog-badge">Chemistry</span>
+              <span class="prog-badge">Physics</span>
+              <span class="prog-badge">Accounting</span>
+              <span class="prog-badge">Economics</span>
+            </div>
+            <a href="/subjects/" class="prog-link">View Subjects <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TEACHING STAFF ═══════════ -->
+<section class="staff-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-label-about">Our People</div>
+      <h2 class="sec-title-about">Our Teaching <span>Staff</span></h2>
+      <p style="color:#777;max-width:480px;margin:0 auto;font-size:.95rem;">Dedicated, qualified educators committed to the success of every student.</p>
     </div>
     {% if all_teachers %}
     <div class="row">
       {% for teacher in all_teachers %}
-      <div class="col-md-4 col-sm-6 mb-4">
-        <div class="card border-0 shadow-sm h-100 text-center p-4">
-          {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}"
-               style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid #6B0000;display:block;margin:0 auto 1rem;"
-               alt="{{ teacher.name }}"
-               onerror="this.src='/static/img/logo.jpg'">
-          {% else %}
-          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-               style="width:120px;height:120px;background:#6B0000;color:#FFD700;font-size:2.5rem;font-weight:700">
-            {{ teacher.name|first }}
+      <div class="col-lg-3 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'0' }}0">
+        <div class="staff-card">
+          <div class="staff-img-wrap">
+            {% if teacher.photo %}
+            <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" onerror="this.style.display='none'">
+            {% else %}
+            <div class="staff-placeholder">{{ teacher.name|first }}</div>
+            {% endif %}
+            <!-- Social overlay -->
+            <div class="staff-social-overlay">
+              {% if teacher.email %}<a href="mailto:{{ teacher.email }}" title="Email"><i class="fas fa-envelope"></i></a>{% endif %}
+              {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank"><i class="fab fa-whatsapp"></i></a>{% endif %}
+              {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+              {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank"><i class="fab fa-facebook-f"></i></a>{% endif %}
+            </div>
+            <div class="staff-role-tag">{{ teacher.get_role_display }}</div>
           </div>
-          {% endif %}
-          <h6 class="font-weight-bold mb-0">{{ teacher.name }}</h6>
-          <small class="text-primary-custom font-weight-bold">{{ teacher.get_role_display }}</small>
-          <br><small class="text-muted">{{ teacher.designation }}</small>
-          {% if teacher.bio %}<p class="text-muted small mt-2">{{ teacher.bio }}</p>{% endif %}
-          {% if teacher.subject_list %}<p class="text-muted small"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
-          {% if teacher.email %}<p class="text-muted small mb-1"><i class="fas fa-envelope mr-1"></i>{{ teacher.email }}</p>{% endif %}
-          {% if teacher.mobile %}<p class="text-muted small mb-1"><i class="fas fa-phone mr-1"></i>{{ teacher.mobile }}</p>{% endif %}
-          <div class="mt-2">
-            {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="text-muted mx-1" title="Email"><i class="fas fa-envelope fa-lg"></i></a>{% endif %}
-            {% if teacher.facebook %}<a href="{{ teacher.facebook }}" target="_blank" class="mx-1" style="color:#3b5998" title="Facebook"><i class="fab fa-facebook fa-lg"></i></a>{% endif %}
-            {% if teacher.twitter %}<a href="{{ teacher.twitter }}" target="_blank" class="mx-1" style="color:#1da1f2" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>{% endif %}
-            {% if teacher.linkedin %}<a href="{{ teacher.linkedin }}" target="_blank" class="mx-1" style="color:#0077b5" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>{% endif %}
-            {% if teacher.whatsapp %}<a href="https://wa.me/{{ teacher.whatsapp }}" target="_blank" class="mx-1" style="color:#25d366" title="WhatsApp"><i class="fab fa-whatsapp fa-lg"></i></a>{% endif %}
+          <div class="staff-body">
+            <h6>{{ teacher.name }}</h6>
+            <div class="desig">{{ teacher.designation }}</div>
+            {% if teacher.subject_list %}<p class="subjects"><i class="fas fa-book mr-1"></i>{{ teacher.subject_list }}</p>{% endif %}
           </div>
         </div>
       </div>
       {% endfor %}
     </div>
     {% else %}
-    <p class="text-center text-muted">Staff information will be updated soon.</p>
+    <div class="text-center py-5">
+      <i class="fas fa-chalkboard-teacher fa-3x mb-3" style="color:#d0c8e8;"></i>
+      <h5 class="text-muted">Staff information coming soon</h5>
+      <p class="text-muted small">Our team directory will be updated shortly.</p>
+    </div>
     {% endif %}
   </div>
 </section>
+
+<!-- ═══════════ CTA BAND ═══════════ -->
+<div class="about-cta" data-aos="fade-up">
+  <div class="container">
+    <h2>Ready to Join Nechilibi High School?</h2>
+    <p>Applications are open for the 2026 academic year. Secure your child's future today.</p>
+    <a href="/admissions/" class="btn-cta-gold"><i class="fas fa-user-graduate mr-2"></i>Apply for Admission</a>
+    <a href="/contact/" class="btn-cta-wht"><i class="fas fa-phone mr-2"></i>Contact Us</a>
+  </div>
+</div>
+
 {% endblock %}
