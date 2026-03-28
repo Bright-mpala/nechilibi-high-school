@@ -3,154 +3,260 @@
 {% block meta_description %}Browse photos and videos from Nechilibi High School — sports events, graduation ceremonies, cultural activities, and campus life.{% endblock %}
 
 {% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
 <style>
-  /* page-hero used from base.html */
-
-  /* ── Layout ── */
-  .gallery-layout { display:flex; gap:28px; align-items:flex-start; padding:2.5rem 0; }
-
-  /* ── Sidebar ── */
-  .gallery-sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 80px;
-  }
-  .sidebar-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(74,0,128,.1);
-    overflow: hidden;
-  }
-  .sidebar-card .sidebar-heading {
-    background: linear-gradient(135deg,#4a0080,#800020);
-    color: #fff;
-    padding: .75rem 1rem;
-    font-weight: 700;
-    font-size: .88rem;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-  }
-  .sidebar-cat-list { list-style: none; margin: 0; padding: .5rem 0; }
-  .sidebar-cat-list li a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: .55rem 1rem;
-    color: #333;
-    font-size: .88rem;
-    text-decoration: none;
-    transition: background .15s, color .15s;
-    border-left: 3px solid transparent;
-  }
-  .sidebar-cat-list li a:hover,
-  .sidebar-cat-list li a.active {
-    background: #f4f1f8;
-    color: #4a0080;
-    border-left-color: #4a0080;
-    font-weight: 600;
-  }
-  .sidebar-cat-list li a .cat-count {
-    background: #e8e0f5;
-    color: #4a0080;
-    font-size: .72rem;
-    font-weight: 700;
-    border-radius: 20px;
-    padding: .1rem .5rem;
-    min-width: 22px;
+  /* ── Gallery hero strip ── */
+  .gallery-strip {
+    background: linear-gradient(120deg, #fdf6e3, #fff8f0);
+    border-bottom: 1px solid #f0dfc8;
     text-align: center;
+    padding: 2.2rem 1rem 1.8rem;
   }
-  .sidebar-cat-list li a:hover .cat-count,
-  .sidebar-cat-list li a.active .cat-count {
-    background: #4a0080;
+  .gallery-strip h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: .4rem;
+  }
+  .gallery-strip p { color: #666; font-size: .95rem; }
+
+  /* ── Controls bar ── */
+  .gallery-controls {
+    max-width: 1200px;
+    margin: 1.6rem auto .8rem;
+    padding: 0 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Filter tabs */
+  .filter-tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .filter-btn {
+    background: #fff;
+    border: 1.5px solid #e2e0ea;
+    padding: .42rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: .82rem;
+    cursor: pointer;
+    transition: all .2s;
+    color: #444;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .filter-btn i { margin-right: 5px; font-size: .78rem; }
+  .filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
     color: #fff;
+    box-shadow: 0 4px 12px rgba(74,0,128,.22);
   }
-  .sidebar-all { border-bottom: 1px solid #f0eaf8; margin-bottom: .25rem; }
+  .filter-btn:hover:not(.active) {
+    background: #f4f1f8;
+    border-color: #b89fd4;
+    color: var(--primary);
+  }
 
-  /* ── Gallery main ── */
-  .gallery-main { flex: 1; min-width: 0; }
+  /* View toggle */
+  .view-toggle {
+    display: flex;
+    gap: 5px;
+    background: #f1f0f6;
+    padding: 4px;
+    border-radius: 40px;
+  }
+  .view-btn {
+    background: transparent;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: .82rem;
+    transition: .2s;
+    color: #555;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .view-btn.active {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  }
 
-  .cat-section { margin-bottom: 3rem; }
+  /* ── Gallery container ── */
+  .gallery-outer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: .5rem 1.2rem 3rem;
+  }
+
+  /* ── Category section header ── */
+  .cat-section { margin-bottom: 2.8rem; }
   .cat-section-title {
-    color: #4a0080;
-    font-size: 1.25rem;
+    color: var(--primary);
+    font-size: 1.1rem;
     font-weight: 800;
     padding-bottom: .5rem;
-    border-bottom: 3px solid #800020;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent), var(--secondary)) 1;
     margin-bottom: 1.2rem;
     display: flex;
     align-items: center;
     gap: .5rem;
   }
-  .cat-section-title i { color: #800020; font-size: 1rem; }
 
-  /* Image cards */
-  .gallery-card {
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.08);
-    cursor: pointer;
-    background: #f4f1f8;
+  /* ── Grid layout ── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.4rem;
+    transition: all .3s;
   }
-  .gallery-card:hover .gallery-img { transform: scale(1.05); }
-  .gallery-img {
-    height: 190px;
-    object-fit: cover;
+
+  /* ── List layout ── */
+  .gallery-grid.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  /* ── Gallery card ── */
+  .gallery-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px -10px rgba(74,0,128,.14);
+    border: 1px solid #ede8f5;
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+  }
+  .gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 36px -12px rgba(74,0,128,.22);
+  }
+
+  /* List-view card */
+  .list-view .gallery-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .list-view .gc-img {
+    width: 180px;
+    height: 130px;
+    flex-shrink: 0;
+  }
+  .list-view .gc-body {
+    padding: .8rem 1rem;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* Card image */
+  .gc-img {
     width: 100%;
-    transition: transform .25s ease;
+    height: 210px;
+    overflow: hidden;
+    background: #f0eaf8;
     display: block;
   }
-  .gallery-caption { padding: .4rem .6rem; font-size: .78rem; color: #666; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gc-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+    display: block;
+  }
+  .gallery-card:hover .gc-img img { transform: scale(1.05); }
+
+  /* Card body */
+  .gc-body {
+    padding: .9rem 1.1rem 1rem;
+    text-align: center;
+  }
+  .gc-title {
+    font-size: .95rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: .25rem;
+    line-height: 1.3;
+  }
+  .gc-desc {
+    font-size: .78rem;
+    color: #777;
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .list-view .gc-desc { justify-content: flex-start; }
+  .gc-badge {
+    display: inline-block;
+    background: #f4f0fb;
+    color: var(--secondary);
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .18rem .65rem;
+    border-radius: 40px;
+    border: 1px solid #e0d6f0;
+  }
 
   /* ── Empty state ── */
-  .gallery-empty { text-align:center; padding:4rem 1rem; color:#999; }
-  .gallery-empty i { font-size:3.5rem; opacity:.2; margin-bottom:1rem; display:block; color:#4a0080; }
+  .gallery-empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #fdf6e3;
+    border-radius: 24px;
+    color: #888;
+    grid-column: 1 / -1;
+  }
+  .gallery-empty i { font-size: 3rem; opacity: .25; display: block; margin-bottom: 1rem; color: var(--primary); }
 
-  /* ── Lightbox ── */
-  .lightbox-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.93); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
-  .lightbox-overlay.active { display:flex; }
-  .lightbox-overlay img { max-width:90%; max-height:82vh; border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.6); }
-  .lightbox-close { position:fixed; top:18px; right:28px; font-size:2.2rem; color:#fff; cursor:pointer; line-height:1; z-index:10000; }
-  .lightbox-caption { color:rgba(255,255,255,.7); font-size:.85rem; margin-top:.75rem; }
+  /* ── Video cards ── */
+  .video-section { margin-top: .5rem; }
 
-  /* ── Video section ── */
-  .video-section { margin-top: 1rem; }
+  /* ── Photo counter chip ── */
+  .photo-count-chip {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: .15rem .65rem;
+    border-radius: 30px;
+    margin-left: .5rem;
+    vertical-align: middle;
+  }
 
-  /* ── Mobile: sidebar becomes horizontal tabs ── */
-  @media (max-width: 767px) {
-    .gallery-layout { flex-direction: column; gap: 0; }
-    .gallery-sidebar { width: 100%; position: static; margin-bottom: 1.5rem; }
-    .sidebar-cat-list { display: flex; flex-wrap: wrap; padding: .5rem; gap: .4rem; }
-    .sidebar-cat-list li a {
-      border-left: none;
-      border-bottom: 2px solid transparent;
-      border-radius: 20px;
-      padding: .3rem .75rem;
-      background: #f4f1f8;
-      font-size: .8rem;
-    }
-    .sidebar-cat-list li a:hover,
-    .sidebar-cat-list li a.active {
-      background: #4a0080;
-      color: #fff;
-      border-color: #4a0080;
-    }
-    .sidebar-cat-list li a .cat-count { background:rgba(255,255,255,.25); color:inherit; }
-    .sidebar-all { border-bottom: none; }
+  /* ── Lightbox custom ── */
+  .lb-data .lb-caption { font-size: .95rem; font-weight: 600; }
+  .lb-nav a.lb-prev, .lb-nav a.lb-next { opacity: .8; }
+
+  @media (max-width: 640px) {
+    .gallery-controls { flex-direction: column; align-items: stretch; }
+    .view-toggle { align-self: center; }
+    .filter-tabs { justify-content: center; }
+    .list-view .gallery-card { flex-direction: column; }
+    .list-view .gc-img { width: 100%; height: 200px; }
+    .list-view .gc-body { text-align: center; }
+    .list-view .gc-desc { justify-content: center; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
+<!-- Page hero (consistent with all inner pages) -->
 <div class="page-hero">
   <i class="fas fa-images ph-bg-icon"></i>
   <div class="container">
     <h1><i class="fas fa-images mr-2" style="opacity:.8;"></i>Photo Gallery</h1>
-    <p class="ph-subtitle">Campus life, events &amp; achievements</p>
+    <p class="ph-subtitle">Campus life, events &amp; achievements in frames</p>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -165,173 +271,166 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="gallery-layout">
+<!-- Warm gallery strip -->
+<div class="gallery-strip">
+  <h2><i class="fas fa-camera-retro mr-2" style="font-size:.85em;"></i>Our Story in Frames</h2>
+  <p>Step inside Nechilibi's vibrant campus — sports, academics, celebrations &amp; everyday moments.</p>
+</div>
 
-    <!-- ── SIDEBAR ── -->
-    <aside class="gallery-sidebar">
-      <div class="sidebar-card">
-        <div class="sidebar-heading">
-          <i class="fas fa-folder-open"></i> Categories
-        </div>
-        <ul class="sidebar-cat-list">
-          <!-- All photos link -->
-          <li class="sidebar-all">
-            <a href="#all" class="active" id="filter-all" onclick="filterCat('all',this)">
-              <span><i class="fas fa-th mr-1"></i>All Photos</span>
-              <span class="cat-count">{{ all_images.count }}</span>
-            </a>
-          </li>
-          {% for cat in categories %}
-            {% with count=cat.images.all|length %}
-            {% if count > 0 %}
-            <li>
-              <a href="#cat-{{ cat.id }}"
-                 id="filter-{{ cat.id }}"
-                 onclick="filterCat('{{ cat.id }}',this)">
-                <span>{{ cat.name }}</span>
-                <span class="cat-count">{{ count }}</span>
-              </a>
-            </li>
-            {% endif %}
-            {% endwith %}
-          {% endfor %}
-          {% if uncategorised %}
-          <li>
-            <a href="#cat-other"
-               id="filter-other"
-               onclick="filterCat('other',this)">
-              <span>Other Photos</span>
-              <span class="cat-count">{{ uncategorised|length }}</span>
-            </a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
-    </aside>
-
-    <!-- ── MAIN CONTENT ── -->
-    <div class="gallery-main">
-
-      {% if all_images %}
-
-        <!-- Categorised sections -->
-        {% for cat in categories %}
-          {% if cat.images.all %}
-          <div class="cat-section" id="cat-{{ cat.id }}" data-cat="{{ cat.id }}">
-            <h3 class="cat-section-title">
-              <i class="fas fa-folder"></i>{{ cat.name }}
-            </h3>
-            <div class="row">
-              {% for image in cat.images.all %}
-              {% if image.is_active %}
-              <div class="col-6 col-md-4 col-lg-3 mb-3">
-                <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}','{{ image.title|default:'' }}')">
-                  <img src="{{ image.image.url }}" class="gallery-img"
-                       alt="{{ image.title|default:cat.name }}"
-                       onerror="this.closest('.col-6').style.display='none'">
-                  {% if image.title %}
-                  <div class="gallery-caption">{{ image.title }}</div>
-                  {% endif %}
-                </div>
-              </div>
-              {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-        {% endfor %}
-
-        <!-- Uncategorised -->
-        {% if uncategorised %}
-        <div class="cat-section" id="cat-other" data-cat="other">
-          {% if categories %}
-          <h3 class="cat-section-title">
-            <i class="fas fa-folder"></i>Other Photos
-          </h3>
-          {% endif %}
-          <div class="row">
-            {% for image in uncategorised %}
-            <div class="col-6 col-md-4 col-lg-3 mb-3">
-              <div class="gallery-card" onclick="openLightbox('{{ image.image.url }}','{{ image.title|default:'' }}')">
-                <img src="{{ image.image.url }}" class="gallery-img"
-                     alt="{{ image.title|default:'Photo' }}"
-                     onerror="this.closest('.col-6').style.display='none'">
-                {% if image.title %}
-                <div class="gallery-caption">{{ image.title }}</div>
-                {% endif %}
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-        <!-- Videos -->
-        {% if videos %}
-        <div class="video-section cat-section" id="cat-videos" data-cat="videos">
-          <h3 class="cat-section-title">
-            <i class="fas fa-play-circle"></i>Videos
-          </h3>
-          <div class="row">
-            {% for video in videos %}
-            <div class="col-md-6 col-lg-4 mb-4">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
-                </div>
-                <div class="card-body">
-                  <h6 class="font-weight-bold mb-1">{{ video.title }}</h6>
-                  {% if video.description %}<p class="text-muted small mb-0">{{ video.description }}</p>{% endif %}
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-      {% else %}
-        <div class="gallery-empty">
-          <i class="fas fa-images"></i>
-          <h4>Gallery Coming Soon</h4>
-          <p>Photos will be added here shortly. Please check back soon.</p>
-          <a href="/contact/" class="btn btn-primary-custom mt-2">Contact Us</a>
-        </div>
+<!-- Controls: filter tabs + view toggle -->
+<div class="gallery-controls">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-btn active" data-cat="all" onclick="filterCat('all',this)">
+      <i class="fas fa-th-large"></i>All Photos
+      <span class="photo-count-chip">{{ all_images.count }}</span>
+    </button>
+    {% for cat in categories %}
+      {% with count=cat.images.all|length %}
+      {% if count > 0 %}
+      <button class="filter-btn" data-cat="cat-{{ cat.id }}" onclick="filterCat('cat-{{ cat.id }}',this)">
+        <i class="fas fa-folder"></i>{{ cat.name }}
+        <span class="photo-count-chip">{{ count }}</span>
+      </button>
       {% endif %}
+      {% endwith %}
+    {% endfor %}
+    {% if uncategorised %}
+    <button class="filter-btn" data-cat="cat-other" onclick="filterCat('cat-other',this)">
+      <i class="fas fa-folder-open"></i>Other
+      <span class="photo-count-chip">{{ uncategorised|length }}</span>
+    </button>
+    {% endif %}
+    {% if videos %}
+    <button class="filter-btn" data-cat="cat-videos" onclick="filterCat('cat-videos',this)">
+      <i class="fas fa-play-circle"></i>Videos
+      <span class="photo-count-chip">{{ videos|length }}</span>
+    </button>
+    {% endif %}
+  </div>
 
-    </div><!-- /gallery-main -->
-  </div><!-- /gallery-layout -->
+  <div class="view-toggle">
+    <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')">
+      <i class="fas fa-th"></i> Grid
+    </button>
+    <button class="view-btn" id="listViewBtn" onclick="setView('list')">
+      <i class="fas fa-list"></i> List
+    </button>
+  </div>
 </div>
 
-<!-- Lightbox -->
-<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-  <img id="lightbox-img" src="" alt="Photo">
-  <div class="lightbox-caption" id="lightbox-caption"></div>
-</div>
+<!-- Gallery content -->
+<div class="gallery-outer">
+
+  {% if all_images %}
+
+    <!-- ── Categorised sections ── -->
+    {% for cat in categories %}
+      {% if cat.images.all %}
+      <div class="cat-section" id="cat-{{ cat.id }}" data-cat="cat-{{ cat.id }}">
+        <h3 class="cat-section-title">
+          <i class="fas fa-folder"></i>{{ cat.name }}
+        </h3>
+        <div class="gallery-grid" id="grid-cat-{{ cat.id }}">
+          {% for image in cat.images.all %}
+          {% if image.is_active %}
+          <div class="gallery-card">
+            <a href="{{ image.image.url }}" data-lightbox="gallery-{{ cat.id }}" data-title="{{ image.title|default:cat.name }}">
+              <div class="gc-img">
+                <img src="{{ image.image.url }}" alt="{{ image.title|default:cat.name }}" loading="lazy"
+                     onerror="this.closest('.gallery-card').style.display='none'">
+              </div>
+            </a>
+            <div class="gc-body">
+              {% if image.title %}<div class="gc-title">{{ image.title }}</div>{% endif %}
+              <div class="gc-desc"><i class="fas fa-folder" style="color:var(--accent);"></i>{{ cat.name }}</div>
+              <span class="gc-badge"><i class="fas fa-tag mr-1"></i>{{ cat.name }}</span>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    <!-- ── Uncategorised ── -->
+    {% if uncategorised %}
+    <div class="cat-section" id="cat-other" data-cat="cat-other">
+      {% if categories %}<h3 class="cat-section-title"><i class="fas fa-folder-open"></i>Other Photos</h3>{% endif %}
+      <div class="gallery-grid" id="grid-cat-other">
+        {% for image in uncategorised %}
+        <div class="gallery-card">
+          <a href="{{ image.image.url }}" data-lightbox="gallery-other" data-title="{{ image.title|default:'Photo' }}">
+            <div class="gc-img">
+              <img src="{{ image.image.url }}" alt="{{ image.title|default:'Photo' }}" loading="lazy"
+                   onerror="this.closest('.gallery-card').style.display='none'">
+            </div>
+          </a>
+          <div class="gc-body">
+            {% if image.title %}<div class="gc-title">{{ image.title }}</div>{% endif %}
+            <div class="gc-desc"><i class="fas fa-images" style="color:var(--accent);"></i>School Photo</div>
+            <span class="gc-badge"><i class="fas fa-tag mr-1"></i>General</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Videos ── -->
+    {% if videos %}
+    <div class="cat-section video-section" id="cat-videos" data-cat="cat-videos">
+      <h3 class="cat-section-title"><i class="fas fa-play-circle"></i>Videos</h3>
+      <div class="row">
+        {% for video in videos %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="gallery-card" style="border-radius:16px;cursor:default;">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="{{ video.get_embed_url }}" allowfullscreen></iframe>
+            </div>
+            <div class="gc-body" style="text-align:left;">
+              <div class="gc-title">{{ video.title }}</div>
+              {% if video.description %}
+              <div class="gc-desc"><i class="fas fa-play" style="color:var(--secondary);"></i>{{ video.description }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  {% else %}
+    <div class="gallery-empty">
+      <i class="fas fa-images"></i>
+      <h4 style="color:var(--primary);margin-bottom:.5rem;">Gallery Coming Soon</h4>
+      <p>Photos will be added here shortly. Please check back soon.</p>
+      <a href="/contact/" class="btn btn-primary-custom mt-3">Contact Us</a>
+    </div>
+  {% endif %}
+
+</div><!-- /gallery-outer -->
 
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 <script>
-  // Lightbox
-  function openLightbox(url, caption) {
-    document.getElementById('lightbox-img').src = url;
-    document.getElementById('lightbox-caption').textContent = caption || '';
-    document.getElementById('lightbox').classList.add('active');
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.getElementById('lightbox-img').src = '';
-  }
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+  // Lightbox config
+  lightbox.option({
+    resizeDuration: 200,
+    wrapAround: true,
+    albumLabel: '📸 %1 of %2',
+    fadeDuration: 280,
+    imageFadeDuration: 280
+  });
 
-  // Sidebar category filter
-  function filterCat(catId, link) {
-    // Update active state on sidebar links
-    document.querySelectorAll('.sidebar-cat-list a').forEach(function(a){ a.classList.remove('active'); });
-    link.classList.add('active');
+  // ── Category filter ──
+  function filterCat(catId, btn) {
+    // update button active state
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
 
     var sections = document.querySelectorAll('.cat-section');
     sections.forEach(function(sec) {
@@ -342,11 +441,23 @@
       }
     });
 
-    // Scroll to top of gallery main
-    var main = document.querySelector('.gallery-main');
-    if (main) { main.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-
+    // Scroll smoothly to gallery
+    document.querySelector('.gallery-outer').scrollIntoView({ behavior: 'smooth', block: 'start' });
     return false;
+  }
+
+  // ── Grid / List toggle ──
+  function setView(mode) {
+    document.getElementById('gridViewBtn').classList.toggle('active', mode === 'grid');
+    document.getElementById('listViewBtn').classList.toggle('active', mode === 'list');
+
+    document.querySelectorAll('.gallery-grid').forEach(function(grid) {
+      if (mode === 'list') {
+        grid.classList.add('list-view');
+      } else {
+        grid.classList.remove('list-view');
+      }
+    });
   }
 </script>
 {% endblock %}
