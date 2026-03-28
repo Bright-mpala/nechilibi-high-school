@@ -475,44 +475,6 @@
 </div>
 {% endif %}
 
-<!-- ═══════════ TESTIMONIALS ═══════════ -->
-{% if testimonials %}
-<section class="py-5" style="background:#fff;">
-  <div class="container">
-    <div class="sec-heading">
-      <h2>What People Say</h2>
-      <p>Hear from our students, parents, and staff</p>
-    </div>
-    <div class="row">
-      {% for t in testimonials %}
-      <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm h-100 p-4" style="border-top:4px solid var(--accent) !important;">
-          <div class="mb-3" style="color:var(--accent);font-size:1.5rem;">
-            <i class="fas fa-quote-left"></i>
-          </div>
-          <p class="text-muted flex-grow-1">{{ t.message }}</p>
-          <div class="d-flex align-items-center mt-3">
-            {% if t.photo %}
-            <img src="{{ t.photo.url }}" alt="{{ t.name }}" class="rounded-circle mr-3"
-                 style="width:50px;height:50px;object-fit:cover;border:2px solid var(--primary);">
-            {% else %}
-            <div class="rounded-circle mr-3 d-flex align-items-center justify-content-center flex-shrink-0"
-                 style="width:50px;height:50px;background:var(--primary);color:#fff;font-size:1.2rem;font-weight:700;">
-              {{ t.name|first }}
-            </div>
-            {% endif %}
-            <div>
-              <strong class="d-block" style="color:var(--primary);">{{ t.name }}</strong>
-              <small class="text-muted">{{ t.role }}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
 
 <!-- ═══════════ SCHOOL VIDEOS ═══════════ -->
 {% if school_videos %}

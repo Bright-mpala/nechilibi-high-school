@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField, Value
 from django_school_management.gallery.models import GalleryCategory, GalleryImage, VideoGallery
 from django_school_management.events.models import Event
 from django_school_management.downloads.models import DownloadCategory, Download
@@ -67,11 +67,18 @@ def home(request):
             context['recent_articles'] = articles
         except Exception:
             pass
-    # Leadership teachers for homepage (Headmaster, Deputy, Senior Teacher)
+    # Leadership teachers for homepage — show 3, headmaster first
     context['leadership_teachers'] = Teacher.objects.filter(
         is_active=True,
         role__in=LEADERSHIP_ROLES
-    ).select_related('designation').prefetch_related('subjects').order_by('designation__role', 'name')
+    ).select_related('designation').prefetch_related('subjects').annotate(
+        role_order=Case(
+            When(role='headmaster', then=Value(0)),
+            When(role='deputy', then=Value(1)),
+            default=Value(2),
+            output_field=IntegerField(),
+        )
+    ).order_by('role_order', 'name')[:3]
     return render(request, 'public/home.html', context)
 
 
