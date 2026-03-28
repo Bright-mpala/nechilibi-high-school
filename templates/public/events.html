@@ -2,15 +2,22 @@
 {% block title %}Events — Nechilibi High School{% endblock %}
 {% block meta_description %}Upcoming and past events at Nechilibi High School — sports days, prize giving, open days, cultural shows, and community activities.{% endblock %}
 {% block content %}
-<div class="bg-primary-custom text-white py-5">
+<div class="page-hero">
+  <i class="fas fa-calendar-star ph-bg-icon"></i>
   <div class="container">
-    <h1 class="text-white">Events</h1>
+    <h1><i class="fas fa-calendar-alt mr-2" style="opacity:.8;"></i>Events</h1>
+    <p class="ph-subtitle">Upcoming &amp; past school events</p>
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 m-0">
-        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-        <li class="breadcrumb-item active text-white">Events</li>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Events</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 
@@ -21,25 +28,25 @@
     <div class="row">
       {% for event in upcoming %}
       <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm h-100 card-hover">
+        <div class="info-card">
           {% if event.image %}
-          <img src="{{ event.image.url }}" class="card-img-top" style="height:200px;object-fit:cover" alt="{{ event.title }}">
+          <div class="ic-img"><img src="{{ event.image.url }}" alt="{{ event.title }}"></div>
           {% endif %}
-          <div class="card-body">
+          <div class="ic-body">
             <div class="d-flex align-items-start">
-              <div class="mr-3 flex-shrink-0 text-white text-center rounded" style="background:#6B0000;padding:10px 14px;border-radius:8px;">
-                <div style="font-size:1.5rem;font-weight:900;line-height:1;">{{ event.start_date|date:"d" }}</div>
-                <div style="font-size:0.7rem;text-transform:uppercase;">{{ event.start_date|date:"M Y" }}</div>
+              <div class="ic-date-bubble mr-3 flex-shrink-0">
+                <div class="day">{{ event.start_date|date:"d" }}</div>
+                <div class="mon">{{ event.start_date|date:"M Y" }}</div>
               </div>
               <div>
-                <h5 class="font-weight-bold">{{ event.title }}</h5>
+                <h5 class="ic-title" style="font-size:1rem;">{{ event.title }}</h5>
                 {% if event.location %}
-                <p class="text-muted small mb-1"><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</p>
+                <p class="ic-meta mb-1"><i class="fas fa-map-marker-alt"></i>{{ event.location }}</p>
                 {% endif %}
                 {% if event.end_date and event.end_date != event.start_date %}
-                <p class="text-muted small mb-1"><i class="fas fa-calendar-alt mr-1"></i>{{ event.start_date|date:"d M" }} – {{ event.end_date|date:"d M Y" }}</p>
+                <p class="ic-meta mb-1"><i class="fas fa-calendar-alt"></i>{{ event.start_date|date:"d M" }} – {{ event.end_date|date:"d M Y" }}</p>
                 {% endif %}
-                <p class="text-muted">{{ event.description|truncatechars:200 }}</p>
+                <p class="ic-excerpt mt-1">{{ event.description|truncatechars:180 }}</p>
               </div>
             </div>
           </div>
@@ -58,17 +65,19 @@
     <div class="row">
       {% for event in past %}
       <div class="col-md-6 mb-3">
-        <div class="card border-0 bg-light p-3">
-          <div class="d-flex">
-            <div class="mr-3 text-muted" style="min-width:50px;text-align:center;">
-              <div style="font-size:1.2rem;font-weight:700;">{{ event.start_date|date:"d" }}</div>
-              <div style="font-size:0.7rem;text-transform:uppercase;">{{ event.start_date|date:"M Y" }}</div>
-            </div>
-            <div>
-              <h6 class="font-weight-bold mb-1">{{ event.title }}</h6>
-              {% if event.location %}
-              <p class="text-muted small mb-0"><i class="fas fa-map-marker-alt mr-1"></i>{{ event.location }}</p>
-              {% endif %}
+        <div class="info-card info-card--muted">
+          <div class="ic-body" style="padding:.9rem 1.1rem;">
+            <div class="d-flex align-items-center">
+              <div class="ic-date-bubble mr-3 flex-shrink-0" style="background:#9e9e9e;padding:6px 10px;">
+                <div class="day" style="font-size:1.1rem;">{{ event.start_date|date:"d" }}</div>
+                <div class="mon">{{ event.start_date|date:"M Y" }}</div>
+              </div>
+              <div>
+                <h6 class="ic-title mb-1" style="font-size:.88rem;">{{ event.title }}</h6>
+                {% if event.location %}
+                <p class="ic-meta mb-0"><i class="fas fa-map-marker-alt"></i>{{ event.location }}</p>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>

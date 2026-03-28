@@ -2,15 +2,22 @@
 {% block title %}News — Nechilibi High School{% endblock %}
 {% block meta_description %}Latest news and articles from Nechilibi High School — academic updates, achievements, school events, and community stories.{% endblock %}
 {% block content %}
-<div class="bg-primary-custom text-white py-5">
+<div class="page-hero">
+  <i class="fas fa-newspaper ph-bg-icon"></i>
   <div class="container">
-    <h1 class="text-white">News &amp; Updates</h1>
+    <h1><i class="fas fa-newspaper mr-2" style="opacity:.8;"></i>News &amp; Updates</h1>
+    <p class="ph-subtitle">Latest stories, announcements &amp; articles</p>
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 m-0">
-        <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-        <li class="breadcrumb-item active text-white">News</li>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">News</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 
@@ -18,25 +25,23 @@
   <div class="container">
     {% if articles %}
     <div class="row">
-      {% for article in articles %}
+        {% for article in articles %}
       <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm card-hover">
-          {% if article.featured_image %}
-            <img src="{{ article.featured_image.url }}" class="card-img-top" style="height:200px;object-fit:cover" alt="{{ article.title }}">
-          {% else %}
-            <div style="height:200px;background:linear-gradient(135deg,#6B0000,#4a0000)" class="d-flex align-items-center justify-content-center">
-              <i class="fas fa-newspaper fa-3x text-white" style="opacity:0.5;"></i>
-            </div>
-          {% endif %}
-          <div class="card-body">
-            <p class="text-muted small mb-2"><i class="far fa-calendar-alt mr-1"></i>{{ article.created|date:"d M Y" }}</p>
-            <h6 class="font-weight-bold">{{ article.title }}</h6>
-            <p class="text-muted small">{{ article.content|striptags|truncatechars:120 }}</p>
+        <div class="info-card">
+          <div class="ic-img">
+            {% if article.featured_image %}
+              <img src="{{ article.featured_image.url }}" alt="{{ article.title }}">
+            {% else %}
+              <i class="fas fa-newspaper"></i>
+            {% endif %}
           </div>
-          <div class="card-footer bg-white border-0 pt-0">
-            <a href="{{ article.get_absolute_url }}" class="text-primary-custom font-weight-bold small">
-              Read More <i class="fas fa-arrow-right ml-1"></i>
-            </a>
+          <div class="ic-body">
+            <p class="ic-meta"><i class="far fa-calendar-alt"></i>{{ article.created|date:"d M Y" }}</p>
+            <h6 class="ic-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h6>
+            <p class="ic-excerpt">{{ article.content|striptags|truncatechars:120 }}</p>
+          </div>
+          <div class="ic-footer">
+            <a href="{{ article.get_absolute_url }}" class="ic-read-more">Read More <i class="fas fa-arrow-right ml-1"></i></a>
           </div>
         </div>
       </div>

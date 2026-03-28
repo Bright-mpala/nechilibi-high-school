@@ -3,12 +3,7 @@
 
 {% block extra_css %}
 <style>
-  /* ── Page header ── */
-  .cal-header { background: linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
-  .cal-header h1 { color:#fff; }
-  .cal-header .breadcrumb { background:transparent; padding:0; margin:0; }
-  .cal-header .breadcrumb-item a { color:#c9a227; }
-  .cal-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+  /* page-hero used from base.html */
 
   /* ── Year switcher ── */
   .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
@@ -98,7 +93,7 @@
   /* ── Print button ── */
   .print-btn { cursor:pointer; }
   @media print {
-    .cal-header, nav, footer, .year-tabs, .print-btn, .top-bar { display:none !important; }
+    .year-tabs, .print-btn { display:none !important; }
     .term-cards { grid-template-columns:repeat(3,1fr); }
     .term-card-header { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     h4 { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
@@ -112,16 +107,22 @@
 
 {% block content %}
 
-<!-- Page header -->
-<div class="cal-header">
+<div class="page-hero">
+  <i class="fas fa-calendar-alt ph-bg-icon"></i>
   <div class="container">
-    <h1><i class="fas fa-calendar-alt mr-2"></i>Academic Calendar</h1>
+    <h1><i class="fas fa-calendar-alt mr-2" style="opacity:.8;"></i>Academic Calendar</h1>
+    <p class="ph-subtitle">Term dates, exams &amp; school events — {{ selected_year }}</p>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">Academic Calendar</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 

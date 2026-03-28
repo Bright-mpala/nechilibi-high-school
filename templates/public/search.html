@@ -4,8 +4,7 @@
 
 {% block extra_css %}
 <style>
-  .search-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
-  .search-header h1 { color:#fff; }
+  /* page-hero used from base.html */
   .search-form-wrap { max-width:600px; }
   .search-form-wrap .input-group input {
     border:none; border-radius:30px 0 0 30px; padding:.7rem 1.4rem;
@@ -53,9 +52,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="search-header">
+<div class="page-hero">
+  <i class="fas fa-search ph-bg-icon"></i>
   <div class="container">
-    <h1><i class="fas fa-search mr-2"></i>Search</h1>
+    <h1><i class="fas fa-search mr-2" style="opacity:.8;"></i>Search</h1>
+    <p class="ph-subtitle">Find notices, news articles &amp; downloadable documents</p>
     <div class="search-form-wrap mt-3">
       <form method="get" action="/search/">
         <div class="input-group">
@@ -66,6 +67,11 @@
         </div>
       </form>
     </div>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 

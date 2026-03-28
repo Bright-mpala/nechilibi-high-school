@@ -3,12 +3,7 @@
 
 {% block extra_css %}
 <style>
-  /* Header */
-  .results-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
-  .results-header h1 { color:#fff; }
-  .results-header .breadcrumb { background:transparent; padding:0; margin:0; }
-  .results-header .breadcrumb-item a { color:#c9a227; }
-  .results-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+  /* page-hero used from base.html */
 
   /* Year tabs */
   .year-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
@@ -90,7 +85,7 @@
   .results-empty i { font-size:3rem; color:#d0c8e8; display:block; margin-bottom:1rem; }
 
   @media print {
-    .results-header, nav, footer, .year-tabs, .print-btn, .top-bar { display:none !important; }
+    .year-tabs, .print-btn { display:none !important; }
     .level-heading { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     .stat-card { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   }
@@ -98,15 +93,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="results-header">
+<div class="page-hero">
+  <i class="fas fa-chart-bar ph-bg-icon"></i>
   <div class="container">
-    <h1><i class="fas fa-chart-bar mr-2"></i>ZIMSEC Examination Results</h1>
+    <h1><i class="fas fa-chart-bar mr-2" style="opacity:.8;"></i>ZIMSEC Examination Results</h1>
+    <p class="ph-subtitle">O-Level &amp; A-Level pass rates, distinctions &amp; subject breakdowns</p>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">ZIMSEC Results</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 

@@ -14,22 +14,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="bg-primary-custom text-white py-5">
+<div class="page-hero">
+  <i class="fas fa-bell ph-bg-icon"></i>
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex justify-content-between align-items-end flex-wrap">
       <div>
-        <h1 class="text-white mb-1">School Notices</h1>
+        <h1><i class="fas fa-bell mr-2" style="opacity:.8;"></i>School Notices</h1>
+        <p class="ph-subtitle">Current notices, holidays &amp; important updates</p>
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent p-0 m-0">
-            <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-            <li class="breadcrumb-item active text-white">Notices</li>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Notices</li>
           </ol>
         </nav>
       </div>
-      <button class="btn btn-sm btn-outline-light notices-actions mt-2" onclick="window.print()">
+      <button class="btn btn-sm btn-outline-light notices-actions mb-1" onclick="window.print()">
         <i class="fas fa-print mr-1"></i>Print Notices
       </button>
     </div>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 
@@ -39,40 +46,35 @@
     <div class="row">
       {% for notice in notices %}
       <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm h-100 card-hover">
-          <div class="card-body">
-            <div class="d-flex align-items-start mb-2">
-              <span class="badge mr-2 flex-shrink-0 {% if notice.notice_type == 'h' %}badge-warning{% else %}badge-primary{% endif %}" style="background:{% if notice.notice_type == 'h' %}var(--accent){% else %}var(--primary){% endif %};color:#fff;">
+        <div class="info-card {% if notice.notice_type == 'h' %}info-card--gold{% endif %}">
+          <div class="ic-body">
+            <div class="d-flex align-items-center mb-2">
+              <span class="mr-2" style="width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+                background:{% if notice.notice_type == 'h' %}var(--accent){% else %}var(--primary){% endif %};color:#fff;font-size:.8rem;">
+                <i class="fas fa-{% if notice.notice_type == 'h' %}sun{% else %}bell{% endif %}"></i>
+              </span>
+              <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+                color:{% if notice.notice_type == 'h' %}var(--accent){% else %}var(--primary){% endif %};">
                 {% if notice.notice_type == 'h' %}Holiday{% else %}Notice{% endif %}
               </span>
-              <h6 class="font-weight-bold mb-0">
-                <a href="/notices/{{ notice.pk }}/" style="color:var(--primary);text-decoration:none;">{{ notice.title }}</a>
-              </h6>
             </div>
+            <h6 class="ic-title"><a href="/notices/{{ notice.pk }}/">{{ notice.title }}</a></h6>
             {% if notice.content %}
-            <p class="text-muted small">{{ notice.content|striptags|truncatechars:150 }}</p>
+            <p class="ic-excerpt">{{ notice.content|striptags|truncatechars:150 }}</p>
             {% endif %}
-            <div class="d-flex justify-content-between align-items-center mt-3">
-              <small class="text-muted">
-                <i class="far fa-calendar-alt mr-1"></i>{{ notice.created|date:"d M Y" }}
-              </small>
-              <small class="text-muted">
-                <i class="fas fa-clock mr-1"></i>Expires: {{ notice.expires_at|date:"d M Y" }}
-              </small>
-            </div>
+            <p class="ic-meta mt-2">
+              <i class="far fa-calendar-alt"></i>{{ notice.created|date:"d M Y" }}
+              &nbsp;·&nbsp;
+              <i class="fas fa-clock"></i>Expires {{ notice.expires_at|date:"d M Y" }}
+            </p>
             {% if notice.notice_file_type %}
-            <div class="mt-2">
-              <a href="{{ notice.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                <i class="fas fa-{% if notice.notice_file_type == 'pdf' %}file-pdf{% else %}image{% endif %} mr-1"></i>
-                View Attachment
-              </a>
-            </div>
+            <a href="{{ notice.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary mt-1">
+              <i class="fas fa-{% if notice.notice_file_type == 'pdf' %}file-pdf{% else %}image{% endif %} mr-1"></i>View Attachment
+            </a>
             {% endif %}
           </div>
-          <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-between align-items-center">
-            <a href="/notices/{{ notice.pk }}/" class="text-primary-custom font-weight-bold small">
-              Read More <i class="fas fa-arrow-right ml-1"></i>
-            </a>
+          <div class="ic-footer">
+            <a href="/notices/{{ notice.pk }}/" class="ic-read-more">Read More <i class="fas fa-arrow-right ml-1"></i></a>
             <button class="btn btn-sm btn-outline-secondary no-print" onclick="printNotice({{ notice.pk }}, '{{ notice.title|escapejs }}')">
               <i class="fas fa-print mr-1"></i>Print
             </button>

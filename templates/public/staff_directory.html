@@ -4,15 +4,11 @@
 
 {% block extra_css %}
 <style>
-  .staff-header { background:linear-gradient(135deg,#4a0080,#800020); color:#fff; padding:48px 0 32px; }
-  .staff-header h1 { color:#fff; }
-  .staff-header .breadcrumb { background:transparent; padding:0; margin:0; }
-  .staff-header .breadcrumb-item a { color:#c9a227; }
-  .staff-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+  /* page-hero used from base.html */
 
   /* Stat pill */
   .staff-stat { display:inline-flex; align-items:center; gap:.6rem; background:#fff; border-radius:30px; padding:.5rem 1.3rem; box-shadow:0 2px 8px rgba(74,0,128,.1); font-weight:700; font-size:.88rem; margin-bottom:2rem; }
-  .staff-stat .num { font-size:1.4rem; font-weight:900; color:#4a0080; }
+  .staff-stat .num { font-size:1.4rem; font-weight:900; color:#c9a227; }
 
   /* Section heading */
   .staff-section-head { display:flex; align-items:center; gap:.7rem; padding:.8rem 1.2rem; border-radius:8px; color:#fff; font-weight:800; font-size:1rem; margin-bottom:1.2rem; }
@@ -56,22 +52,29 @@
   .staff-search input:focus { border-color:#4a0080; }
 
   @media print {
-    .staff-header, nav, footer, .staff-search, .staff-stat { display:none !important; }
+    .staff-search, .staff-stat { display:none !important; }
     .staff-card:hover { box-shadow:none; transform:none; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="staff-header">
+<div class="page-hero">
+  <i class="fas fa-chalkboard-teacher ph-bg-icon"></i>
   <div class="container">
-    <h1><i class="fas fa-chalkboard-teacher mr-2"></i>Staff Directory</h1>
+    <h1><i class="fas fa-chalkboard-teacher mr-2" style="opacity:.8;"></i>Staff Directory</h1>
+    <p class="ph-subtitle">Meet our dedicated teaching team</p>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">Staff Directory</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 

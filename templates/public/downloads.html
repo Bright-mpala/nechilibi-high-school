@@ -14,22 +14,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="bg-primary-custom text-white py-5">
+<div class="page-hero">
+  <i class="fas fa-download ph-bg-icon"></i>
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex justify-content-between align-items-end flex-wrap">
       <div>
-        <h1 class="text-white mb-1">Downloads</h1>
+        <h1><i class="fas fa-download mr-2" style="opacity:.8;"></i>Downloads</h1>
+        <p class="ph-subtitle">Forms, timetables, handbooks &amp; documents</p>
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent p-0 m-0">
-            <li class="breadcrumb-item"><a href="/" class="text-warning">Home</a></li>
-            <li class="breadcrumb-item active text-white">Downloads</li>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Downloads</li>
           </ol>
         </nav>
       </div>
-      <button class="btn btn-sm btn-outline-light no-print mt-2" onclick="window.print()">
+      <button class="btn btn-sm btn-outline-light no-print mb-1" onclick="window.print()">
         <i class="fas fa-print mr-1"></i>Print List
       </button>
     </div>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 

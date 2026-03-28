@@ -4,11 +4,7 @@
 
 {% block extra_css %}
 <style>
-  .sports-header { background:linear-gradient(135deg,#2e7d32,#1a5276); color:#fff; padding:48px 0 32px; }
-  .sports-header h1 { color:#fff; }
-  .sports-header .breadcrumb { background:transparent; padding:0; margin:0; }
-  .sports-header .breadcrumb-item a { color:#c9a227; }
-  .sports-header .breadcrumb-item.active { color:rgba(255,255,255,.75); }
+  /* page-hero--green used from base.html */
 
   /* Type filter tabs */
   .type-tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2rem; }
@@ -69,21 +65,28 @@
   .section-group.visible { display:block; }
 
   @media print {
-    .sports-header, nav, footer, .type-tabs, .stat-pills { display:none !important; }
+    .type-tabs, .stat-pills { display:none !important; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="sports-header">
+<div class="page-hero page-hero--green">
+  <i class="fas fa-running ph-bg-icon"></i>
   <div class="container">
-    <h1><i class="fas fa-running mr-2"></i>Sports &amp; Co-curricular Activities</h1>
+    <h1><i class="fas fa-running mr-2" style="opacity:.8;"></i>Sports &amp; Co-curricular Activities</h1>
+    <p class="ph-subtitle">Teams, clubs &amp; societies — beyond the classroom</p>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item active">Sports &amp; Co-curriculars</li>
       </ol>
     </nav>
+  </div>
+  <div class="ph-wave">
+    <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,28 C360,56 1080,0 1440,28 L1440,56 L0,56 Z" fill="#fff"/>
+    </svg>
   </div>
 </div>
 
@@ -94,7 +97,7 @@
 
     <!-- Stat pills -->
     <div class="stat-pills">
-      <div class="stat-pill"><i class="fas fa-trophy" style="color:#c9a227;"></i><span class="pill-num" style="color:#2e7d32;">{{ total }}</span> Activities</div>
+      <div class="stat-pill"><i class="fas fa-trophy" style="color:#c9a227;"></i><span class="pill-num" style="color:#c9a227;">{{ total }}</span> Activities</div>
       {% if sports %}<div class="stat-pill"><i class="fas fa-futbol" style="color:#2e7d32;"></i><span class="pill-num" style="color:#2e7d32;">{{ sports|length }}</span> Sports</div>{% endif %}
       {% if clubs %}<div class="stat-pill"><i class="fas fa-users" style="color:#4a0080;"></i><span class="pill-num" style="color:#4a0080;">{{ clubs|length }}</span> Clubs</div>{% endif %}
       {% if societies %}<div class="stat-pill"><i class="fas fa-star" style="color:#800020;"></i><span class="pill-num" style="color:#800020;">{{ societies|length }}</span> Societies</div>{% endif %}
